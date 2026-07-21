@@ -1,7 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { getCookie, setCookie } from "@tanstack/react-start/server";
-import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
 const REACTIONS = [
@@ -42,12 +41,11 @@ function getSessionId(): string {
 
 export const listSharedStories = createServerFn({ method: "GET" }).handler(async () => {
   const sessionId = getSessionId();
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-  const { data: notebooks, error: nbError } = await supabase
+  const { data: notebooks, error: nbError } = await supabaseAdmin
     .from("notebooks")
-    .select(
-      "*, profiles!inner(nickname)"
-    )
+    .select("*, profiles!inner(nickname)")
     .eq("shared", true)
     .order("shared_at", { ascending: false })
     .limit(60);
@@ -61,8 +59,8 @@ export const listSharedStories = createServerFn({ method: "GET" }).handler(async
   const ids = stories.map((s) => s.id);
 
   const [{ data: entries }, { data: reactionEvents }] = await Promise.all([
-    supabase.from("entries").select("notebook_id, content").in("notebook_id", ids).eq("shared", true),
-    supabase.from("reaction_events").select("notebook_id, reaction, session_id").in("notebook_id", ids),
+    supabaseAdmin.from("entries").select("notebook_id, content").in("notebook_id", ids).eq("shared", true),
+    supabaseAdmin.from("reaction_events").select("notebook_id, reaction, session_id").in("notebook_id", ids),
   ]);
 
   const firstEntryMap = new Map<string, string>();
@@ -111,8 +109,9 @@ export const getSharedStory = createServerFn({ method: "GET" })
   .inputValidator((data) => storyIdSchema.parse(data))
   .handler(async ({ data }) => {
     const sessionId = getSessionId();
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    const { data: notebook, error: nbError } = await supabase
+    const { data: notebook, error: nbError } = await supabaseAdmin
       .from("notebooks")
       .select("*, profiles!inner(nickname)")
       .eq("id", data.id)
@@ -125,8 +124,8 @@ export const getSharedStory = createServerFn({ method: "GET" })
     };
 
     const [{ data: entries }, { data: reactionEvents }] = await Promise.all([
-      supabase.from("entries").select("*").eq("notebook_id", data.id).eq("shared", true).order("created_at", { ascending: false }),
-      supabase.from("reaction_events").select("reaction, session_id").eq("notebook_id", data.id),
+      supabaseAdmin.from("entries").select("*").eq("notebook_id", data.id).eq("shared", true).order("created_at", { ascending: false }),
+      supabaseAdmin.from("reaction_events").select("reaction, session_id").eq("notebook_id", data.id),
     ]);
 
     const counts = new Map<string, number>();
@@ -164,8 +163,9 @@ export const sendReaction = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const sessionId = getSessionId();
     const reaction = data.reaction.trim().toLowerCase();
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    const { data: existing } = await supabase
+    const { data: existing } = await supabaseAdmin
       .from("reaction_events")
       .select("id")
       .eq("notebook_id", data.notebookId)
@@ -174,16 +174,16 @@ export const sendReaction = createServerFn({ method: "POST" })
       .maybeSingle();
 
     if (existing) {
-      await supabase.from("reaction_events").delete().eq("id", existing.id);
+      await supabaseAdmin.from("reaction_events").delete().eq("id", existing.id);
     } else {
-      await supabase.from("reaction_events").insert({
+      await supabaseAdmin.from("reaction_events").insert({
         notebook_id: data.notebookId,
         session_id: sessionId,
         reaction,
       });
     }
 
-    const { data: reactionEvents } = await supabase
+    const { data: reactionEvents } = await supabaseAdmin
       .from("reaction_events")
       .select("reaction, session_id")
       .eq("notebook_id", data.notebookId);
