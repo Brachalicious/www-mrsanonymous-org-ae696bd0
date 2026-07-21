@@ -88,8 +88,6 @@ export type Database = {
           created_at: string
           id: string
           owner_id: string
-          reacted_by: Json
-          reactions: Json
           share_as: string
           shared: boolean
           shared_at: string | null
@@ -102,8 +100,6 @@ export type Database = {
           created_at?: string
           id?: string
           owner_id: string
-          reacted_by?: Json
-          reactions?: Json
           share_as?: string
           shared?: boolean
           shared_at?: string | null
@@ -116,8 +112,6 @@ export type Database = {
           created_at?: string
           id?: string
           owner_id?: string
-          reacted_by?: Json
-          reactions?: Json
           share_as?: string
           shared?: boolean
           shared_at?: string | null
