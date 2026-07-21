@@ -1,10 +1,18 @@
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/contexts/AuthContext";
 import { performQuickExit } from "./QuickExit";
 
-const TABS = [
+type NavItem = {
+  to: string;
+  label: string;
+  testid: string;
+  kind?: "dark" | "rose";
+  external?: boolean;
+};
+
+const TABS: NavItem[] = [
   { to: "/about", label: "About us", testid: "nav-about" },
   { to: "/women", label: "Women", testid: "nav-women" },
   { to: "/girls", label: "Girls", testid: "nav-girls" },
@@ -14,7 +22,7 @@ const TABS = [
   { to: "/resources", label: "Resources", testid: "nav-resources" },
   { to: "https://www.thehotline.org/", label: "Get help now! (women)", testid: "nav-get-help-women", kind: "dark", external: true },
   { to: "https://childhelphotline.org/", label: "get help now! (girls)", testid: "nav-get-help-girls", kind: "dark", external: true },
-] as const;
+];
 
 export function Navbar() {
   const { user, profile, loading } = useAuth();
