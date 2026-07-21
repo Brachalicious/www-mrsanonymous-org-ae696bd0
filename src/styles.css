@@ -241,7 +241,9 @@
 /* Form focus override: use warm accent instead of default blue */
 @utility focus-ring-warm {
   outline: none;
-  ring: 2px solid var(--color-rose-500);
-  ring-offset: 2px;
-  ring-offset-color: var(--color-background);
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-rose-500);
+  }
 }
