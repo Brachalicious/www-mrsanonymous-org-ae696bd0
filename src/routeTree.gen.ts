@@ -9,8 +9,68 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WomenRouteImport } from './routes/women'
+import { Route as ToolsRouteImport } from './routes/tools'
+import { Route as TellYourStoryRouteImport } from './routes/tell-your-story'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as GirlsRouteImport } from './routes/girls'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BoardRouteImport } from './routes/board'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WomenRoute = WomenRouteImport.update({
+  id: '/women',
+  path: '/women',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsRoute = ToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TellYourStoryRoute = TellYourStoryRouteImport.update({
+  id: '/tell-your-story',
+  path: '/tell-your-story',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResourcesRoute = ResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GirlsRoute = GirlsRouteImport.update({
+  id: '/girls',
+  path: '/girls',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BoardRoute = BoardRouteImport.update({
+  id: '/board',
+  path: '/board',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +79,172 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/board': typeof BoardRoute
+  '/contact': typeof ContactRoute
+  '/girls': typeof GirlsRoute
+  '/login': typeof LoginRoute
+  '/resources': typeof ResourcesRoute
+  '/signup': typeof SignupRoute
+  '/tell-your-story': typeof TellYourStoryRoute
+  '/tools': typeof ToolsRoute
+  '/women': typeof WomenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/board': typeof BoardRoute
+  '/contact': typeof ContactRoute
+  '/girls': typeof GirlsRoute
+  '/login': typeof LoginRoute
+  '/resources': typeof ResourcesRoute
+  '/signup': typeof SignupRoute
+  '/tell-your-story': typeof TellYourStoryRoute
+  '/tools': typeof ToolsRoute
+  '/women': typeof WomenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/board': typeof BoardRoute
+  '/contact': typeof ContactRoute
+  '/girls': typeof GirlsRoute
+  '/login': typeof LoginRoute
+  '/resources': typeof ResourcesRoute
+  '/signup': typeof SignupRoute
+  '/tell-your-story': typeof TellYourStoryRoute
+  '/tools': typeof ToolsRoute
+  '/women': typeof WomenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/board'
+    | '/contact'
+    | '/girls'
+    | '/login'
+    | '/resources'
+    | '/signup'
+    | '/tell-your-story'
+    | '/tools'
+    | '/women'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/board'
+    | '/contact'
+    | '/girls'
+    | '/login'
+    | '/resources'
+    | '/signup'
+    | '/tell-your-story'
+    | '/tools'
+    | '/women'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/board'
+    | '/contact'
+    | '/girls'
+    | '/login'
+    | '/resources'
+    | '/signup'
+    | '/tell-your-story'
+    | '/tools'
+    | '/women'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  BoardRoute: typeof BoardRoute
+  ContactRoute: typeof ContactRoute
+  GirlsRoute: typeof GirlsRoute
+  LoginRoute: typeof LoginRoute
+  ResourcesRoute: typeof ResourcesRoute
+  SignupRoute: typeof SignupRoute
+  TellYourStoryRoute: typeof TellYourStoryRoute
+  ToolsRoute: typeof ToolsRoute
+  WomenRoute: typeof WomenRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/women': {
+      id: '/women'
+      path: '/women'
+      fullPath: '/women'
+      preLoaderRoute: typeof WomenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools': {
+      id: '/tools'
+      path: '/tools'
+      fullPath: '/tools'
+      preLoaderRoute: typeof ToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tell-your-story': {
+      id: '/tell-your-story'
+      path: '/tell-your-story'
+      fullPath: '/tell-your-story'
+      preLoaderRoute: typeof TellYourStoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resources': {
+      id: '/resources'
+      path: '/resources'
+      fullPath: '/resources'
+      preLoaderRoute: typeof ResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/girls': {
+      id: '/girls'
+      path: '/girls'
+      fullPath: '/girls'
+      preLoaderRoute: typeof GirlsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/board': {
+      id: '/board'
+      path: '/board'
+      fullPath: '/board'
+      preLoaderRoute: typeof BoardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,17 +257,17 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  BoardRoute: BoardRoute,
+  ContactRoute: ContactRoute,
+  GirlsRoute: GirlsRoute,
+  LoginRoute: LoginRoute,
+  ResourcesRoute: ResourcesRoute,
+  SignupRoute: SignupRoute,
+  TellYourStoryRoute: TellYourStoryRoute,
+  ToolsRoute: ToolsRoute,
+  WomenRoute: WomenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
