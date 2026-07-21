@@ -170,20 +170,36 @@ export function Navbar() {
               );
             }
 
-            return (
-              <li key={t.to}>
-                <Link
-                  to={t.to as any}
-                  search={t.to === "/tell-your-story" && t.kind === "rose" ? { tab: "mine" } : undefined}
-                  data-testid={t.testid}
-                  className={className}
-                  activeProps={{ className: `${className} text-rose-500 font-semibold` }}
-                  activeOptions={{ exact: false }}
-                >
-                  {t.label}
-                </Link>
-              </li>
-            );
+              if (t.to === "/tell-your-story" && t.kind === "rose") {
+                return (
+                  <li key={t.to}>
+                    <Link
+                      to="/tell-your-story"
+                      search={{ tab: "mine" }}
+                      data-testid={t.testid}
+                      className={className}
+                      activeProps={{ className: `${className} text-rose-500 font-semibold` }}
+                      activeOptions={{ exact: false }}
+                    >
+                      {t.label}
+                    </Link>
+                  </li>
+                );
+              }
+
+              return (
+                <li key={t.to}>
+                  <Link
+                    to={t.to as any}
+                    data-testid={t.testid}
+                    className={className}
+                    activeProps={{ className: `${className} text-rose-500 font-semibold` }}
+                    activeOptions={{ exact: false }}
+                  >
+                    {t.label}
+                  </Link>
+                </li>
+              );
           })}
           <li className="ml-auto">
             <button
