@@ -12,7 +12,7 @@ type NavItem = {
   external?: boolean;
 };
 
-const TABS: NavItem[] = [
+const BASE_TABS: NavItem[] = [
   { to: "/about", label: "About us", testid: "nav-about" },
   { to: "/women", label: "Women", testid: "nav-women" },
   { to: "/girls", label: "Girls", testid: "nav-girls" },
@@ -24,19 +24,36 @@ const TABS: NavItem[] = [
   { to: "https://childhelphotline.org/", label: "get help now! (girls)", testid: "nav-get-help-girls", kind: "dark", external: true },
 ];
 
+const MY_NOTEBOOKS_TAB: NavItem = {
+  to: "/tell-your-story",
+  label: "📓 My Notebooks",
+  testid: "nav-my-notebooks",
+  kind: "rose",
+};
+
+function getTabs(loggedIn: boolean): NavItem[] {
+  if (!loggedIn) return BASE_TABS;
+  return [
+    BASE_TABS[0],
+    BASE_TABS[1],
+    BASE_TABS[2],
+    BASE_TABS[3],
+    MY_NOTEBOOKS_TAB,
+    BASE_TABS[4],
+    BASE_TABS[5],
+    BASE_TABS[6],
+    BASE_TABS[7],
+    BASE_TABS[8],
+  ];
+}
+
 export function Navbar() {
   const { user, profile, loading } = useAuth();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   const loggedIn = !!user;
-  const tabs = loggedIn
-    ? [
-        ...TABS.slice(0, 4),
-        { to: "/tell-your-story?tab=mine", label: "📓 My Notebooks", testid: "nav-my-notebooks", kind: "rose" },
-        ...TABS.slice(4),
-      ]
-    : TABS;
+  const tabs = getTabs(loggedIn);
 
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -135,34 +152,39 @@ export function Navbar() {
       {/* Desktop nav */}
       <nav className="hidden lg:block">
         <ul className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-5 gap-y-2 px-5 py-3 lg:px-10">
-          {tabs.map((t) =>
-            t.external ? (
-              <li key={t.to}>
-                <a
-                  href={t.to}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-testid={t.testid}
-                  className={tabCls({ isActive: false }, t.kind)}
-                >
-                  {t.label}
-                </a>
-              </li>
-            ) : (
+          {tabs.map((t) => {
+            const className = tabClassName(t.kind);
+            if (t.external) {
+              return (
+                <li key={t.to}>
+                  <a
+                    href={t.to}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-testid={t.testid}
+                    className={className}
+                  >
+                    {t.label}
+                  </a>
+                </li>
+              );
+            }
+
+            return (
               <li key={t.to}>
                 <Link
                   to={t.to as any}
-                  search={t.to.includes("?") ? { tab: "mine" } : undefined}
+                  search={t.to === "/tell-your-story" && t.kind === "rose" ? { tab: "mine" } : undefined}
                   data-testid={t.testid}
-                  activeProps={{ className: tabCls({ isActive: true }, t.kind) }}
-                  inactiveProps={{ className: tabCls({ isActive: false }, t.kind) }}
+                  className={className}
+                  activeProps={{ className: `${className} text-rose-500 font-semibold` }}
                   activeOptions={{ exact: false }}
                 >
                   {t.label}
                 </Link>
               </li>
-            )
-          )}
+            );
+          })}
           <li className="ml-auto">
             <button
               data-testid="nav-quick-exit"
@@ -181,24 +203,28 @@ export function Navbar() {
       {open && (
         <div className="border-t border-ink-300/30 bg-white lg:hidden">
           <div className="flex flex-col gap-2 px-5 py-4">
-            {tabs.map((t) =>
-              t.external ? (
-                <a
-                  key={t.to}
-                  href={t.to}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-testid={`${t.testid}-mobile`}
-                  onClick={() => setOpen(false)}
-                  className="rounded-md bg-ink-900 px-3 py-2 text-center text-xs font-bold uppercase tracking-widest text-white"
-                >
-                  {t.label}
-                </a>
-              ) : (
+            {tabs.map((t) => {
+              if (t.external) {
+                return (
+                  <a
+                    key={t.to}
+                    href={t.to}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-testid={`${t.testid}-mobile`}
+                    onClick={() => setOpen(false)}
+                    className="rounded-md bg-ink-900 px-3 py-2 text-center text-xs font-bold uppercase tracking-widest text-white"
+                  >
+                    {t.label}
+                  </a>
+                );
+              }
+
+              return (
                 <Link
                   key={t.to}
                   to={t.to as any}
-                  search={t.to.includes("?") ? { tab: "mine" } : undefined}
+                  search={t.to === "/tell-your-story" && t.kind === "rose" ? { tab: "mine" } : undefined}
                   data-testid={`${t.testid}-mobile`}
                   onClick={() => setOpen(false)}
                   className={
@@ -211,8 +237,8 @@ export function Navbar() {
                 >
                   {t.label}
                 </Link>
-              )
-            )}
+              );
+            })}
             <button
               data-testid="nav-quick-exit-mobile"
               onClick={performQuickExit}
@@ -256,14 +282,12 @@ export function Navbar() {
   );
 }
 
-function tabCls({ isActive }: { isActive: boolean }, kind?: string) {
+function tabClassName(kind?: "dark" | "rose") {
   if (kind === "rose") {
     return "inline-flex items-center rounded-md bg-rose-500 px-3 py-2 text-[11px] font-bold uppercase tracking-widest text-white hover:bg-rose-600";
   }
   if (kind === "dark") {
-    return "inline-flex items-center rounded-md px-3 py-2 text-[11px] font-bold uppercase tracking-widest transition-colors bg-ink-900 text-white hover:bg-ink-700";
+    return "inline-flex items-center rounded-md bg-ink-900 px-3 py-2 text-[11px] font-bold uppercase tracking-widest text-white hover:bg-ink-700";
   }
-  return `text-sm tracking-wide transition-colors ${
-    isActive ? "text-rose-500 font-semibold" : "text-ink-900 hover:text-rose-500"
-  }`;
+  return "text-sm tracking-wide text-ink-900 transition-colors hover:text-rose-500";
 }
