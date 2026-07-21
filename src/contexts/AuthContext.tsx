@@ -21,6 +21,8 @@ const AuthContext = createContext<AuthContextValue>({
   loading: true,
 });
 
+const sb = supabase as any;
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -35,7 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(user ?? null);
 
       if (user) {
-        const { data } = await supabase
+        const { data } = await sb
           .from("profiles")
           .select("*")
           .eq("id", user.id)
@@ -56,7 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(nextUser);
 
       if (nextUser) {
-        const { data } = await supabase
+        const { data } = await sb
           .from("profiles")
           .select("*")
           .eq("id", nextUser.id)
