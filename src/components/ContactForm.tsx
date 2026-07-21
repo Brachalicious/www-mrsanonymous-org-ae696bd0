@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { useMutation } from "@tanstack/react-query";
+import { sendContactMessage } from "@/lib/contact.functions";
 
 interface ContactFormProps {
   audience?: "women" | "girls";
@@ -7,7 +10,18 @@ interface ContactFormProps {
 export function ContactForm({ audience = "women" }: ContactFormProps) {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("");
-  const [sending, setSending] = useState(false);
+  const send = useServerFn(sendContactMessage);
+
+  const mutation = useMutation({
+    mutationFn: send,
+    onSuccess: () => {
+      setStatus("✓ Message received. Thank you for trusting us with it.");
+      setMessage("");
+    },
+    onError: (err) => {
+      setStatus((err as Error).message || "Could not send message. Please try again.");
+    },
+  });
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -15,15 +29,8 @@ export function ContactForm({ audience = "women" }: ContactFormProps) {
       setStatus("Please write a message before sending.");
       return;
     }
-    setSending(true);
     setStatus("");
-    try {
-      await new Promise((res) => setTimeout(res, 800));
-      setStatus("✓ Message received. Thank you for trusting us with it.");
-      setMessage("");
-    } finally {
-      setSending(false);
-    }
+    mutation.mutate({ data: { message: message.trim(), audience } });
   }
 
   return (
