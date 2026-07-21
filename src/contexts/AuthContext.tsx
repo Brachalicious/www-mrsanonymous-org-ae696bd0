@@ -1,11 +1,17 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
-import type { Tables } from "@/integrations/supabase/types";
+
+export interface Profile {
+  id: string;
+  nickname: string | null;
+  created_at: string;
+  updated_at: string | null;
+}
 
 interface AuthContextValue {
   user: User | null;
-  profile: Tables<"profiles"> | null;
+  profile: Profile | null;
   loading: boolean;
 }
 
@@ -17,7 +23,7 @@ const AuthContext = createContext<AuthContextValue>({
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [profile, setProfile] = useState<Tables<"profiles"> | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -34,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           .select("*")
           .eq("id", user.id)
           .single();
-        if (mounted) setProfile(data ?? null);
+        if (mounted) setProfile((data as Profile | null) ?? null);
       } else {
         setProfile(null);
       }
@@ -55,7 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           .select("*")
           .eq("id", nextUser.id)
           .single();
-        if (mounted) setProfile(data ?? null);
+        if (mounted) setProfile((data as Profile | null) ?? null);
       } else {
         setProfile(null);
       }
