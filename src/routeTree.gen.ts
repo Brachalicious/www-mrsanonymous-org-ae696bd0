@@ -20,6 +20,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BoardRouteImport } from './routes/board'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as NotebooksIdRouteImport } from './routes/notebooks.$id'
 
 const WomenRoute = WomenRouteImport.update({
   id: '/women',
@@ -76,6 +77,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NotebooksIdRoute = NotebooksIdRouteImport.update({
+  id: '/notebooks/$id',
+  path: '/notebooks/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/tell-your-story': typeof TellYourStoryRoute
   '/tools': typeof ToolsRoute
   '/women': typeof WomenRoute
+  '/notebooks/$id': typeof NotebooksIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByTo {
   '/tell-your-story': typeof TellYourStoryRoute
   '/tools': typeof ToolsRoute
   '/women': typeof WomenRoute
+  '/notebooks/$id': typeof NotebooksIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/tell-your-story': typeof TellYourStoryRoute
   '/tools': typeof ToolsRoute
   '/women': typeof WomenRoute
+  '/notebooks/$id': typeof NotebooksIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
     | '/tell-your-story'
     | '/tools'
     | '/women'
+    | '/notebooks/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
     | '/tell-your-story'
     | '/tools'
     | '/women'
+    | '/notebooks/$id'
   id:
     | '__root__'
     | '/'
@@ -157,6 +168,7 @@ export interface FileRouteTypes {
     | '/tell-your-story'
     | '/tools'
     | '/women'
+    | '/notebooks/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -171,6 +183,7 @@ export interface RootRouteChildren {
   TellYourStoryRoute: typeof TellYourStoryRoute
   ToolsRoute: typeof ToolsRoute
   WomenRoute: typeof WomenRoute
+  NotebooksIdRoute: typeof NotebooksIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -252,6 +265,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/notebooks/$id': {
+      id: '/notebooks/$id'
+      path: '/notebooks/$id'
+      fullPath: '/notebooks/$id'
+      preLoaderRoute: typeof NotebooksIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -267,6 +287,7 @@ const rootRouteChildren: RootRouteChildren = {
   TellYourStoryRoute: TellYourStoryRoute,
   ToolsRoute: ToolsRoute,
   WomenRoute: WomenRoute,
+  NotebooksIdRoute: NotebooksIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

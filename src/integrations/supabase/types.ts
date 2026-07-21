@@ -14,7 +14,172 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contact_messages: {
+        Row: {
+          audience: string
+          created_at: string
+          id: string
+          message: string
+        }
+        Insert: {
+          audience?: string
+          created_at?: string
+          id?: string
+          message: string
+        }
+        Update: {
+          audience?: string
+          created_at?: string
+          id?: string
+          message?: string
+        }
+        Relationships: []
+      }
+      entries: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          mood: string | null
+          notebook_id: string
+          share_as: string
+          shared: boolean
+          shared_at: string | null
+          topics: string[]
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          mood?: string | null
+          notebook_id: string
+          share_as?: string
+          shared?: boolean
+          shared_at?: string | null
+          topics?: string[]
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          mood?: string | null
+          notebook_id?: string
+          share_as?: string
+          shared?: boolean
+          shared_at?: string | null
+          topics?: string[]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "entries_notebook_id_fkey"
+            columns: ["notebook_id"]
+            isOneToOne: false
+            referencedRelation: "notebooks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notebooks: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          owner_id: string
+          share_as: string
+          shared: boolean
+          shared_at: string | null
+          title: string
+          topics: string[]
+          updated_at: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          id?: string
+          owner_id: string
+          share_as?: string
+          shared?: boolean
+          shared_at?: string | null
+          title: string
+          topics?: string[]
+          updated_at?: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          owner_id?: string
+          share_as?: string
+          shared?: boolean
+          shared_at?: string | null
+          title?: string
+          topics?: string[]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          audience: string
+          created_at: string
+          id: string
+          nickname: string
+          updated_at: string
+        }
+        Insert: {
+          audience?: string
+          created_at?: string
+          id: string
+          nickname: string
+          updated_at?: string
+        }
+        Update: {
+          audience?: string
+          created_at?: string
+          id?: string
+          nickname?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reaction_events: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          notebook_id: string
+          reaction: string
+          session_id: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          notebook_id: string
+          reaction: string
+          session_id: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          notebook_id?: string
+          reaction?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reaction_events_notebook_id_fkey"
+            columns: ["notebook_id"]
+            isOneToOne: false
+            referencedRelation: "notebooks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
