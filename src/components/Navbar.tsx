@@ -32,7 +32,6 @@ const MY_NOTEBOOKS_TAB: NavItem = {
 };
 
 function getTabs(loggedIn: boolean): NavItem[] {
-  if (!loggedIn) return BASE_TABS;
   return [
     BASE_TABS[0],
     BASE_TABS[1],
