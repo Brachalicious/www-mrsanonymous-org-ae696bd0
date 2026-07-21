@@ -236,17 +236,29 @@ export function Navbar() {
                 );
               }
 
+              if (t.to === "/tell-your-story" && t.kind === "rose") {
+                return (
+                  <Link
+                    key={t.to}
+                    to="/tell-your-story"
+                    search={{ tab: "mine" }}
+                    data-testid={`${t.testid}-mobile`}
+                    onClick={() => setOpen(false)}
+                    className="rounded-md bg-rose-500 px-3 py-2 text-center text-xs font-bold uppercase tracking-widest text-white"
+                  >
+                    {t.label}
+                  </Link>
+                );
+              }
+
               return (
                 <Link
                   key={t.to}
                   to={t.to as any}
-                  search={t.to === "/tell-your-story" && t.kind === "rose" ? { tab: "mine" } : undefined}
                   data-testid={`${t.testid}-mobile`}
                   onClick={() => setOpen(false)}
                   className={
-                    t.kind === "rose"
-                      ? "rounded-md bg-rose-500 px-3 py-2 text-center text-xs font-bold uppercase tracking-widest text-white"
-                      : t.kind === "dark"
+                    t.kind === "dark"
                       ? "rounded-md bg-ink-900 px-3 py-2 text-center text-xs font-bold uppercase tracking-widest text-white"
                       : "rounded-lg px-3 py-2 text-sm text-ink-900 hover:bg-ink-100"
                   }
