@@ -168,10 +168,10 @@
   letter-spacing: 0.05em;
   color: white;
   transition: all 0.2s ease-out;
-}
 
-@utility btn-rose:hover {
-  background-color: var(--color-rose-600);
+  &:hover {
+    background-color: var(--color-rose-600);
+  }
 }
 
 @utility btn-ghost {
@@ -187,10 +187,10 @@
   font-weight: 600;
   color: var(--color-ink-900);
   transition: all 0.2s ease-out;
-}
 
-@utility btn-ghost:hover {
-  background-color: var(--color-cream-100);
+  &:hover {
+    background-color: var(--color-cream-100);
+  }
 }
 
 @utility hand-note {
