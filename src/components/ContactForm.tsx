@@ -62,8 +62,8 @@ export function ContactForm({ audience = "women" }: ContactFormProps) {
           </div>
         )}
 
-        <button type="submit" disabled={sending} className="btn-rose w-full">
-          {sending ? "Sending…" : "Send message anonymously"}
+        <button type="submit" disabled={mutation.isPending} className="btn-rose w-full">
+          {mutation.isPending ? "Sending…" : "Send message anonymously"}
         </button>
 
         <p className="text-[11px] leading-relaxed text-ink-500">
