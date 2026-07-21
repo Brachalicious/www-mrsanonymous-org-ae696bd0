@@ -1,5 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
+import { useAuth } from "@/contexts/AuthContext";
+import { StoriesBoard } from "@/components/StoriesBoard";
+import { NotebookList } from "@/components/NotebookList";
 
 export const Route = createFileRoute("/tell-your-story")({
   validateSearch: z.object({
@@ -17,13 +20,75 @@ export const Route = createFileRoute("/tell-your-story")({
 });
 
 function TellYourStoryPage() {
+  const { tab } = Route.useSearch();
+  const { user } = useAuth();
+
+  const tabs = [
+    { key: "story", label: "The Board" },
+    { key: "mine", label: "My Notebooks" },
+  ] as const;
+
   return (
-    <div className="mx-auto max-w-3xl px-5 py-16 lg:px-10">
-      <h1 className="font-serif text-4xl text-ink-900">Tell Your Story</h1>
-      <p className="mt-6 text-ink-600">
-        This is your private space. Write what you need to write, keep it safe, and decide if you want to share it
-        with the community board.
-      </p>
+    <div className="mx-auto max-w-6xl px-5 py-12 lg:px-10">
+      <div className="mb-8 text-center">
+        <span className="hand-note text-2xl">your words, your choice</span>
+        <h1 className="mt-2 font-serif text-4xl text-ink-900">Tell Your Story</h1>
+        <p className="mx-auto mt-4 max-w-2xl text-ink-600">
+          Write privately in a notebook only you can open. If you want, share it to the community board —
+          blurred by default, and always anonymous or by your nickname, your choice.
+        </p>
+      </div>
+
+      <div className="mb-8 flex flex-wrap justify-center gap-2">
+        {tabs.map((t) => {
+          const active = tab === t.key;
+          return (
+            <Link
+              key={t.key}
+              to="/tell-your-story"
+              search={{ tab: t.key }}
+              className={`rounded-full px-5 py-2 text-sm font-semibold transition ${
+                active
+                  ? "bg-rose-500 text-white"
+                  : "border border-ink-300 text-ink-700 hover:bg-cream-100"
+              }`}
+            >
+              {t.label}
+            </Link>
+          );
+        })}
+      </div>
+
+      {tab === "story" && (
+        <section aria-label="Community board">
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="font-serif text-2xl text-ink-900">The Board</h2>
+            <span className="text-sm text-ink-500">Tap a card to reveal. Take your time.</span>
+          </div>
+          <StoriesBoard />
+        </section>
+      )}
+
+      {tab === "mine" && (
+        <section aria-label="My notebooks">
+          {!user && (
+            <div className="mb-6 note-card p-5 text-center">
+              <p className="text-ink-700">
+                Notebooks are private and tied to your anonymous account. Log in or create one to start writing.
+              </p>
+              <div className="mt-4 flex justify-center gap-3">
+                <Link to="/login" className="btn-rose">
+                  Log in
+                </Link>
+                <Link to="/signup" className="btn-ghost">
+                  Create account
+                </Link>
+              </div>
+            </div>
+          )}
+          <NotebookList />
+        </section>
+      )}
     </div>
   );
 }

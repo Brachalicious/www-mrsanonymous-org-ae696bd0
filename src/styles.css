@@ -247,3 +247,103 @@
     box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-rose-500);
   }
 }
+
+/* Notebook marble covers */
+@utility notebook-card-wrap {
+  position: relative;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px) rotate(var(--jitter, 0deg));
+  }
+}
+
+@utility marble-base {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 10px 30px rgba(45, 40, 38, 0.12);
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.35) 0%, transparent 25%),
+      radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.25) 0%, transparent 30%),
+      radial-gradient(circle at 60% 20%, rgba(255, 255, 255, 0.2) 0%, transparent 20%);
+    mix-blend-mode: overlay;
+  }
+}
+
+@utility notebook-tape {
+  position: absolute;
+  top: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 5rem;
+  height: 1.5rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 6px rgba(45, 40, 38, 0.08);
+  backdrop-filter: blur(2px);
+}
+
+@utility paper-lines {
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 31px,
+    var(--color-ink-300) 31px,
+    var(--color-ink-300) 32px
+  );
+  background-attachment: local;
+  line-height: 32px;
+}
+
+@utility blur-story {
+  filter: blur(6px);
+  transition: filter 0.35s ease;
+  user-select: none;
+
+  &:hover,
+  &:focus-within,
+  &[data-revealed="true"] {
+    filter: blur(0);
+    user-select: auto;
+  }
+}
+
+@utility jitter {
+  --jitter: calc(-1.5deg + 3deg * var(--random, 0.5));
+  transform: rotate(var(--jitter));
+}
+
+@utility reaction-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 9999px;
+  border: 1px solid var(--color-ink-300);
+  background-color: var(--color-card);
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: var(--color-rose-50);
+    border-color: var(--color-rose-400);
+  }
+
+  &[data-active="true"] {
+    background-color: var(--color-rose-50);
+    border-color: var(--color-rose-500);
+    color: var(--color-rose-600);
+  }
+}
+
+@utility safety-callout {
+  border-radius: var(--radius-xl);
+  border-left: 4px solid var(--color-rose-500);
+  background-color: var(--color-rose-50);
+  padding: 1rem 1.25rem;
+}
