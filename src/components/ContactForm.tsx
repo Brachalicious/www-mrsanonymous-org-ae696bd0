@@ -46,8 +46,7 @@ export function ContactForm({ audience = "women" }: ContactFormProps) {
         We do not ask for your name or email. This message is for this visit only.
         {user && (
           <>
-            {" "}You are signed in as{" "}
-            <span className="font-semibold">friend</span> — replies from support will appear in your Inbox.
+            {" "}You are signed in — replies from support will appear in your Inbox.
           </>
         )}
       </p>
