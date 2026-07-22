@@ -12,8 +12,19 @@ import {
 } from "@/lib/notebooks.functions";
 import { useAuth } from "@/contexts/AuthContext";
 import { EntryEditor } from "@/components/EntryEditor";
-import { ArrowLeft, Lock, Globe, Share2, BookOpen, Trash2 } from "lucide-react";
-import { getCoverStyle } from "@/lib/notebook-covers";
+import { ArrowLeft, Lock, Globe, Share2, BookOpen, Palette, Check, X } from "lucide-react";
+import { getCoverStyle, COVER_PRESETS, isPreset } from "@/lib/notebook-covers";
+
+const PRESET_COLORS = [
+  "#B91C1C",
+  "#1E3A8A",
+  "#065F46",
+  "#7C2D12",
+  "#4C1D95",
+  "#831843",
+  "#134E4A",
+  "#3730A3",
+];
 
 const MAX_TOPICS = 8;
 const TOPIC_OPTIONS = [
@@ -54,6 +65,7 @@ function NotebookDetailPage() {
 
   const [newTitle, setNewTitle] = useState("");
   const [editingTitle, setEditingTitle] = useState(false);
+  const [editingCover, setEditingCover] = useState(false);
 
   const {
     data: notebook,
@@ -168,26 +180,42 @@ function NotebookDetailPage() {
                 }
                 setEditingTitle(false);
               }}
-              className="mt-4"
+              className="mt-4 flex gap-2"
             >
               <input
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
-                className="w-full rounded-xl border border-white/40 bg-white/20 px-3 py-2 text-2xl font-serif text-white placeholder-white/60 focus-ring-warm"
+                className="flex-1 rounded-xl border border-white/40 bg-white/20 px-3 py-2 text-2xl font-serif text-white placeholder-white/60 focus-ring-warm"
                 autoFocus
                 maxLength={120}
               />
+              <button type="submit" className="rounded-xl bg-white/30 px-3 text-white hover:bg-white/40" aria-label="Save title">
+                <Check className="h-5 w-5" />
+              </button>
+              <button type="button" onClick={() => setEditingTitle(false)} className="rounded-xl bg-white/20 px-3 text-white hover:bg-white/30" aria-label="Cancel">
+                <X className="h-5 w-5" />
+              </button>
             </form>
           ) : (
-            <h1
-              onClick={() => {
-                setNewTitle(notebook.title);
-                setEditingTitle(true);
-              }}
-              className="mt-4 cursor-pointer font-serif text-3xl hover:underline"
-            >
-              {notebook.title}
-            </h1>
+            <div className="mt-4 flex items-center gap-3">
+              <h1
+                onClick={() => {
+                  setNewTitle(notebook.title);
+                  setEditingTitle(true);
+                }}
+                className="cursor-pointer font-serif text-3xl hover:underline"
+                title="Click to rename"
+              >
+                {notebook.title}
+              </h1>
+              <button
+                onClick={() => setEditingCover((v) => !v)}
+                className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur hover:bg-white/30"
+              >
+                <Palette className="h-3 w-3" />
+                {editingCover ? "Done" : "Change cover"}
+              </button>
+            </div>
           )}
 
           <div className="mt-4 flex flex-wrap gap-2">
@@ -199,6 +227,71 @@ function NotebookDetailPage() {
           </div>
         </div>
       </div>
+
+      {editingCover && (
+        <div className="note-card mb-6 p-5">
+          <h3 className="font-serif text-lg text-ink-900">Choose a cover</h3>
+          <div className="mt-4">
+            <span className="text-xs font-semibold uppercase tracking-widest text-ink-500">Cover designs</span>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {COVER_PRESETS.map((p) => (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => updateMutation.mutate({ data: { id, color: p.id } })}
+                  title={p.label}
+                  aria-label={`Select ${p.label} cover`}
+                  className={`h-10 w-10 overflow-hidden rounded-lg border-2 flex items-center justify-center transition ${
+                    notebook.color === p.id ? "border-ink-900 scale-110" : "border-transparent"
+                  }`}
+                  style={{ backgroundImage: p.preview }}
+                >
+                  <span className="rounded-full bg-white/70 px-1 text-xs" aria-hidden="true">
+                    {p.emoji}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="mt-4">
+            <span className="text-xs font-semibold uppercase tracking-widest text-ink-500">Solid colors</span>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              {PRESET_COLORS.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => updateMutation.mutate({ data: { id, color: c } })}
+                  className={`h-8 w-8 rounded-full border-2 transition ${
+                    notebook.color === c ? "border-ink-900 scale-110" : "border-transparent"
+                  }`}
+                  style={{ backgroundColor: c }}
+                  aria-label={`Select color ${c}`}
+                />
+              ))}
+              <label
+                className={`relative flex h-8 w-8 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 ${
+                  !isPreset(notebook.color) && !PRESET_COLORS.includes(notebook.color)
+                    ? "border-ink-900 scale-110"
+                    : "border-ink-300"
+                }`}
+                title="Pick any color"
+                style={{
+                  background:
+                    "conic-gradient(from 0deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)",
+                }}
+              >
+                <input
+                  type="color"
+                  value={isPreset(notebook.color) ? "#B91C1C" : notebook.color}
+                  onChange={(e) => updateMutation.mutate({ data: { id, color: e.target.value } })}
+                  className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                  aria-label="Custom color picker"
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+      )}
 
       <SharePanel
         notebook={notebook}
