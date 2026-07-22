@@ -13,6 +13,7 @@ import { Route as WomenRouteImport } from './routes/women'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as TellYourStoryRouteImport } from './routes/tell-your-story'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SecurityQuestionsRouteImport } from './routes/security-questions'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as GirlsRouteImport } from './routes/girls'
@@ -41,6 +42,11 @@ const TellYourStoryRoute = TellYourStoryRouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SecurityQuestionsRoute = SecurityQuestionsRouteImport.update({
+  id: '/security-questions',
+  path: '/security-questions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResourcesRoute = ResourcesRouteImport.update({
@@ -98,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/girls': typeof GirlsRoute
   '/login': typeof LoginRoute
   '/resources': typeof ResourcesRoute
+  '/security-questions': typeof SecurityQuestionsRoute
   '/signup': typeof SignupRoute
   '/tell-your-story': typeof TellYourStoryRoute
   '/tools': typeof ToolsRoute
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/girls': typeof GirlsRoute
   '/login': typeof LoginRoute
   '/resources': typeof ResourcesRoute
+  '/security-questions': typeof SecurityQuestionsRoute
   '/signup': typeof SignupRoute
   '/tell-your-story': typeof TellYourStoryRoute
   '/tools': typeof ToolsRoute
@@ -129,6 +137,7 @@ export interface FileRoutesById {
   '/girls': typeof GirlsRoute
   '/login': typeof LoginRoute
   '/resources': typeof ResourcesRoute
+  '/security-questions': typeof SecurityQuestionsRoute
   '/signup': typeof SignupRoute
   '/tell-your-story': typeof TellYourStoryRoute
   '/tools': typeof ToolsRoute
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
     | '/girls'
     | '/login'
     | '/resources'
+    | '/security-questions'
     | '/signup'
     | '/tell-your-story'
     | '/tools'
@@ -161,6 +171,7 @@ export interface FileRouteTypes {
     | '/girls'
     | '/login'
     | '/resources'
+    | '/security-questions'
     | '/signup'
     | '/tell-your-story'
     | '/tools'
@@ -176,6 +187,7 @@ export interface FileRouteTypes {
     | '/girls'
     | '/login'
     | '/resources'
+    | '/security-questions'
     | '/signup'
     | '/tell-your-story'
     | '/tools'
@@ -192,6 +204,7 @@ export interface RootRouteChildren {
   GirlsRoute: typeof GirlsRoute
   LoginRoute: typeof LoginRoute
   ResourcesRoute: typeof ResourcesRoute
+  SecurityQuestionsRoute: typeof SecurityQuestionsRoute
   SignupRoute: typeof SignupRoute
   TellYourStoryRoute: typeof TellYourStoryRoute
   ToolsRoute: typeof ToolsRoute
@@ -227,6 +240,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/security-questions': {
+      id: '/security-questions'
+      path: '/security-questions'
+      fullPath: '/security-questions'
+      preLoaderRoute: typeof SecurityQuestionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resources': {
@@ -304,6 +324,7 @@ const rootRouteChildren: RootRouteChildren = {
   GirlsRoute: GirlsRoute,
   LoginRoute: LoginRoute,
   ResourcesRoute: ResourcesRoute,
+  SecurityQuestionsRoute: SecurityQuestionsRoute,
   SignupRoute: SignupRoute,
   TellYourStoryRoute: TellYourStoryRoute,
   ToolsRoute: ToolsRoute,

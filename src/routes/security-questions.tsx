@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { useAuth } from "@/contexts/AuthContext";
-import { SecurityQuestionsForm } from "@/components/SecurityQuestionsForm";
+import { SecurityQuestionsForm, type SecurityAnswers } from "@/components/SecurityQuestionsForm";
 import { saveMyQuestions } from "@/lib/security-questions.functions";
 
 const searchSchema = z.object({
@@ -48,7 +48,7 @@ function SecurityQuestionsPage() {
 
   const required = search.required === "1";
 
-  async function onSubmit(values: Parameters<typeof save>[0]["data"]) {
+  async function onSubmit(values: SecurityAnswers) {
     setError("");
     setSaving(true);
     try {
