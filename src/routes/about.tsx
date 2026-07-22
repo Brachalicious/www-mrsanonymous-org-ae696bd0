@@ -37,9 +37,7 @@ function AboutPage() {
           </div>
 
           <ul className="space-y-1 border-l-2 border-rose-300 pl-5 font-serif text-xl text-ink-900">
-            <li>You choose what to share.</li>
-            <li>You choose how to share it.</li>
-            <li>You choose when to share.</li>
+            <li>You choose what to share, how to share, and when to share.</li>
           </ul>
 
           <p>
