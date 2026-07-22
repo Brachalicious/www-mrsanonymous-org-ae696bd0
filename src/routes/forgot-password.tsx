@@ -172,7 +172,7 @@ function ForgotPasswordPage() {
                   value={newPw}
                   onChange={(e) => setNewPw(e.target.value)}
                   name="new-password"
-                  placeholder="At least 6 characters"
+                  placeholder="Your new password"
                 />
               </div>
             </label>

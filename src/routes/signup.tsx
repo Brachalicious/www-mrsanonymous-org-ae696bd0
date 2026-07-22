@@ -74,7 +74,7 @@ function SignupPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 name="new-password"
-                placeholder="At least 6 characters"
+                placeholder="Your password"
               />
             </div>
           </label>
