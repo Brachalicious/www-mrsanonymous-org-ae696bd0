@@ -76,19 +76,19 @@
   --card-foreground: #2D2826;
   --popover: #FFFFFF;
   --popover-foreground: #2D2826;
-  --primary: #C48B81;
+  --primary: #DC2626;
   --primary-foreground: #FFFFFF;
   --secondary: #F0EBE1;
   --secondary-foreground: #2D2826;
   --muted: #F0EBE1;
   --muted-foreground: #9A928D;
-  --accent: #8C9C8A;
+  --accent: #DC2626;
   --accent-foreground: #FFFFFF;
   --destructive: #E11D48;
   --destructive-foreground: #FFFFFF;
   --border: #E2DCD0;
   --input: #E2DCD0;
-  --ring: #C48B81;
+  --ring: #DC2626;
 
   /* MrsAnonymous ink scale */
   --ink-900: #2D2826;
@@ -98,10 +98,10 @@
   --ink-100: #F5F2EC;
 
   /* MrsAnonymous accent scale */
-  --rose-500: #C48B81;
-  --rose-600: #B37A70;
-  --rose-400: #D9A05B;
-  --rose-50: #FDF2F0;
+  --rose-500: #DC2626;
+  --rose-600: #B91C1C;
+  --rose-400: #EF4444;
+  --rose-50: #FEF2F2;
 
   /* Surfaces */
   --cream-100: #F0EBE1;
