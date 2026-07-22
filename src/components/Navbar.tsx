@@ -47,7 +47,7 @@ function getTabs(loggedIn: boolean): NavItem[] {
 }
 
 export function Navbar() {
-  const { user, profile, loading } = useAuth();
+  const { user, profile, isAdmin } = useAuth();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -98,6 +98,22 @@ export function Navbar() {
               <span className="text-xs text-ink-500">
                 Hello, <span className="font-semibold text-ink-900">{profile?.nickname || "friend"}</span>
               </span>
+              <Link
+                to="/inbox"
+                data-testid="nav-inbox"
+                className="rounded-full border border-ink-900/30 px-4 py-1.5 text-xs font-semibold text-ink-900 hover:bg-ink-900 hover:text-white"
+              >
+                📬 Inbox
+              </Link>
+              {isAdmin && (
+                <Link
+                  to="/admin/messages"
+                  data-testid="nav-admin"
+                  className="rounded-full border border-rose-500/60 px-4 py-1.5 text-xs font-semibold text-rose-500 hover:bg-rose-500 hover:text-white"
+                >
+                  Admin
+                </Link>
+              )}
               <Link
                 to="/tell-your-story"
                 search={{ tab: "mine" }}
@@ -285,6 +301,29 @@ export function Navbar() {
                 Log out ({profile?.nickname || "friend"})
               </button>
             ) : (
+              <></>
+            )}
+            {loggedIn && (
+              <>
+                <Link
+                  to="/inbox"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg border border-ink-900/30 px-3 py-2 text-center text-sm font-semibold text-ink-900"
+                >
+                  📬 Inbox
+                </Link>
+                {isAdmin && (
+                  <Link
+                    to="/admin/messages"
+                    onClick={() => setOpen(false)}
+                    className="rounded-lg border border-rose-500/60 px-3 py-2 text-center text-sm font-semibold text-rose-500"
+                  >
+                    Admin
+                  </Link>
+                )}
+              </>
+            )}
+            {!loggedIn && (
               <>
                 <Link
                   to="/login"

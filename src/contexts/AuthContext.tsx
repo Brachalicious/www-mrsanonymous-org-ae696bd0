@@ -14,6 +14,7 @@ export interface Profile {
 interface AuthContextValue {
   user: User | null;
   profile: Profile | null;
+  isAdmin: boolean;
   loading: boolean;
   login: (creds: { nickname: string; password: string }) => Promise<void>;
   register: (creds: { nickname: string; password: string; audience: "women" | "girls" }) => Promise<void>;
@@ -24,6 +25,7 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue>({
   user: null,
   profile: null,
+  isAdmin: false,
   loading: true,
   login: async () => {},
   register: async () => {},
@@ -40,6 +42,7 @@ function nicknameToEmail(nickname: string) {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -55,8 +58,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (user) {
         const { data } = await sb.from("profiles").select("*").eq("id", user.id).single();
         if (mounted) setProfile((data as Profile | null) ?? null);
+        const { data: roles } = await sb.from("user_roles").select("role").eq("user_id", user.id);
+        if (mounted) setIsAdmin(Array.isArray(roles) && roles.some((r: any) => r.role === "admin"));
       } else {
         setProfile(null);
+        setIsAdmin(false);
       }
 
       if (mounted) setLoading(false);
@@ -74,8 +80,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (nextUser) {
         const { data } = await sb.from("profiles").select("*").eq("id", nextUser.id).single();
         if (mounted) setProfile((data as Profile | null) ?? null);
+        const { data: roles } = await sb.from("user_roles").select("role").eq("user_id", nextUser.id);
+        if (mounted) setIsAdmin(Array.isArray(roles) && roles.some((r: any) => r.role === "admin"));
       } else {
         setProfile(null);
+        setIsAdmin(false);
       }
 
       if (mounted) setLoading(false);
@@ -118,7 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, profile, loading, login, register, logout, errMsg }}>
+    <AuthContext.Provider value={{ user, profile, isAdmin, loading, login, register, logout, errMsg }}>
       {children}
     </AuthContext.Provider>
   );
