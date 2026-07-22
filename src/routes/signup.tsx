@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { PasswordInput } from "@/components/PasswordInput";
@@ -17,6 +17,7 @@ export const Route = createFileRoute("/signup")({
 
 function SignupPage() {
   const { register, errMsg } = useAuth();
+  const navigate = useNavigate({ from: "/signup" });
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -32,6 +33,7 @@ function SignupPage() {
     setLoading(true);
     try {
       await register({ nickname: nickname.trim(), password, audience });
+      navigate({ to: "/security-questions", search: { required: "1" } });
     } catch (e) {
       setError(errMsg(e));
     } finally {
