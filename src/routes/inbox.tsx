@@ -1,0 +1,86 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
+import { listMyMessages } from "@/lib/contact.functions";
+import { useAuth } from "@/contexts/AuthContext";
+
+export const Route = createFileRoute("/inbox")({
+  head: () => ({
+    meta: [
+      { title: "Inbox — MrsANONymous" },
+      { name: "description", content: "Read replies from support to your anonymous messages." },
+      { property: "og:title", content: "Inbox — MrsANONymous" },
+      { property: "og:description", content: "Read replies from support to your anonymous messages." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
+  component: InboxPage,
+});
+
+function InboxPage() {
+  const { user, loading } = useAuth();
+  const fetchFn = useServerFn(listMyMessages);
+  const q = useQuery({
+    queryKey: ["my-messages", user?.id],
+    queryFn: () => fetchFn(),
+    enabled: !!user,
+  });
+
+  if (loading) return <div className="mx-auto max-w-3xl px-5 py-16 text-ink-500">Loading…</div>;
+  if (!user) {
+    return (
+      <div className="mx-auto max-w-3xl px-5 py-16 text-center">
+        <h1 className="font-serif text-3xl text-ink-900">Your Inbox</h1>
+        <p className="mt-3 text-ink-700">Log in to see replies from support.</p>
+        <div className="mt-6 flex justify-center gap-3">
+          <Link to="/login" className="btn-rose">Log in</Link>
+          <Link to="/signup" className="rounded-full border border-ink-900/30 px-4 py-2 text-sm font-semibold text-ink-900">Create account</Link>
+        </div>
+      </div>
+    );
+  }
+
+  const messages = (q.data as any[]) ?? [];
+
+  return (
+    <div className="mx-auto max-w-3xl px-5 py-12">
+      <h1 className="font-serif text-4xl text-ink-900">Your Inbox</h1>
+      <p className="mt-2 text-ink-700">Messages you sent us and any replies from support.</p>
+
+      {q.isLoading && <p className="mt-6 text-ink-500">Loading…</p>}
+      {messages.length === 0 && !q.isLoading && (
+        <div className="note-card mt-8 p-6 text-ink-700">
+          You haven't sent any messages yet. Use the contact form on any page — while signed in, replies will land here.
+        </div>
+      )}
+
+      <div className="mt-8 space-y-6">
+        {messages.map((m) => (
+          <div key={m.id} className="note-card p-6">
+            <div className="flex items-center justify-between text-xs uppercase tracking-widest text-ink-500">
+              <span>{new Date(m.created_at).toLocaleString()}</span>
+              <span className={m.status === "replied" ? "text-green-700" : "text-rose-500"}>
+                {m.status === "replied" ? "Replied" : "Awaiting reply"}
+              </span>
+            </div>
+            <p className="mt-3 whitespace-pre-wrap text-ink-900">{m.message}</p>
+
+            {m.replies?.length > 0 && (
+              <div className="mt-5 space-y-3 border-l-2 border-rose-500/40 pl-4">
+                {m.replies.map((r: any) => (
+                  <div key={r.id}>
+                    <div className="text-[11px] uppercase tracking-widest text-rose-500">
+                      Support · {new Date(r.created_at).toLocaleString()}
+                    </div>
+                    <p className="mt-1 whitespace-pre-wrap text-ink-900">{r.body}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
