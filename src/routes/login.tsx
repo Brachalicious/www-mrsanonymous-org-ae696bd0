@@ -1,7 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { useAuth } from "@/contexts/AuthContext";
 import { PasswordInput } from "@/components/PasswordInput";
+import { hasMyQuestions } from "@/lib/security-questions.functions";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -18,6 +20,7 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   const { login, errMsg } = useAuth();
   const navigate = useNavigate({ from: "/login" });
+  const checkQuestions = useServerFn(hasMyQuestions);
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -29,6 +32,16 @@ function LoginPage() {
     setLoading(true);
     try {
       await login({ nickname: nickname.trim(), password });
+      // Prompt users to set up security questions if they haven't yet.
+      try {
+        const res = await checkQuestions();
+        if (!res.hasQuestions) {
+          navigate({ to: "/security-questions", search: { required: "1" } });
+          return;
+        }
+      } catch {
+        // If the check fails, don't block the login.
+      }
       navigate({ to: "/tell-your-story", search: { tab: "mine" } });
     } catch (e) {
       setError(errMsg(e));
@@ -81,6 +94,12 @@ function LoginPage() {
         </form>
 
         <p className="mt-6 text-sm text-ink-500">
+          Forgot your password?{" "}
+          <Link to="/forgot-password" data-testid="login-link-forgot" className="link-soft underline-offset-4 hover:underline">
+            Reset with security questions
+          </Link>
+        </p>
+        <p className="mt-3 text-sm text-ink-500">
           No account yet?{" "}
           <Link to="/signup" data-testid="login-link-signup" className="link-soft underline-offset-4 hover:underline">
             Create an anonymous account
