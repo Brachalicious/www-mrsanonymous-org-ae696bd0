@@ -510,6 +510,7 @@ const SECTIONS: { id: string; title: string; items: ResourceItem[] }[] = [
       { name: "National Sexual Assault Hotline (RAINN)", phone: "1-800-656-HOPE (4673)", href: "tel:18006564673", note: "24/7 confidential. Free, anonymous." },
       { name: "Childhelp National Child Abuse Hotline", phone: "1-800-422-4453", href: "tel:18004224453", note: "For children and adults." },
       { name: "Suicide & Crisis Lifeline", phone: "988", href: "tel:988", note: "Call or text 988, 24/7." },
+      { name: "The Trevor Project (LGBTQ+ youth crisis)", phone: "866-488-7386 / text 678678", href: "tel:8664887386", note: "24/7 crisis support for LGBTQ+ young people. Text START to 678678 or chat at chat.trvr.org.", },
       { name: "Emergency", phone: "911", href: "tel:911", note: "Immediate danger." },
     ],
   },
