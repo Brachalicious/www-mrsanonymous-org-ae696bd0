@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { BookOpen, Lock, Globe } from "lucide-react";
+import { getCoverStyle } from "@/lib/notebook-covers";
 
 interface NotebookCoverProps {
   id: string;
@@ -20,6 +21,7 @@ export function NotebookCover({
   shareAs = "anonymous",
   jitter = 0,
 }: NotebookCoverProps) {
+  const { className, style } = getCoverStyle(color);
   return (
     <Link
       to="/notebooks/$id"
@@ -28,8 +30,8 @@ export function NotebookCover({
       style={{ ["--jitter" as string]: `${jitter}deg` }}
     >
       <div
-        className="marble-base relative h-52 w-40 p-5 text-white"
-        style={{ backgroundColor: color }}
+        className={`marble-base ${className} relative h-52 w-40 p-5 text-white`}
+        style={style}
       >
         <div className="notebook-tape" />
         <div className="relative z-10 flex h-full flex-col">
