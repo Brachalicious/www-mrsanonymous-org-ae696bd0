@@ -301,6 +301,29 @@ export function Navbar() {
                 Log out ({profile?.nickname || "friend"})
               </button>
             ) : (
+              <></>
+            )}
+            {loggedIn && (
+              <>
+                <Link
+                  to="/inbox"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg border border-ink-900/30 px-3 py-2 text-center text-sm font-semibold text-ink-900"
+                >
+                  📬 Inbox
+                </Link>
+                {isAdmin && (
+                  <Link
+                    to="/admin/messages"
+                    onClick={() => setOpen(false)}
+                    className="rounded-lg border border-rose-500/60 px-3 py-2 text-center text-sm font-semibold text-rose-500"
+                  >
+                    Admin
+                  </Link>
+                )}
+              </>
+            )}
+            {!loggedIn && (
               <>
                 <Link
                   to="/login"
