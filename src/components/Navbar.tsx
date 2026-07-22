@@ -81,6 +81,14 @@ export function Navbar() {
           >
             ✕ Quick Exit
           </button>
+          <a
+            data-testid="safety-strip-call-911"
+            href="tel:911"
+            className="inline-flex items-center gap-1 rounded-sm border border-red-400 bg-red-600 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white shadow ring-1 ring-red-300/60 hover:bg-red-700"
+            title="Immediate danger? Tap to call 911."
+          >
+            <span aria-hidden>📞</span> Call 911
+          </a>
         </div>
       </div>
 
