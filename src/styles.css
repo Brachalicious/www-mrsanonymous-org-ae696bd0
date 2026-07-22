@@ -347,3 +347,113 @@
   background-color: var(--color-rose-50);
   padding: 1rem 1.25rem;
 }
+
+/* ==================================================================
+ * Notebook cover design presets (Lisa Frank, faith, galaxy, etc.)
+ * Applied by setting notebook.color to `preset:<name>`.
+ * ================================================================== */
+
+@utility cover-lisa-frank {
+  background:
+    radial-gradient(circle at 20% 20%, #fef08a 0%, transparent 40%),
+    radial-gradient(circle at 80% 30%, #6ee7ff 0%, transparent 40%),
+    radial-gradient(circle at 30% 80%, #f0abfc 0%, transparent 45%),
+    radial-gradient(circle at 75% 75%, #fda4af 0%, transparent 40%),
+    linear-gradient(135deg, #ff6ec7, #ffb86b 25%, #ffe66b 50%, #6bffb8 75%, #6bb8ff);
+}
+
+@utility cover-rainbow {
+  background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #1dd1a1, #a29bfe, #ff9ff3);
+}
+
+@utility cover-galaxy {
+  background:
+    radial-gradient(1.5px 1.5px at 20% 30%, #ffffff, transparent),
+    radial-gradient(1px 1px at 40% 70%, #ffffff, transparent),
+    radial-gradient(1.5px 1.5px at 60% 20%, #ffffff, transparent),
+    radial-gradient(1px 1px at 80% 55%, #ffffff, transparent),
+    radial-gradient(1px 1px at 15% 80%, #ffffff, transparent),
+    radial-gradient(2px 2px at 70% 85%, #ffe6a7, transparent),
+    linear-gradient(160deg, #0f0524 0%, #2b0a5a 40%, #6b1b8f 80%, #ff6bd6 100%);
+}
+
+@utility cover-faith {
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.4) 0%, transparent 40%),
+    linear-gradient(160deg, #1e3a8a 0%, #4c1d95 60%, #d4af37 120%);
+  position: relative;
+
+  &::after {
+    content: "✝";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 5rem;
+    color: rgba(255, 215, 0, 0.35);
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    z-index: 0;
+    pointer-events: none;
+  }
+}
+
+@utility cover-floral {
+  background:
+    radial-gradient(circle at 25% 25%, #fda4af 8%, transparent 12%),
+    radial-gradient(circle at 75% 30%, #fbcfe8 8%, transparent 12%),
+    radial-gradient(circle at 40% 65%, #fecaca 8%, transparent 12%),
+    radial-gradient(circle at 80% 80%, #fda4af 8%, transparent 12%),
+    radial-gradient(circle at 15% 85%, #fbcfe8 8%, transparent 12%),
+    linear-gradient(180deg, #fff1f2, #fce7f3);
+  color: #831843 !important;
+}
+
+@utility cover-butterfly {
+  background:
+    radial-gradient(circle at 30% 40%, #c4b5fd 0%, transparent 35%),
+    radial-gradient(circle at 70% 60%, #f9a8d4 0%, transparent 35%),
+    linear-gradient(135deg, #a78bfa, #ec4899 50%, #f472b6);
+}
+
+@utility cover-ocean {
+  background:
+    radial-gradient(ellipse at 30% 20%, #a5f3fc 0%, transparent 45%),
+    radial-gradient(ellipse at 70% 80%, #67e8f9 0%, transparent 45%),
+    linear-gradient(180deg, #0e7490, #155e75 60%, #0c4a6e);
+}
+
+@utility cover-sunset {
+  background: linear-gradient(180deg, #fde68a 0%, #fb923c 40%, #ec4899 75%, #7c3aed 100%);
+}
+
+@utility cover-forest {
+  background:
+    radial-gradient(circle at 20% 30%, rgba(134, 239, 172, 0.4) 0%, transparent 35%),
+    radial-gradient(circle at 80% 70%, rgba(34, 197, 94, 0.35) 0%, transparent 40%),
+    linear-gradient(160deg, #14532d, #166534 60%, #4d7c0f);
+}
+
+@utility cover-leopard {
+  background-color: #d4a574;
+  background-image:
+    radial-gradient(ellipse 8px 6px at 20% 25%, #3a2410 40%, transparent 45%),
+    radial-gradient(ellipse 6px 5px at 45% 35%, #3a2410 40%, transparent 45%),
+    radial-gradient(ellipse 7px 6px at 70% 20%, #3a2410 40%, transparent 45%),
+    radial-gradient(ellipse 8px 5px at 30% 60%, #3a2410 40%, transparent 45%),
+    radial-gradient(ellipse 6px 7px at 65% 65%, #3a2410 40%, transparent 45%),
+    radial-gradient(ellipse 7px 5px at 85% 80%, #3a2410 40%, transparent 45%),
+    radial-gradient(ellipse 6px 6px at 15% 85%, #3a2410 40%, transparent 45%);
+}
+
+@utility cover-holographic {
+  background: linear-gradient(
+    115deg,
+    #ff9a9e 0%,
+    #fad0c4 20%,
+    #a1c4fd 40%,
+    #c2e9fb 55%,
+    #d4fc79 70%,
+    #f6d365 85%,
+    #fda085 100%
+  );
+}
