@@ -13,6 +13,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { EntryEditor } from "@/components/EntryEditor";
 import { ArrowLeft, Lock, Globe, Share2, BookOpen, Trash2 } from "lucide-react";
+import { getCoverStyle } from "@/lib/notebook-covers";
 
 const MAX_TOPICS = 8;
 const TOPIC_OPTIONS = [
@@ -138,8 +139,8 @@ function NotebookDetailPage() {
       </Link>
 
       <div
-        className="marble-base relative mb-8 overflow-hidden rounded-3xl p-8 text-white"
-        style={{ backgroundColor: notebook.color }}
+        className={`marble-base ${getCoverStyle(notebook.color).className} relative mb-8 overflow-hidden rounded-3xl p-8 text-white`}
+        style={getCoverStyle(notebook.color).style}
       >
         <div className="notebook-tape" />
         <div className="relative z-10">
