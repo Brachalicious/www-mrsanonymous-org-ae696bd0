@@ -144,8 +144,8 @@ function SignupPage() {
           </button>
 
           <p className="text-[11px] leading-relaxed text-ink-500">
-            We store only your nickname (lowercase, for uniqueness) and a one-way hash of your password. There is no way
-            to recover your password if you forget your nickname. Choose something only you would remember.
+            We store only your nickname and a one-way hash of your password. On the next screen you'll set 3
+            security questions — the only way to recover your account if you forget your password.
           </p>
         </form>
 
