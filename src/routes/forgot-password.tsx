@@ -62,7 +62,6 @@ function ForgotPasswordPage() {
   async function doReset(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    if (newPw.length < 6) return setError("Password must be at least 6 characters.");
     if (newPw !== confirm) return setError("Passwords do not match.");
     setLoading(true);
     try {
@@ -173,7 +172,7 @@ function ForgotPasswordPage() {
                   value={newPw}
                   onChange={(e) => setNewPw(e.target.value)}
                   name="new-password"
-                  placeholder="At least 6 characters"
+                  placeholder="Your new password"
                 />
               </div>
             </label>

@@ -6,9 +6,10 @@ interface PasswordInputProps {
   placeholder?: string;
   name?: string;
   testid?: string;
+  minLength?: number;
 }
 
-export function PasswordInput({ value, onChange, placeholder, name, testid }: PasswordInputProps) {
+export function PasswordInput({ value, onChange, placeholder, name, testid, minLength = 1 }: PasswordInputProps) {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -21,7 +22,7 @@ export function PasswordInput({ value, onChange, placeholder, name, testid }: Pa
         onChange={onChange}
         placeholder={placeholder}
         required
-        minLength={6}
+        minLength={minLength}
         className="input-soft w-full pr-12"
       />
       <button

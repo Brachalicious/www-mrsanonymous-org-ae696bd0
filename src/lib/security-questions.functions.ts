@@ -23,9 +23,9 @@ function timingSafeEq(a: string, b: string) {
 }
 
 const saveSchema = z.object({
-  question_1: z.string().trim().min(4).max(200),
-  question_2: z.string().trim().min(4).max(200),
-  question_3: z.string().trim().min(4).max(200),
+  question_1: z.string().trim().min(1).max(200),
+  question_2: z.string().trim().min(1).max(200),
+  question_3: z.string().trim().min(1).max(200),
   answer_1: z.string().trim().min(1).max(200),
   answer_2: z.string().trim().min(1).max(200),
   answer_3: z.string().trim().min(1).max(200),
@@ -103,7 +103,7 @@ const resetSchema = z.object({
   answer_1: z.string().trim().min(1).max(200),
   answer_2: z.string().trim().min(1).max(200),
   answer_3: z.string().trim().min(1).max(200),
-  new_password: z.string().min(6).max(128),
+  new_password: z.string().min(1).max(128),
 });
 
 export const resetPasswordWithAnswers = createServerFn({ method: "POST" })

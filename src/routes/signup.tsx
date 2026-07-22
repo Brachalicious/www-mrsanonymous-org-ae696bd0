@@ -28,7 +28,6 @@ function SignupPage() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    if (password.length < 6) return setError("Password must be at least 6 characters.");
     if (password !== confirm) return setError("Passwords do not match.");
     setLoading(true);
     try {
@@ -75,7 +74,7 @@ function SignupPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 name="new-password"
-                placeholder="At least 6 characters"
+                placeholder="Your password"
               />
             </div>
           </label>
