@@ -62,7 +62,7 @@ function Index() {
                 "Whether you are here to tell your story, read others, or simply feel less alone — this space is for you."
               </p>
               <p className="mt-6 text-sm leading-relaxed text-ink-500">
-                You choose what to share. You choose how. You choose when to share.
+                You choose what to share, how to share, and when to share.
               </p>
               <div className="mt-8 flex items-center justify-between text-xs text-ink-300">
                 <span>— Mrs. Anonymous</span>
