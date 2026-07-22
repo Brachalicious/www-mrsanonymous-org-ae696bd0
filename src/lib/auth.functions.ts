@@ -7,7 +7,7 @@ function nicknameToEmail(nickname: string) {
 
 const registerSchema = z.object({
   nickname: z.string().min(2).max(40),
-  password: z.string().min(6).max(128),
+  password: z.string().min(1).max(128),
   audience: z.enum(["women", "girls"]).default("women"),
 });
 
