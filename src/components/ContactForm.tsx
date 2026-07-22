@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
 import { sendContactMessage } from "@/lib/contact.functions";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface ContactFormProps {
   audience?: "women" | "girls";
@@ -11,11 +12,16 @@ export function ContactForm({ audience = "women" }: ContactFormProps) {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("");
   const send = useServerFn(sendContactMessage);
+  const { user } = useAuth();
 
   const mutation = useMutation({
     mutationFn: send,
     onSuccess: () => {
-      setStatus("✓ Message received. Thank you for trusting us with it.");
+      setStatus(
+        user
+          ? "✓ Message received. Any reply from support will appear in your Inbox."
+          : "✓ Message received. Thank you for trusting us with it."
+      );
       setMessage("");
     },
     onError: (err) => {
@@ -30,7 +36,7 @@ export function ContactForm({ audience = "women" }: ContactFormProps) {
       return;
     }
     setStatus("");
-    mutation.mutate({ data: { message: message.trim(), audience } });
+    mutation.mutate({ data: { message: message.trim(), audience, userId: user?.id ?? null } });
   }
 
   return (
@@ -38,6 +44,12 @@ export function ContactForm({ audience = "women" }: ContactFormProps) {
       <div className="text-xs font-bold uppercase tracking-[0.3em] text-rose-500">Contact us anonymously</div>
       <p className="mt-2 text-ink-700">
         We do not ask for your name or email. This message is for this visit only.
+        {user && (
+          <>
+            {" "}You are signed in as{" "}
+            <span className="font-semibold">friend</span> — replies from support will appear in your Inbox.
+          </>
+        )}
       </p>
 
       <form onSubmit={submit} className="mt-5 space-y-4">
