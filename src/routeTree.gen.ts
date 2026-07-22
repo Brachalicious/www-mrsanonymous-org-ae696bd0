@@ -13,9 +13,11 @@ import { Route as WomenRouteImport } from './routes/women'
 import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as TellYourStoryRouteImport } from './routes/tell-your-story'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SecurityQuestionsRouteImport } from './routes/security-questions'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as GirlsRouteImport } from './routes/girls'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BoardRouteImport } from './routes/board'
 import { Route as AboutRouteImport } from './routes/about'
@@ -42,6 +44,11 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SecurityQuestionsRoute = SecurityQuestionsRouteImport.update({
+  id: '/security-questions',
+  path: '/security-questions',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResourcesRoute = ResourcesRouteImport.update({
   id: '/resources',
   path: '/resources',
@@ -55,6 +62,11 @@ const LoginRoute = LoginRouteImport.update({
 const GirlsRoute = GirlsRouteImport.update({
   id: '/girls',
   path: '/girls',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -88,9 +100,11 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/board': typeof BoardRoute
   '/contact': typeof ContactRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/girls': typeof GirlsRoute
   '/login': typeof LoginRoute
   '/resources': typeof ResourcesRoute
+  '/security-questions': typeof SecurityQuestionsRoute
   '/signup': typeof SignupRoute
   '/tell-your-story': typeof TellYourStoryRoute
   '/tools': typeof ToolsRoute
@@ -102,9 +116,11 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/board': typeof BoardRoute
   '/contact': typeof ContactRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/girls': typeof GirlsRoute
   '/login': typeof LoginRoute
   '/resources': typeof ResourcesRoute
+  '/security-questions': typeof SecurityQuestionsRoute
   '/signup': typeof SignupRoute
   '/tell-your-story': typeof TellYourStoryRoute
   '/tools': typeof ToolsRoute
@@ -117,9 +133,11 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/board': typeof BoardRoute
   '/contact': typeof ContactRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/girls': typeof GirlsRoute
   '/login': typeof LoginRoute
   '/resources': typeof ResourcesRoute
+  '/security-questions': typeof SecurityQuestionsRoute
   '/signup': typeof SignupRoute
   '/tell-your-story': typeof TellYourStoryRoute
   '/tools': typeof ToolsRoute
@@ -133,9 +151,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/board'
     | '/contact'
+    | '/forgot-password'
     | '/girls'
     | '/login'
     | '/resources'
+    | '/security-questions'
     | '/signup'
     | '/tell-your-story'
     | '/tools'
@@ -147,9 +167,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/board'
     | '/contact'
+    | '/forgot-password'
     | '/girls'
     | '/login'
     | '/resources'
+    | '/security-questions'
     | '/signup'
     | '/tell-your-story'
     | '/tools'
@@ -161,9 +183,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/board'
     | '/contact'
+    | '/forgot-password'
     | '/girls'
     | '/login'
     | '/resources'
+    | '/security-questions'
     | '/signup'
     | '/tell-your-story'
     | '/tools'
@@ -176,9 +200,11 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   BoardRoute: typeof BoardRoute
   ContactRoute: typeof ContactRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   GirlsRoute: typeof GirlsRoute
   LoginRoute: typeof LoginRoute
   ResourcesRoute: typeof ResourcesRoute
+  SecurityQuestionsRoute: typeof SecurityQuestionsRoute
   SignupRoute: typeof SignupRoute
   TellYourStoryRoute: typeof TellYourStoryRoute
   ToolsRoute: typeof ToolsRoute
@@ -216,6 +242,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/security-questions': {
+      id: '/security-questions'
+      path: '/security-questions'
+      fullPath: '/security-questions'
+      preLoaderRoute: typeof SecurityQuestionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/resources': {
       id: '/resources'
       path: '/resources'
@@ -235,6 +268,13 @@ declare module '@tanstack/react-router' {
       path: '/girls'
       fullPath: '/girls'
       preLoaderRoute: typeof GirlsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -280,9 +320,11 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   BoardRoute: BoardRoute,
   ContactRoute: ContactRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   GirlsRoute: GirlsRoute,
   LoginRoute: LoginRoute,
   ResourcesRoute: ResourcesRoute,
+  SecurityQuestionsRoute: SecurityQuestionsRoute,
   SignupRoute: SignupRoute,
   TellYourStoryRoute: TellYourStoryRoute,
   ToolsRoute: ToolsRoute,

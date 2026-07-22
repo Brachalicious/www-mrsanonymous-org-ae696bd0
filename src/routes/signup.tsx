@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { PasswordInput } from "@/components/PasswordInput";
@@ -17,6 +17,7 @@ export const Route = createFileRoute("/signup")({
 
 function SignupPage() {
   const { register, errMsg } = useAuth();
+  const navigate = useNavigate({ from: "/signup" });
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -32,6 +33,7 @@ function SignupPage() {
     setLoading(true);
     try {
       await register({ nickname: nickname.trim(), password, audience });
+      navigate({ to: "/security-questions", search: { required: "1" } });
     } catch (e) {
       setError(errMsg(e));
     } finally {
@@ -142,8 +144,8 @@ function SignupPage() {
           </button>
 
           <p className="text-[11px] leading-relaxed text-ink-500">
-            We store only your nickname (lowercase, for uniqueness) and a one-way hash of your password. There is no way
-            to recover your password if you forget your nickname. Choose something only you would remember.
+            We store only your nickname and a one-way hash of your password. On the next screen you'll set 3
+            security questions — the only way to recover your account if you forget your password.
           </p>
         </form>
 

@@ -180,6 +180,45 @@ export type Database = {
           },
         ]
       }
+      security_questions: {
+        Row: {
+          answer_1_hash: string
+          answer_2_hash: string
+          answer_3_hash: string
+          created_at: string
+          question_1: string
+          question_2: string
+          question_3: string
+          salt: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          answer_1_hash: string
+          answer_2_hash: string
+          answer_3_hash: string
+          created_at?: string
+          question_1: string
+          question_2: string
+          question_3: string
+          salt: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          answer_1_hash?: string
+          answer_2_hash?: string
+          answer_3_hash?: string
+          created_at?: string
+          question_1?: string
+          question_2?: string
+          question_3?: string
+          salt?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
