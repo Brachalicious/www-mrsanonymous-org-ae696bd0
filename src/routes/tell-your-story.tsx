@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
-import { useAuth } from "@/contexts/AuthContext";
 import { StoriesBoard } from "@/components/StoriesBoard";
 import { NotebookList } from "@/components/NotebookList";
 
@@ -21,7 +20,6 @@ export const Route = createFileRoute("/tell-your-story")({
 
 function TellYourStoryPage() {
   const { tab } = Route.useSearch();
-  const { user } = useAuth();
 
   const tabs = [
     { key: "story", label: "The Board" },
@@ -71,21 +69,6 @@ function TellYourStoryPage() {
 
       {tab === "mine" && (
         <section aria-label="My notebooks">
-          {!user && (
-            <div className="mb-6 note-card p-5 text-center">
-              <p className="text-ink-700">
-                Notebooks are private and tied to your anonymous account. Log in or create one to start writing.
-              </p>
-              <div className="mt-4 flex justify-center gap-3">
-                <Link to="/login" className="btn-rose">
-                  Log in
-                </Link>
-                <Link to="/signup" className="btn-ghost">
-                  Create account
-                </Link>
-              </div>
-            </div>
-          )}
           <NotebookList />
         </section>
       )}
