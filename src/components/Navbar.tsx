@@ -88,8 +88,8 @@ export function Navbar() {
             title="Immediate danger? Tap to call 911."
           >
             <svg aria-hidden className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C10.2 2 9 3.2 9 5v4.5c0 .3-.2.5-.5.5s-.5-.2-.5-.5V5c0-1.1-.9-2-2-2S4 3.9 4 5v8c0 3.3 2.7 6 6 6h4c3.3 0 6-2.7 6-6V5c0-1.1-.9-2-2-2s-2 .9-2 2v4.5c0 .3-.2.5-.5.5s-.5-.2-.5-.5V5c0-1.8-1.2-3-3-3Z" />
-              <path d="M9 11h6v2H9z" />
+              <path d="M12 22c4.5 0 8-3.5 8-8v-6c0-1.1-.9-2-2-2s-2 .9-2 2v1h-2V5c0-1.1-.9-2-2-2s-2 .9-2 2v4h-2V6c0-1.1-.9-2-2-2S4 4.9 4 6v8c0 4.5 3.5 8 8 8Z" />
+              <path d="M8 11h8v2H8z" />
             </svg>
             Call 911
           </a>
