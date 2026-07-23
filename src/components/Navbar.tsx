@@ -87,14 +87,9 @@ export function Navbar() {
             className="inline-flex items-center gap-1.5 rounded-sm border border-red-400 bg-red-600 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white shadow ring-1 ring-red-300/60 hover:bg-red-700"
             title="Immediate danger? Tap to call 911."
           >
-            <svg aria-hidden className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 16v-4" />
-              <path d="M10 16v-3" />
-              <path d="M14 16v-3" />
-              <path d="M8 16v-2" />
-              <path d="M16 16v-2" />
-              <path d="M12 12c-2-2-3-2-5-1-2 1-2 3-2 5 0 2 2 3 4 3h6c2 0 4-1 4-3 0-2-1-4-2-5-2-1-3-1-5 1Z" />
-              <path d="M12 12V8" />
+            <svg aria-hidden className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C10.2 2 9 3.2 9 5v4.5c0 .3-.2.5-.5.5s-.5-.2-.5-.5V5c0-1.1-.9-2-2-2S4 3.9 4 5v8c0 3.3 2.7 6 6 6h4c3.3 0 6-2.7 6-6V5c0-1.1-.9-2-2-2s-2 .9-2 2v4.5c0 .3-.2.5-.5.5s-.5-.2-.5-.5V5c0-1.8-1.2-3-3-3Z" />
+              <path d="M9 11h6v2H9z" />
             </svg>
             Call 911
           </a>
