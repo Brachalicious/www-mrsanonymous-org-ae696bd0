@@ -179,7 +179,7 @@ export function Navbar() {
             const className = tabClassName(t.kind);
             if (t.external) {
               return (
-                <li key={t.to}>
+                <li key={t.testid}>
                   <a
                     href={t.to}
                     target="_blank"
@@ -195,7 +195,7 @@ export function Navbar() {
 
               if (t.to === "/tell-your-story" && t.kind === "rose") {
                 return (
-                  <li key={t.to}>
+                  <li key={t.testid}>
                     <Link
                       to="/tell-your-story"
                       search={{ tab: "mine" }}
@@ -211,7 +211,7 @@ export function Navbar() {
               }
 
               return (
-                <li key={t.to}>
+                <li key={t.testid}>
                   <Link
                     to={t.to as any}
                     data-testid={t.testid}
@@ -246,7 +246,7 @@ export function Navbar() {
               if (t.external) {
                 return (
                   <a
-                    key={t.to}
+                    key={t.testid}
                     href={t.to}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -262,7 +262,7 @@ export function Navbar() {
               if (t.to === "/tell-your-story" && t.kind === "rose") {
                 return (
                   <Link
-                    key={t.to}
+                    key={t.testid}
                     to="/tell-your-story"
                     search={{ tab: "mine" }}
                     data-testid={`${t.testid}-mobile`}
@@ -276,7 +276,7 @@ export function Navbar() {
 
               return (
                 <Link
-                  key={t.to}
+                  key={t.testid}
                   to={t.to as any}
                   data-testid={`${t.testid}-mobile`}
                   onClick={() => setOpen(false)}
