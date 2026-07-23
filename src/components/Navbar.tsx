@@ -84,14 +84,11 @@ export function Navbar() {
           <a
             data-testid="safety-strip-call-911"
             href="tel:911"
-            className="inline-flex items-center gap-1.5 rounded-sm border border-red-400 bg-red-600 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white shadow ring-1 ring-red-300/60 hover:bg-red-700"
+            className="inline-flex items-center gap-2 rounded-sm border border-red-400 bg-red-600 px-4 py-2 text-xs font-extrabold uppercase tracking-widest text-white shadow ring-1 ring-red-300/60 hover:bg-red-700"
             title="Immediate danger? Tap to call 911."
           >
-            <svg aria-hidden className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 22c4.5 0 8-3.5 8-8v-6c0-1.1-.9-2-2-2s-2 .9-2 2v1h-2V5c0-1.1-.9-2-2-2s-2 .9-2 2v4h-2V6c0-1.1-.9-2-2-2S4 4.9 4 6v8c0 4.5 3.5 8 8 8Z" />
-              <path d="M8 11h8v2H8z" />
-            </svg>
-            Call 911
+            <span aria-hidden className="text-lg leading-none">🖐️➡️✊</span>
+            <span className="leading-none">Call 911</span>
           </a>
         </div>
       </div>
