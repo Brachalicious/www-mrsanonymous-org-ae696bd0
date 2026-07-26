@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { LANGUAGES, translate, type LangCode } from "@/lib/translations";
+import { applyLanguageToDom } from "@/lib/dom-translator";
 
 const STORAGE_KEY = "mrsanon:lang";
 
@@ -39,6 +40,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     if (typeof document === "undefined") return;
     document.documentElement.lang = lang;
     document.documentElement.dir = dir;
+    applyLanguageToDom(lang);
   }, [lang, dir]);
 
   const setLang = useCallback((l: LangCode) => {
