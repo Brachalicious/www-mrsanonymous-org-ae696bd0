@@ -30,6 +30,7 @@ function DownloadPage() {
   const [platform, setPlatform] = useState<Platform>("desktop");
   const [installEvent, setInstallEvent] = useState<any>(null);
   const [installed, setInstalled] = useState(false);
+  const [disguise, setDisguise] = useState(false);
 
   useEffect(() => {
     setPlatform(detectPlatform());
@@ -47,6 +48,21 @@ function DownloadPage() {
     };
   }, []);
 
+  useEffect(() => {
+    const link = document.querySelector<HTMLLinkElement>('link[rel="manifest"]');
+    if (!link) return;
+    const original = link.getAttribute("href") || "/manifest.webmanifest";
+    link.setAttribute("href", disguise ? "/manifest-calc.webmanifest" : "/manifest.webmanifest");
+    // update apple touch icon too so iOS Add-to-Home uses calc icon
+    const apple = document.querySelector<HTMLLinkElement>('link[rel="apple-touch-icon"]');
+    const appleOrig = apple?.getAttribute("href") || "/apple-touch-icon.png";
+    if (apple) apple.setAttribute("href", disguise ? "/calc-icon-192.png" : "/apple-touch-icon.png");
+    return () => {
+      link.setAttribute("href", original);
+      if (apple) apple.setAttribute("href", appleOrig);
+    };
+  }, [disguise]);
+
   async function handleInstall() {
     if (!installEvent) return;
     installEvent.prompt();
@@ -60,18 +76,50 @@ function DownloadPage() {
       <div className="mx-auto max-w-3xl">
         <div className="text-center">
           <img
-            src="/app-icon-512.png"
-            alt="MrsANONymous app icon"
+            src={disguise ? "/calc-icon-512.png" : "/app-icon-512.png"}
+            alt={disguise ? "Calculator app icon" : "MrsANONymous app icon"}
             width={128}
             height={128}
             className="mx-auto rounded-3xl shadow-lg"
           />
           <h1 className="mt-6 font-serif text-4xl font-bold text-ink-900 sm:text-5xl">
-            Download the MrsANONymous App
+            {disguise ? "Install as “Calculator” (disguised)" : "Download the MrsANONymous App"}
           </h1>
           <p className="mt-3 text-lg text-ink-700">
             A discreet safety companion for your phone. Free. No app store. No account traces. 100% anonymous.
           </p>
+        </div>
+
+        <div className="mt-6 rounded-xl border-2 border-ink-300 bg-white p-5">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h3 className="font-serif text-lg font-semibold text-ink-900">🕶️ Disguise Mode</h3>
+              <p className="mt-1 text-sm text-ink-700">
+                Install the app so it shows up on your home screen as a plain
+                <strong> Calculator</strong> — calculator icon, calculator name.
+                Only you know what it really opens. Turn this on <em>before</em> you install.
+              </p>
+            </div>
+            <label className="flex shrink-0 cursor-pointer items-center gap-2">
+              <input
+                type="checkbox"
+                checked={disguise}
+                onChange={(e) => setDisguise(e.target.checked)}
+                className="h-5 w-5 accent-rose-600"
+                data-testid="toggle-disguise"
+              />
+              <span className="text-sm font-semibold text-ink-900">
+                {disguise ? "On" : "Off"}
+              </span>
+            </label>
+          </div>
+          {disguise && (
+            <p className="mt-3 rounded-lg bg-amber-50 p-3 text-xs text-ink-700">
+              When your phone asks for a name during install, keep it as
+              <strong> “Calculator”</strong>. On iPhone you can also type
+              <strong> Calculator</strong> in the “Add to Home Screen” name field.
+            </p>
+          )}
         </div>
 
         {installed && (
@@ -89,7 +137,7 @@ function DownloadPage() {
               className="btn-rose text-lg"
               data-testid="btn-install-app"
             >
-              📥 Install Now
+              {disguise ? "🧮 Install as Calculator" : "📥 Install Now"}
             </button>
           </div>
         )}
