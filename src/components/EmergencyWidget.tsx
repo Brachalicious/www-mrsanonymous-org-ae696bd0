@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Phone, X, HeartPulse, MapPin, MessageSquare, Settings } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES, translateToEnglish, type LangCode } from "@/lib/translations";
+import { getEmergency } from "@/lib/emergency-numbers";
 
 const MSG_KEY = "mrsanon:panic-message";
 const MSG_LANG_KEY = "mrsanon:panic-msg-lang";
@@ -17,6 +18,7 @@ type Loc = {
 
 export function EmergencyWidget() {
   const { t, lang: uiLang } = useLanguage();
+  const emergency = getEmergency(uiLang);
   const [open, setOpen] = useState(false);
   const [loc, setLoc] = useState<Loc | null>(null);
   const [locError, setLocError] = useState<string | null>(null);
@@ -105,7 +107,8 @@ export function EmergencyWidget() {
   }
 
   // Fallback (English) href so the link is valid even before translation runs.
-  const fallbackHref = `sms:911?&body=${encodeURIComponent(buildSmsBody(message))}`;
+  const smsNumber = emergency.sms ?? emergency.police;
+  const fallbackHref = `sms:${smsNumber}?&body=${encodeURIComponent(buildSmsBody(message))}`;
 
   async function handleTextClick(e: React.MouseEvent<HTMLAnchorElement>) {
     if (msgLang === "en") return; // fallbackHref already correct
@@ -115,7 +118,7 @@ export function EmergencyWidget() {
       const original = message.trim() || DEFAULT_MSG;
       const english = await translateToEnglish(original, msgLang);
       const body = buildSmsBody(english, original);
-      window.location.href = `sms:911?&body=${encodeURIComponent(body)}`;
+      window.location.href = `sms:${smsNumber}?&body=${encodeURIComponent(body)}`;
     } finally {
       setPreparing(false);
     }
@@ -141,29 +144,33 @@ export function EmergencyWidget() {
             {t("emg.disclaimer")}
           </p>
           <div className="mt-3 flex flex-col gap-2">
+            {emergency.crisis && (
+              <a
+                href={`tel:${emergency.crisis}`}
+                data-testid="emergency-call-crisis"
+                className="btn-rose w-full py-2 text-xs"
+              >
+                <Phone className="h-3.5 w-3.5" /> {t("safety.callEmergency")} {emergency.crisisLabel ?? emergency.crisis}
+              </a>
+            )}
             <a
-              href="tel:988"
-              data-testid="emergency-call-988"
-              className="btn-rose w-full py-2 text-xs"
-            >
-              <Phone className="h-3.5 w-3.5" /> {t("emg.call988")}
-            </a>
-            <a
-              href="tel:911"
-              data-testid="emergency-call-911"
+              href={`tel:${emergency.police}`}
+              data-testid="emergency-call-police"
               className="btn-ghost w-full py-2 text-xs"
             >
-              <Phone className="h-3.5 w-3.5" /> {t("emg.call911")}
+              <Phone className="h-3.5 w-3.5" /> {t("safety.callEmergency")} {emergency.policeLabel}
             </a>
-            <a
-              href={fallbackHref}
-              onClick={handleTextClick}
-              data-testid="emergency-text-911"
-              className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-red-600 py-2 text-xs font-extrabold uppercase tracking-widest text-white hover:bg-red-700"
-            >
-              <MessageSquare className="h-3.5 w-3.5" />{" "}
-              {preparing ? t("emg.translating") : t("emg.text911")}
-            </a>
+            {emergency.smsSupported && (
+              <a
+                href={fallbackHref}
+                onClick={handleTextClick}
+                data-testid="emergency-text-emergency"
+                className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-red-600 py-2 text-xs font-extrabold uppercase tracking-widest text-white hover:bg-red-700"
+              >
+                <MessageSquare className="h-3.5 w-3.5" />{" "}
+                {preparing ? t("emg.translating") : `${t("emg.text911").replace("911", emergency.sms ?? emergency.police)}`}
+              </a>
+            )}
           </div>
 
           <div className="mt-3 rounded-lg border border-ink-300/60 bg-cream-100 p-2">
