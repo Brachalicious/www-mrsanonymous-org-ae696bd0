@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { isDisguiseEnabled, setDisguiseEnabled } from "@/components/CalcGate";
 
 export const Route = createFileRoute("/download")({
   component: DownloadPage,
@@ -31,6 +32,32 @@ function DownloadPage() {
   const [installEvent, setInstallEvent] = useState<any>(null);
   const [installed, setInstalled] = useState(false);
   const [disguise, setDisguise] = useState(false);
+  const [gateOn, setGateOn] = useState(false);
+
+  useEffect(() => {
+    setGateOn(isDisguiseEnabled());
+  }, []);
+
+  function toggleGate(on: boolean) {
+    if (on) {
+      const confirmed = confirm(
+        "Turn on Calculator lock?\n\nThe app will look and open like a calculator. To open the real app you'll type a math calculation you choose, then press = .\n\nOn the very next launch you'll set your passcode: type the calculation you want (e.g. 7+3), then press = . That exact sequence becomes your passcode."
+      );
+      if (!confirmed) return;
+      setDisguiseEnabled(true);
+      setGateOn(true);
+    } else {
+      setDisguiseEnabled(false);
+      setGateOn(false);
+    }
+  }
+
+  function resetPasscode() {
+    if (!confirm("Reset your calculator passcode? You'll set a new one on next open.")) return;
+    localStorage.removeItem("calc_disguise_passcode");
+    sessionStorage.removeItem("calc_disguise_unlocked");
+    alert("Passcode cleared. Next time the calculator opens, the first calculation you type + = becomes your new passcode.");
+  }
 
   useEffect(() => {
     setPlatform(detectPlatform());
@@ -120,6 +147,46 @@ function DownloadPage() {
               <strong> Calculator</strong> in the “Add to Home Screen” name field.
             </p>
           )}
+        </div>
+
+        <div className="mt-4 rounded-xl border-2 border-red-600 bg-white p-5">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h3 className="font-serif text-lg font-semibold text-ink-900">🔢 Calculator Passcode Lock</h3>
+              <p className="mt-1 text-sm text-ink-700">
+                When on, the app opens as a working calculator. To reveal the real
+                app, type your chosen calculation (e.g. <code>7+3</code>) and press
+                <strong> =</strong>. Wrong entries just show a normal calculator
+                result — no error, no hint.
+              </p>
+              <ul className="mt-2 ml-5 list-disc text-xs text-ink-500">
+                <li>First launch after turning it on: your first <code>calc =</code> becomes the passcode.</li>
+                <li>To turn it off from inside the calculator, <strong>double-tap the display</strong>.</li>
+                <li>You can always turn it back on here.</li>
+              </ul>
+              {gateOn && (
+                <button
+                  type="button"
+                  onClick={resetPasscode}
+                  className="mt-3 text-xs font-semibold text-red-700 underline"
+                >
+                  Reset passcode
+                </button>
+              )}
+            </div>
+            <label className="flex shrink-0 cursor-pointer items-center gap-2">
+              <input
+                type="checkbox"
+                checked={gateOn}
+                onChange={(e) => toggleGate(e.target.checked)}
+                className="h-5 w-5 accent-red-600"
+                data-testid="toggle-calc-lock"
+              />
+              <span className="text-sm font-semibold text-ink-900">
+                {gateOn ? "On" : "Off"}
+              </span>
+            </label>
+          </div>
         </div>
 
         {installed && (
