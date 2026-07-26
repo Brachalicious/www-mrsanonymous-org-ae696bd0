@@ -35,7 +35,8 @@ const PROFILES: Record<string, EmergencyProfile> = {
     medical: "101", medicalLabel: "101 (מד\"א)",
     fire: "102",    fireLabel: "102 (כיבוי אש)",
     crisis: "1201", crisisLabel: "1201 (ער\"ן)",
-    smsSupported: false,
+    sms: "0522020100", // Israel Police SMS line 052-2020100
+    smsSupported: true,
   },
   ar: { country: "INT",   police: "112",  policeLabel: "112",                                                                     smsSupported: false },
   fa: { country: "IR",    police: "110",  policeLabel: "110",                                                                     smsSupported: false },
