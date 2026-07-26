@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { performQuickExit } from "./QuickExit";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES, type LangCode } from "@/lib/translations";
+import { getEmergency } from "@/lib/emergency-numbers";
 
 type NavItem = {
   to: string;
@@ -68,6 +69,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const { lang, setLang, t } = useLanguage();
+  const emergency = getEmergency(lang);
 
   const loggedIn = !!user;
   const tabs = getTabs(loggedIn);
