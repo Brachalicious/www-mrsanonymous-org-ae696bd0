@@ -258,3 +258,25 @@ export async function translateToEnglish(text: string, sourceLang: LangCode): Pr
     return text;
   }
 }
+
+/**
+ * Translate arbitrary text from one language to another using the public
+ * Google Translate endpoint. Returns the original on failure.
+ */
+export async function translateText(
+  text: string,
+  targetLang: LangCode,
+  sourceLang: LangCode = "en",
+): Promise<string> {
+  if (!text.trim() || targetLang === sourceLang) return text;
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    if (!res.ok) return text;
+    const data = await res.json();
+    if (!Array.isArray(data) || !Array.isArray(data[0])) return text;
+    return data[0].map((seg: unknown[]) => (Array.isArray(seg) ? String(seg[0] ?? "") : "")).join("");
+  } catch {
+    return text;
+  }
+}
