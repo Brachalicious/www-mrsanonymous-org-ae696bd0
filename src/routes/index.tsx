@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useAuth } from "@/contexts/AuthContext";
+import signalForHelp from "@/assets/signal-for-help.png.asset.json";
 
 export const Route = createFileRoute("/")({
   component: Index,
