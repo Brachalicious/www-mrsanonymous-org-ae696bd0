@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { performQuickExit } from "./QuickExit";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES, type LangCode } from "@/lib/translations";
+import { getEmergency } from "@/lib/emergency-numbers";
 
 type NavItem = {
   to: string;
@@ -68,6 +69,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const { lang, setLang, t } = useLanguage();
+  const emergency = getEmergency(lang);
 
   const loggedIn = !!user;
   const tabs = getTabs(loggedIn);
@@ -118,12 +120,14 @@ export function Navbar() {
           </button>
           <a
             data-testid="safety-strip-call-911"
-            href="tel:911"
+            href={`tel:${emergency.police}`}
             className="inline-flex items-center gap-2 rounded-sm border border-red-400 bg-red-600 px-4 py-2 text-xs font-extrabold uppercase tracking-widest text-white shadow ring-1 ring-red-300/60 hover:bg-red-700"
-            title="Immediate danger? Tap to call 911."
+            title={`Immediate danger? Tap to call ${emergency.policeLabel}.`}
           >
             <span aria-hidden className="text-lg leading-none">🖐️➡️✊</span>
-            <span className="leading-none">{t("safety.call911")}</span>
+            <span className="leading-none">
+              {t("safety.callEmergency")} {emergency.policeLabel}
+            </span>
           </a>
         </div>
       </div>
