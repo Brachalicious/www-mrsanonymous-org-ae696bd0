@@ -259,6 +259,12 @@ const COUNTRIES: Country[] = [
     code: "IL",
     name: "Israel",
     items: [
+      { name: "Israel Police (משטרת ישראל)", phone: "100", tel: "100", note: "Immediate danger — national police emergency line.", sms: "052-2020100", smsTel: "0522020100", fax: "08-6525111", email: "listen@police.gov.il" },
+      { name: "Magen David Adom (מגן דוד אדום)", phone: "101", tel: "101", note: "National emergency medical, ambulance, disaster & blood bank service.", sms: "052-7000101", smsTel: "0527000101", fax: "1-800-500-101", email: "101@mda.org.il" },
+      { name: "Israel Fire and Rescue Services (כבאות והצלה)", phone: "102", tel: "102", note: "National fire & rescue emergency line.", sms: "050-5960735", smsTel: "0505960735", fax: "03-9532230" },
+      { name: "Home Front Command (פיקוד העורף)", phone: "104", tel: "104", note: "Civil defense — rocket alerts, shelter guidance, wartime emergencies.", sms: "052-9415520", smsTel: "0529415520", fax: "08-9783603" },
+      { name: "Israel Electric Corporation (חברת חשמל)", phone: "103", tel: "103", note: "Power outages, downed lines, electrical emergencies.", sms: "050-5960735", smsTel: "0505960735", fax: "1-800-200-103" },
+      { name: "Israel Police Information Center", phone: "110", tel: "110", note: "Non-emergency police information & complaints center.", fax: "02-5898823", email: "tlunot@police.gov.il" },
       { name: "Ministry of Welfare Hotline", phone: "118", tel: "118", note: "National social services hotline — domestic violence support, 24/7." },
       { name: "L.A. Women — 1202 (Hebrew) / 1203 (Arabic)", phone: "1202", tel: "1202", note: "24/7 rape crisis hotline. Arabic: 1203." },
       { name: "WIZO Domestic Violence Hotline", phone: "1-800-220-000", tel: "1800220000", note: "Free, confidential 24/7." },
@@ -266,7 +272,6 @@ const COUNTRIES: Country[] = [
       { name: "ERAN (emotional first aid)", phone: "1201", tel: "1201", note: "24/7 crisis & suicide prevention." },
       { name: "ELEM (at-risk youth)", href: "https://www.elem.org.il/en/", note: "Support & outreach for youth in crisis." },
       { name: "IGY (LGBTQ+ youth)", href: "https://igy.org.il/en/", note: "LGBTQ+ youth support." },
-      { name: "Emergency", phone: "100", tel: "100", note: "Immediate danger (police)." },
     ],
   },
   {
