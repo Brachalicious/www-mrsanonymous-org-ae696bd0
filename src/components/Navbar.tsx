@@ -3,6 +3,8 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { performQuickExit } from "./QuickExit";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LANGUAGES, type LangCode } from "@/lib/translations";
 
 type NavItem = {
   to: string;
@@ -50,6 +52,7 @@ export function Navbar() {
   const { user, profile, isAdmin } = useAuth();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const { lang, setLang, t } = useLanguage();
 
   const loggedIn = !!user;
   const tabs = getTabs(loggedIn);
@@ -66,20 +69,37 @@ export function Navbar() {
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2 px-5 py-2 text-[11px] uppercase tracking-widest lg:px-10">
           <div className="flex items-center gap-2">
             <span className="inline-block h-2 w-2 animate-soft-pulse rounded-full bg-rose-500" />
-            <span className="text-white/80">Need to leave fast?</span>
+            <span className="text-white/80">{t("safety.needLeave")}</span>
             <span className="text-white">
-              Press <kbd className="rounded border border-white/40 bg-black px-1.5 py-0.5 text-[10px] font-bold">ESC</kbd>
-              <span className="px-1 text-white/40">or</span>
-              click <span className="font-bold text-rose-400">✕ QUICK EXIT</span>
-              <span className="px-1 text-white/40">to switch this tab to Google.</span>
+              {t("safety.pressEsc")} <kbd className="rounded border border-white/40 bg-black px-1.5 py-0.5 text-[10px] font-bold">ESC</kbd>
+              <span className="px-1 text-white/40">{t("safety.or")}</span>
+              {t("safety.clickQuickExit")} <span className="font-bold text-rose-400">✕ {t("safety.quickExit").toUpperCase()}</span>
+              <span className="px-1 text-white/40">{t("safety.switchGoogle")}</span>
             </span>
           </div>
+          <label className="inline-flex items-center gap-1 rounded-sm border border-white/30 bg-white/5 px-2 py-1 text-[10px] font-semibold normal-case tracking-normal text-white">
+            <span aria-hidden>🌐</span>
+            <span className="sr-only">{t("safety.language")}</span>
+            <select
+              data-testid="safety-strip-language"
+              value={lang}
+              onChange={(e) => setLang(e.target.value as LangCode)}
+              className="bg-transparent text-white outline-none [&>option]:bg-ink-900 [&>option]:text-white"
+              aria-label={t("safety.language")}
+            >
+              {LANGUAGES.map((l) => (
+                <option key={l.code} value={l.code}>
+                  {l.native}
+                </option>
+              ))}
+            </select>
+          </label>
           <button
             data-testid="safety-strip-quick-exit"
             onClick={performQuickExit}
             className="rounded-sm border border-rose-400 bg-rose-500 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white hover:bg-rose-600"
           >
-            ✕ Quick Exit
+            ✕ {t("safety.quickExit")}
           </button>
           <a
             data-testid="safety-strip-call-911"
@@ -88,7 +108,7 @@ export function Navbar() {
             title="Immediate danger? Tap to call 911."
           >
             <span aria-hidden className="text-lg leading-none">🖐️➡️✊</span>
-            <span className="leading-none">Call 911</span>
+            <span className="leading-none">{t("safety.call911")}</span>
           </a>
         </div>
       </div>
