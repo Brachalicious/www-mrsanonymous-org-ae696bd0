@@ -4,6 +4,10 @@ export type EmergencyProfile = {
   country: string;
   police: string;        // number dialed (tel:)
   policeLabel: string;   // display label
+  medical?: string;      // ambulance / medical
+  medicalLabel?: string;
+  fire?: string;         // fire service
+  fireLabel?: string;
   crisis?: string;       // suicide / mental health crisis line
   crisisLabel?: string;
   sms?: string;          // number for text-to-emergency, if supported
@@ -25,7 +29,14 @@ const PROFILES: Record<string, EmergencyProfile> = {
   ru: { country: "RU",    police: "112",  policeLabel: "112",                                                                     smsSupported: false },
   uk: { country: "UA",    police: "112",  policeLabel: "112",                                                                     smsSupported: false },
   tr: { country: "TR",    police: "112",  policeLabel: "112",                                                                     smsSupported: false },
-  he: { country: "IL",    police: "100",  policeLabel: "100 (משטרה)", crisis: "1201",    crisisLabel: "1201 (ער\"ן)",             smsSupported: false },
+  he: {
+    country: "IL",
+    police: "100", policeLabel: "100 (משטרה)",
+    medical: "101", medicalLabel: "101 (מד\"א)",
+    fire: "102",    fireLabel: "102 (כיבוי אש)",
+    crisis: "1201", crisisLabel: "1201 (ער\"ן)",
+    smsSupported: false,
+  },
   ar: { country: "INT",   police: "112",  policeLabel: "112",                                                                     smsSupported: false },
   fa: { country: "IR",    police: "110",  policeLabel: "110",                                                                     smsSupported: false },
   ur: { country: "PK",    police: "15",   policeLabel: "15",                                                                      smsSupported: false },
