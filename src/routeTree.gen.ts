@@ -19,6 +19,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as InboxRouteImport } from './routes/inbox'
 import { Route as GirlsRouteImport } from './routes/girls'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as DownloadRouteImport } from './routes/download'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BoardRouteImport } from './routes/board'
 import { Route as AboutRouteImport } from './routes/about'
@@ -76,6 +77,11 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DownloadRoute = DownloadRouteImport.update({
+  id: '/download',
+  path: '/download',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -112,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/board': typeof BoardRoute
   '/contact': typeof ContactRoute
+  '/download': typeof DownloadRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/girls': typeof GirlsRoute
   '/inbox': typeof InboxRoute
@@ -130,6 +137,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/board': typeof BoardRoute
   '/contact': typeof ContactRoute
+  '/download': typeof DownloadRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/girls': typeof GirlsRoute
   '/inbox': typeof InboxRoute
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/board': typeof BoardRoute
   '/contact': typeof ContactRoute
+  '/download': typeof DownloadRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/girls': typeof GirlsRoute
   '/inbox': typeof InboxRoute
@@ -169,6 +178,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/board'
     | '/contact'
+    | '/download'
     | '/forgot-password'
     | '/girls'
     | '/inbox'
@@ -187,6 +197,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/board'
     | '/contact'
+    | '/download'
     | '/forgot-password'
     | '/girls'
     | '/inbox'
@@ -205,6 +216,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/board'
     | '/contact'
+    | '/download'
     | '/forgot-password'
     | '/girls'
     | '/inbox'
@@ -224,6 +236,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   BoardRoute: typeof BoardRoute
   ContactRoute: typeof ContactRoute
+  DownloadRoute: typeof DownloadRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   GirlsRoute: typeof GirlsRoute
   InboxRoute: typeof InboxRoute
@@ -310,6 +323,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/download': {
+      id: '/download'
+      path: '/download'
+      fullPath: '/download'
+      preLoaderRoute: typeof DownloadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -360,6 +380,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   BoardRoute: BoardRoute,
   ContactRoute: ContactRoute,
+  DownloadRoute: DownloadRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   GirlsRoute: GirlsRoute,
   InboxRoute: InboxRoute,
@@ -376,3 +397,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
