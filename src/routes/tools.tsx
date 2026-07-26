@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { performQuickExit } from "@/components/QuickExit";
-import { AlertTriangle, Ban, EyeOff, Hand, LogOut, MousePointer2, Shield } from "lucide-react";
+import { AlertTriangle, Ban, EyeOff, Hand, HeartPulse, LogOut, MousePointer2, MoveDown, Shield } from "lucide-react";
 
 export const Route = createFileRoute("/tools")({
   head: () => ({
@@ -68,13 +68,31 @@ function ToolsPage() {
           icon={<Hand className="h-6 w-6 text-rose-600" />}
           title="Silent Panic"
           color="bg-rose-100"
-          summary="A silent way to signal distress. Double-tap the bottom-right corner of any page."
+          summary="A silent way to signal distress. Tap the heart button in the bottom-right corner of any page."
         >
-          <p className="text-sm text-ink-700">
-            Double-tap or long-press the hidden corner on any page to open a neutral-looking screen.
-          </p>
+          <div className="flex flex-col items-center gap-2 py-2">
+            <p className="text-sm font-semibold text-ink-900">
+              Click button for immediate help options
+            </p>
+            <MoveDown className="h-6 w-6 animate-bounce text-rose-600" />
+            <button
+              type="button"
+              aria-label="Open immediate help options"
+              className="group flex h-14 w-14 items-center justify-center rounded-full bg-rose-500 text-white shadow-lg transition hover:scale-105 hover:bg-rose-600"
+              onClick={() => {
+                document
+                  .querySelector<HTMLButtonElement>('[data-testid="emergency-widget-toggle"]')
+                  ?.click();
+              }}
+            >
+              <HeartPulse className="h-6 w-6 transition group-hover:scale-110" />
+            </button>
+            <p className="mt-1 text-[11px] text-ink-500">
+              Same button lives in the bottom-right corner of every page.
+            </p>
+          </div>
           <div className="mt-3 rounded-lg border border-rose-200 bg-rose-50 p-2 text-xs text-rose-700">
-            This is a placebo-safety feature. If you are in immediate danger, call local emergency services.
+            If you are in immediate danger, call local emergency services.
           </div>
         </ToolCard>
 
