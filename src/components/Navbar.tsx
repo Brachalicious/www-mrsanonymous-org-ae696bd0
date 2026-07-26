@@ -22,6 +22,7 @@ const BASE_TABS: NavItem[] = [
   { to: "/board", label: "The Board", testid: "nav-board" },
   { to: "/tools", label: "Tools", testid: "nav-tools" },
   { to: "/resources", label: "Resources", testid: "nav-resources" },
+  { to: "/download", label: "📱 Download App", testid: "nav-download" },
   { to: "https://www.thehotline.org/", label: "Get help now! (women)", testid: "nav-get-help-women", kind: "dark", external: true },
   { to: "https://childhelphotline.org/", label: "get help now! (girls)", testid: "nav-get-help-girls", kind: "dark", external: true },
 ];
@@ -58,6 +59,7 @@ function getTabs(loggedIn: boolean): NavItem[] {
     BASE_TABS[6],
     BASE_TABS[7],
     BASE_TABS[8],
+    BASE_TABS[9],
   ];
 }
 
