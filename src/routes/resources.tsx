@@ -532,6 +532,7 @@ const SECTIONS: { id: string; title: string; items: ResourceItem[] }[] = [
       { name: "TheHotline.org", href: "https://www.thehotline.org/", note: "Anonymous online chat." },
       { name: "RAINN.org", href: "https://www.rainn.org/", note: "Online support, articles, resources." },
       { name: "Womenslaw.org", href: "https://www.womenslaw.org/", note: "Legal info for survivors of abuse." },
+      { name: "loveisrespect.org", href: "https://www.loveisrespect.org/", note: "Online chat, articles, and quizzes about healthy relationships and dating abuse." },
     ],
   },
   {
