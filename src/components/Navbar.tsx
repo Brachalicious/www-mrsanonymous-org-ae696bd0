@@ -33,6 +33,19 @@ const MY_NOTEBOOKS_TAB: NavItem = {
   kind: "rose",
 };
 
+const TAB_LABEL_KEYS: Record<string, string> = {
+  "nav-about": "nav.about",
+  "nav-women": "nav.women",
+  "nav-girls": "nav.girls",
+  "nav-tell-story": "nav.tellStory",
+  "nav-my-notebooks": "nav.notebooks",
+  "nav-board": "nav.board",
+  "nav-tools": "nav.tools",
+  "nav-resources": "nav.resources",
+  "nav-get-help-women": "nav.getHelpWomen",
+  "nav-get-help-girls": "nav.getHelpGirls",
+};
+
 function getTabs(loggedIn: boolean): NavItem[] {
   return [
     BASE_TABS[0],
