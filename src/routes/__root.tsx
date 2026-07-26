@@ -18,6 +18,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { QuickExit } from "@/components/QuickExit";
 import { EmergencyWidget } from "@/components/EmergencyWidget";
+import { CalcGate } from "@/components/CalcGate";
 
 function NotFoundComponent() {
   return (
@@ -160,6 +161,7 @@ function RootComponent() {
             <Footer />
             <EmergencyWidget />
             <QuickExit />
+            <CalcGate />
           </div>
         </LanguageProvider>
       </AuthProvider>
