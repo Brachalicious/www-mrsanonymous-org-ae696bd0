@@ -16,6 +16,10 @@ type CountryItem = {
   href?: string;
   tel?: string;
   note: string;
+  sms?: string;   // display SMS number
+  smsTel?: string; // digits-only for sms: link
+  fax?: string;
+  email?: string;
 };
 
 type Country = {
