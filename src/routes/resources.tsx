@@ -742,6 +742,25 @@ function LocationFinder() {
                 <div>
                   <div className="font-semibold text-ink-900">{it.name}</div>
                   <div className="text-sm text-ink-500">{it.note}</div>
+                  {(it.sms || it.fax || it.email) && (
+                    <div className="mt-2 flex flex-wrap gap-2 text-xs">
+                      {it.sms && (
+                        <a href={`sms:${it.smsTel || it.sms}`} className="rounded-full border border-ink-300/60 bg-white px-2 py-1 text-ink-900 hover:border-rose-500">
+                          ✉️ SMS {it.sms}
+                        </a>
+                      )}
+                      {it.email && (
+                        <a href={`mailto:${it.email}`} className="rounded-full border border-ink-300/60 bg-white px-2 py-1 text-ink-900 hover:border-rose-500">
+                          📧 {it.email}
+                        </a>
+                      )}
+                      {it.fax && (
+                        <span className="rounded-full border border-ink-300/60 bg-white px-2 py-1 text-ink-500">
+                          📠 Fax {it.fax}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
                 {it.tel ? (
                   <a data-testid={`intl-link-${slug(it.name)}`} href={`tel:${it.tel}`} className="btn-rose shrink-0 !px-4 !py-2 !text-xs">
