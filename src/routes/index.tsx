@@ -236,10 +236,10 @@ function HandSignalSection() {
 
         <div className="flex items-center justify-center">
           <img
-            src="/hand-signal.jpg"
+            src={signalForHelp.url}
             alt="Silent Help Signal — Step 1: palm to camera and tuck thumb. Step 2: trap thumb by closing fingers over it."
             data-testid="hand-signal-illustration"
-            className="w-full max-w-md rounded-2xl border-[3px] border-black shadow-[8px_8px_0px_#ff0000]"
+            className="w-full max-w-md rounded-2xl border-[3px] border-black bg-white shadow-[8px_8px_0px_#ff0000]"
           />
         </div>
       </div>
