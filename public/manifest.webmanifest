@@ -1,0 +1,16 @@
+{
+  "name": "MrsANONymous — Safety & Support",
+  "short_name": "MrsANON",
+  "description": "A safe, 100% anonymous support space for women and girls facing domestic violence.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F9F6F0",
+  "theme_color": "#DC2626",
+  "categories": ["health", "lifestyle", "social"],
+  "icons": [
+    { "src": "/app-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/app-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
