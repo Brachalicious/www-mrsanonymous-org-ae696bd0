@@ -1,98 +1,60 @@
-# Port MrsAnonymous.org into Lovable
-
 ## Goal
-Rebuild the MrsAnonymous.org application (a warm, paper-like anonymous support platform for women and girls) inside the current Lovable TanStack Start project, using Lovable Cloud for backend data and auth.
+Add multi-language support in two places:
+1. **Emergency Text-to-911** — let user type their custom message in their native language; auto-translate to English before sending to 911 (911 dispatchers read English).
+2. **App-wide language switcher** — a button in the navbar that translates the UI into the selected language.
 
-## What we're building
+---
 
-### Design system
-- Convert the existing Tailwind v3 design tokens (`ink-900`, `rose-500`, `cream-100`, warm paper backgrounds, `Cormorant Garamond` + `Figtree` + `Caveat` fonts) into Tailwind v4 CSS variables in `src/styles.css`.
-- Add custom utility classes for `.note-card`, `.paper-bg`, `.btn-rose`, `.btn-ghost`, `.hand-note`, `.envelope-shadow`.
+## Part 1: Emergency widget language + translation
 
-### Shared shell
-- `src/routes/__root.tsx`: update head metadata (title, description, OG/Twitter) and wrap the app with the warm paper background.
-- `src/components/Navbar.tsx`: sticky top nav with safety strip, brand, auth links, Quick Exit.
-- `src/components/Footer.tsx`: simple footer.
-- `src/components/QuickExit.tsx`: ESC/button handler that replaces the tab with `https://www.google.com`.
-- `src/components/EmergencyWidget.tsx`: floating crisis widget.
+In `src/components/EmergencyWidget.tsx`:
+- Add a language `<select>` above the custom-message textarea (~15 common languages: English, Spanish, French, Arabic, Chinese, Hindi, Portuguese, Russian, Vietnamese, Tagalog, Korean, Japanese, German, Farsi, Ukrainian).
+- Set the textarea's `lang` and `dir` attributes based on the choice (so mobile keyboards switch to that language's keys, and RTL languages render correctly).
+- Persist the choice in `localStorage`.
+- When building the SMS body: if the chosen language ≠ English, call a free translation endpoint (`https://translate.googleapis.com/translate_a/single?client=gtx&sl=<lang>&tl=en&dt=t&q=<msg>`) to translate the user's message to English. Send both to 911:
+  - Line 1: English translation (so dispatcher understands)
+  - Line 2: `[Original (<lang>): <original message>]`
+  - Then address, coordinates, map link.
+- Translate on-demand when "Text 911" is tapped (with a small loading state); fall back to sending the original text if the fetch fails so the SMS is never blocked.
 
-### Public pages (each as a separate route)
-- `/` — Home: hero, private-letter envelope, hand-signal section, path cards, anonymous contact form, bottom band.
-- `/about` — About us.
-- `/women` — Women landing page with hotline links.
-- `/girls` — Girls landing page with hotline links.
-- `/resources` — Resource directory with state/country picker.
-- `/get-help/women` and `/get-help/girls` — Urgent help pages.
-- `/login` and `/signup` — Anonymous nickname + password auth.
-- `/tell-your-story` — Private notebooks dashboard (auth-gated).
-- `/board` — Public stories with gentle blur reveal, topic tags, emoji reactions, supporters badge.
-- `/tools` — Tools page (abuse journal, SOFY mode, silent panic — P2 backlog).
+## Part 2: App-wide language switcher
 
-### Backend via Lovable Cloud / Supabase
-- Enable Lovable Cloud.
-- Schema:
-  - `profiles` (id, nickname, audience, created_at)
-  - `user_roles` (id, user_id, role)
-  - `notebooks` (id, user_id, title, color, shared, share_as, topics, created_at, updated_at)
-  - `entries` (id, notebook_id, content, mood, shared, share_as, topics, created_at, updated_at)
-  - `reactions` (id, story_id, user_id, reaction_key)
-  - `contacts` (id, message, nickname, audience, created_at)
-  - `login_attempts` (id, identifier, count, locked_until)
-- RLS policies enforcing:
-  - Users can only read/write their own notebooks and entries.
-  - Public read of shared stories and reactions counts.
-  - Anonymous contact form inserts allowed to `anon`.
-- Server functions for auth, notebooks, entries, stories, reactions, contact, support stats.
+Add a lightweight i18n layer without pulling in i18next:
 
-### Public assets
-- Copy `hand-signal.jpg` from the repo into `public/hand-signal.jpg`.
-- Copy app icons/manifest if needed.
+- New file `src/contexts/LanguageContext.tsx`:
+  - `LanguageProvider` stores selected language in `localStorage` (`mrsanon:lang`), defaults to browser language or `en`.
+  - Exposes `useLanguage()` → `{ lang, setLang, t(key) }`.
+  - `t(key)` looks up `dictionaries[lang][key]` and falls back to English, then to the key itself.
 
-### Safety & trust
-- Quick Exit (ESC + button) implemented.
-- Trigger warnings on the Board.
-- Gentle blur reveal for stories.
-- `data-testid` attributes on all interactive elements.
-- XSS-safe output (no `dangerouslySetInnerHTML`).
+- New file `src/lib/translations.ts`:
+  - Export a `dictionaries` map keyed by language code.
+  - Cover the ~15 languages above.
+  - Include keys for the highest-visibility UI: navbar tabs, safety strip buttons ("Quick Exit", "Call 911"), emergency widget labels, home hero copy, footer.
+  - For strings not in the dictionary, English is shown (graceful fallback).
 
-## Phases
+- Wrap the app: in `src/routes/__root.tsx`, add `<LanguageProvider>` inside `<AuthProvider>` so all pages get it.
 
-### Phase 1: Foundation
-- Enable Lovable Cloud.
-- Create design system in `src/styles.css`.
-- Set up root layout, Navbar, Footer, Quick Exit, Emergency Widget.
-- Add `public/hand-signal.jpg`.
+- Update `src/components/Navbar.tsx`:
+  - Add a compact "🌐 Language" dropdown in the top safety strip (next to Quick Exit / Call 911).
+  - Setting it calls `setLang(...)` and updates `<html lang>` and `dir` via effect.
+  - Replace the hardcoded labels for the primary nav items and safety-strip buttons with `t("nav.notebooks")`, etc.
 
-### Phase 2: Public marketing pages
-- Build Home, About, Women, Girls, Resources, Get Help, Contact.
-- Add routes with proper `head()` metadata.
+- Update `src/components/EmergencyWidget.tsx` labels to use `t(...)` so the widget itself is translated too.
 
-### Phase 3: Auth + notebooks
-- Build Supabase auth flow using nickname/password (we'll use Supabase Auth with metadata for nickname).
-- Build Login, Signup, Tell Your Story (notebooks + entries).
-- Build Notebook detail page.
+- Update `src/routes/index.tsx` hero + CTAs and `src/components/Footer.tsx` to use `t(...)` for the most-seen strings. Deep page content stays English for now (translating every route is out of scope for this pass); scaffolding is in place to add more keys later.
 
-### Phase 4: Board + reactions
-- Build public Board with trigger warning, gentle reveal, reactions, support stats.
+## Technical notes
 
-### Phase 5: Tools + polish
-- Tools page with Private Abuse Journal placeholder, SOFY mode, Silent Panic.
-- PWA manifest, install prompt.
-- Final responsive pass, test navigation, and publish.
+- Endpoint used for translation: `translate.googleapis.com/translate_a/single` (public, no API key, used by many open-source translation libraries). Requests only fire when the user actually taps Text 911 in a non-English language.
+- We do NOT auto-translate the whole app via Google — that would be a runtime network call on every page. Instead we ship a dictionary and fall back to English for missing keys.
+- `<html lang>` is updated so screen readers and browser translation prompts behave correctly.
+- No new dependencies.
 
-## Technical details
-- **Stack:** TanStack Start v1 + React 19 + Tailwind v4 + shadcn/ui + Lovable Cloud (Supabase).
-- **Routing:** TanStack Router file-based routes (`src/routes/*.tsx`).
-- **Data:** TanStack Query + `createServerFn` + Supabase.
-- **Auth:** Supabase Auth with email/password under the hood; the app uses nickname as the displayed identifier (we'll generate a synthetic email or use Supabase metadata). Anonymous accounts mean we never store real names.
-- **Images:** `/hand-signal.jpg` from the repo; other Unsplash textures reused per design guidelines.
+## Files touched
 
-## Out of scope / P2 backlog
-- Drag-to-rip animation for sharing.
-- Push notifications.
-- Encrypted localStorage for journals.
-- Admin dashboard for contact messages.
-- Full FastAPI feature parity (SMS silent panic, geolocation). These can be added after the core app is live.
-
-## Next step
-Approve the plan, and I'll start with Phase 1 (foundation + Lovable Cloud setup).
+- New: `src/contexts/LanguageContext.tsx`
+- New: `src/lib/translations.ts`
+- Edit: `src/components/EmergencyWidget.tsx` (language picker + translate on send)
+- Edit: `src/components/Navbar.tsx` (language dropdown + t() calls)
+- Edit: `src/routes/__root.tsx` (mount provider)
+- Edit: `src/components/Footer.tsx`, `src/routes/index.tsx` (use t() for hero/footer)

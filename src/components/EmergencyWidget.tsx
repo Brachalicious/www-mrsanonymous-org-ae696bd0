@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Phone, X, HeartPulse, MapPin, MessageSquare, Settings } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LANGUAGES, translateToEnglish, type LangCode } from "@/lib/translations";
 
 const MSG_KEY = "mrsanon:panic-message";
+const MSG_LANG_KEY = "mrsanon:panic-msg-lang";
 const DEFAULT_MSG =
   "Emergency. I need help. Please send police to my location.";
 
@@ -13,24 +16,41 @@ type Loc = {
 };
 
 export function EmergencyWidget() {
+  const { t, lang: uiLang } = useLanguage();
   const [open, setOpen] = useState(false);
   const [loc, setLoc] = useState<Loc | null>(null);
   const [locError, setLocError] = useState<string | null>(null);
   const [locLoading, setLocLoading] = useState(false);
   const [editMsg, setEditMsg] = useState(false);
   const [message, setMessage] = useState(DEFAULT_MSG);
+  const [msgLang, setMsgLang] = useState<LangCode>("en");
+  const [preparing, setPreparing] = useState(false);
 
   useEffect(() => {
     try {
       const stored = localStorage.getItem(MSG_KEY);
       if (stored) setMessage(stored);
+      const storedLang = localStorage.getItem(MSG_LANG_KEY) as LangCode | null;
+      if (storedLang && LANGUAGES.some((l) => l.code === storedLang)) {
+        setMsgLang(storedLang);
+      } else if (LANGUAGES.some((l) => l.code === uiLang)) {
+        setMsgLang(uiLang);
+      }
     } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function saveMessage(next: string) {
     setMessage(next);
     try {
       localStorage.setItem(MSG_KEY, next);
+    } catch {}
+  }
+
+  function saveMsgLang(next: LangCode) {
+    setMsgLang(next);
+    try {
+      localStorage.setItem(MSG_LANG_KEY, next);
     } catch {}
   }
 
@@ -66,8 +86,12 @@ export function EmergencyWidget() {
     );
   }
 
-  function buildSmsBody() {
-    const parts = [message.trim() || DEFAULT_MSG];
+  function buildSmsBody(englishMessage: string, original?: string) {
+    const parts: string[] = [englishMessage.trim() || DEFAULT_MSG];
+    if (original && original.trim() && original.trim() !== englishMessage.trim()) {
+      const langLabel = LANGUAGES.find((l) => l.code === msgLang)?.label ?? msgLang;
+      parts.push(`[Original (${langLabel}): ${original.trim()}]`);
+    }
     if (loc) {
       if (loc.address) parts.push(`Address: ${loc.address}`);
       parts.push(
@@ -80,14 +104,31 @@ export function EmergencyWidget() {
     return parts.join("\n");
   }
 
-  const smsHref = `sms:911?&body=${encodeURIComponent(buildSmsBody())}`;
+  // Fallback (English) href so the link is valid even before translation runs.
+  const fallbackHref = `sms:911?&body=${encodeURIComponent(buildSmsBody(message))}`;
+
+  async function handleTextClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    if (msgLang === "en") return; // fallbackHref already correct
+    e.preventDefault();
+    setPreparing(true);
+    try {
+      const original = message.trim() || DEFAULT_MSG;
+      const english = await translateToEnglish(original, msgLang);
+      const body = buildSmsBody(english, original);
+      window.location.href = `sms:911?&body=${encodeURIComponent(body)}`;
+    } finally {
+      setPreparing(false);
+    }
+  }
+
+  const msgLangDir = LANGUAGES.find((l) => l.code === msgLang)?.dir ?? "ltr";
 
   return (
     <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-3">
       {open && (
         <div className="note-card w-80 max-w-[92vw] overflow-hidden p-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-serif text-lg text-ink-900">Need help now?</h3>
+            <h3 className="font-serif text-lg text-ink-900">{t("emg.title")}</h3>
             <button
               onClick={() => setOpen(false)}
               aria-label="Close emergency widget"
@@ -97,7 +138,7 @@ export function EmergencyWidget() {
             </button>
           </div>
           <p className="mt-2 text-xs text-ink-500">
-            If you are in immediate danger, call emergency services or a trusted hotline.
+            {t("emg.disclaimer")}
           </p>
           <div className="mt-3 flex flex-col gap-2">
             <a
@@ -105,35 +146,37 @@ export function EmergencyWidget() {
               data-testid="emergency-call-988"
               className="btn-rose w-full py-2 text-xs"
             >
-              <Phone className="h-3.5 w-3.5" /> Call 988
+              <Phone className="h-3.5 w-3.5" /> {t("emg.call988")}
             </a>
             <a
               href="tel:911"
               data-testid="emergency-call-911"
               className="btn-ghost w-full py-2 text-xs"
             >
-              <Phone className="h-3.5 w-3.5" /> Call 911
+              <Phone className="h-3.5 w-3.5" /> {t("emg.call911")}
             </a>
             <a
-              href={smsHref}
+              href={fallbackHref}
+              onClick={handleTextClick}
               data-testid="emergency-text-911"
               className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-red-600 py-2 text-xs font-extrabold uppercase tracking-widest text-white hover:bg-red-700"
             >
-              <MessageSquare className="h-3.5 w-3.5" /> Text 911 (with location)
+              <MessageSquare className="h-3.5 w-3.5" />{" "}
+              {preparing ? t("emg.translating") : t("emg.text911")}
             </a>
           </div>
 
           <div className="mt-3 rounded-lg border border-ink-300/60 bg-cream-100 p-2">
             <div className="flex items-center justify-between">
               <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-widest text-ink-700">
-                <MapPin className="h-3 w-3" /> Location
+                <MapPin className="h-3 w-3" /> {t("emg.location")}
               </span>
               <button
                 onClick={getLocation}
                 disabled={locLoading}
                 className="rounded border border-ink-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-ink-900 hover:bg-cream-200 disabled:opacity-50"
               >
-                {locLoading ? "Locating…" : loc ? "Refresh" : "Get my location"}
+                {locLoading ? t("emg.locating") : loc ? t("emg.refresh") : t("emg.getLocation")}
               </button>
             </div>
             {locError && (
@@ -147,7 +190,7 @@ export function EmergencyWidget() {
             )}
             {!loc && !locError && (
               <p className="mt-1 text-[10px] text-ink-500">
-                Tap to attach your address & coordinates to the 911 text.
+                {t("emg.attachLoc")}
               </p>
             )}
           </div>
@@ -158,21 +201,46 @@ export function EmergencyWidget() {
               className="inline-flex items-center gap-1 text-[11px] font-semibold text-ink-700 hover:text-rose-600"
             >
               <Settings className="h-3 w-3" />
-              {editMsg ? "Hide custom message" : "Edit custom 911 message"}
+              {editMsg ? t("emg.hideMsg") : t("emg.editMsg")}
             </button>
             {editMsg && (
-              <textarea
-                value={message}
-                onChange={(e) => saveMessage(e.target.value)}
-                rows={3}
-                className="mt-2 w-full rounded-md border border-ink-300 bg-white p-2 text-xs text-ink-900 focus:border-rose-500 focus:outline-none"
-                placeholder="Message sent to 911 with your location"
-              />
+              <div className="mt-2 space-y-2">
+                <label className="block">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-700">
+                    {t("emg.msgLang")}
+                  </span>
+                  <select
+                    data-testid="emergency-msg-lang"
+                    value={msgLang}
+                    onChange={(e) => saveMsgLang(e.target.value as LangCode)}
+                    className="mt-1 w-full rounded-md border border-ink-300 bg-white p-1.5 text-xs text-ink-900 focus:border-rose-500 focus:outline-none"
+                  >
+                    {LANGUAGES.map((l) => (
+                      <option key={l.code} value={l.code}>
+                        {l.native} ({l.label})
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <textarea
+                  value={message}
+                  onChange={(e) => saveMessage(e.target.value)}
+                  rows={3}
+                  lang={msgLang}
+                  dir={msgLangDir}
+                  inputMode="text"
+                  className="w-full rounded-md border border-ink-300 bg-white p-2 text-xs text-ink-900 focus:border-rose-500 focus:outline-none"
+                  placeholder={t("emg.msgPlaceholder")}
+                />
+                {msgLang !== "en" && (
+                  <p className="text-[10px] text-ink-500">{t("emg.translateNote")}</p>
+                )}
+              </div>
             )}
           </div>
 
           <p className="mt-3 text-[10px] text-ink-400">
-            Not all US areas support Text-to-911. If it does not go through, call 911.
+            {t("emg.textFooter")}
           </p>
         </div>
       )}
