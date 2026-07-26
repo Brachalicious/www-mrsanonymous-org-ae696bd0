@@ -209,51 +209,55 @@ export function Navbar() {
       {/* Desktop nav */}
       <nav className="hidden lg:block">
         <ul className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-5 gap-y-2 px-5 py-3 lg:px-10">
-          {tabs.map((t) => {
-            const className = tabClassName(t.kind);
-            if (t.external) {
+          {tabs.map((tab) => {
+            const className = tabClassName(tab.kind);
+            const labelKey = TAB_LABEL_KEYS[tab.testid];
+            const label = labelKey
+              ? (tab.testid === "nav-my-notebooks" ? "📓 " : "") + t(labelKey)
+              : tab.label;
+            if (tab.external) {
               return (
-                <li key={t.testid}>
+                <li key={tab.testid}>
                   <a
-                    href={t.to}
+                    href={tab.to}
                     target="_blank"
                     rel="noopener noreferrer"
-                    data-testid={t.testid}
+                    data-testid={tab.testid}
                     className={className}
                   >
-                    {t.label}
+                    {label}
                   </a>
                 </li>
               );
             }
 
-              if (t.to === "/tell-your-story" && t.kind === "rose") {
+              if (tab.to === "/tell-your-story" && tab.kind === "rose") {
                 return (
-                  <li key={t.testid}>
+                  <li key={tab.testid}>
                     <Link
                       to="/tell-your-story"
                       search={{ tab: "mine" }}
-                      data-testid={t.testid}
+                      data-testid={tab.testid}
                       className={className}
                       activeProps={{ className: `${className} text-rose-500 font-semibold` }}
                       activeOptions={{ exact: false }}
                     >
-                      {t.label}
+                      {label}
                     </Link>
                   </li>
                 );
               }
 
               return (
-                <li key={t.testid}>
+                <li key={tab.testid}>
                   <Link
-                    to={t.to as any}
-                    data-testid={t.testid}
+                    to={tab.to as any}
+                    data-testid={tab.testid}
                     className={className}
                     activeProps={{ className: `${className} text-rose-500 font-semibold` }}
                     activeOptions={{ exact: false }}
                   >
-                    {t.label}
+                    {label}
                   </Link>
                 </li>
               );
@@ -266,7 +270,7 @@ export function Navbar() {
               className="inline-flex items-center gap-1.5 rounded-md bg-emergency px-4 py-2 text-[11px] font-extrabold uppercase tracking-widest text-white shadow-md ring-2 ring-emergency/30 hover:bg-emergency-dark"
             >
               <span aria-hidden>✕</span>
-              qUICK eXIT!
+              {t("safety.quickExit").toUpperCase()}!
             </button>
           </li>
         </ul>
@@ -276,51 +280,55 @@ export function Navbar() {
       {open && (
         <div className="border-t border-ink-300/30 bg-white lg:hidden">
           <div className="flex flex-col gap-2 px-5 py-4">
-            {tabs.map((t) => {
-              if (t.external) {
+            {tabs.map((tab) => {
+              const labelKey = TAB_LABEL_KEYS[tab.testid];
+              const label = labelKey
+                ? (tab.testid === "nav-my-notebooks" ? "📓 " : "") + t(labelKey)
+                : tab.label;
+              if (tab.external) {
                 return (
                   <a
-                    key={t.testid}
-                    href={t.to}
+                    key={tab.testid}
+                    href={tab.to}
                     target="_blank"
                     rel="noopener noreferrer"
-                    data-testid={`${t.testid}-mobile`}
+                    data-testid={`${tab.testid}-mobile`}
                     onClick={() => setOpen(false)}
                     className="rounded-md bg-ink-900 px-3 py-2 text-center text-xs font-bold uppercase tracking-widest text-white"
                   >
-                    {t.label}
+                    {label}
                   </a>
                 );
               }
 
-              if (t.to === "/tell-your-story" && t.kind === "rose") {
+              if (tab.to === "/tell-your-story" && tab.kind === "rose") {
                 return (
                   <Link
-                    key={t.testid}
+                    key={tab.testid}
                     to="/tell-your-story"
                     search={{ tab: "mine" }}
-                    data-testid={`${t.testid}-mobile`}
+                    data-testid={`${tab.testid}-mobile`}
                     onClick={() => setOpen(false)}
                     className="rounded-md bg-rose-500 px-3 py-2 text-center text-xs font-bold uppercase tracking-widest text-white"
                   >
-                    {t.label}
+                    {label}
                   </Link>
                 );
               }
 
               return (
                 <Link
-                  key={t.testid}
-                  to={t.to as any}
-                  data-testid={`${t.testid}-mobile`}
+                  key={tab.testid}
+                  to={tab.to as any}
+                  data-testid={`${tab.testid}-mobile`}
                   onClick={() => setOpen(false)}
                   className={
-                    t.kind === "dark"
+                    tab.kind === "dark"
                       ? "rounded-md bg-ink-900 px-3 py-2 text-center text-xs font-bold uppercase tracking-widest text-white"
                       : "rounded-lg px-3 py-2 text-sm text-ink-900 hover:bg-ink-100"
                   }
                 >
-                  {t.label}
+                  {label}
                 </Link>
               );
             })}
@@ -329,7 +337,7 @@ export function Navbar() {
               onClick={performQuickExit}
               className="rounded-md bg-emergency px-3 py-2 text-center text-xs font-extrabold uppercase tracking-widest text-white"
             >
-              ✕ qUICK eXIT!
+              ✕ {t("safety.quickExit").toUpperCase()}!
             </button>
             {loggedIn ? (
               <button
