@@ -43,17 +43,24 @@ export const listSharedStories = createServerFn({ method: "GET" }).handler(async
   const sessionId = getSessionId();
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
+  const { data: blocks } = await supabaseAdmin
+    .from("story_blocks")
+    .select("owner_id")
+    .eq("session_id", sessionId);
+  const blockedOwners = new Set((blocks || []).map((b: { owner_id: string }) => b.owner_id));
+
   const { data: notebooks, error: nbError } = await supabaseAdmin
     .from("notebooks")
     .select("*, profiles!inner(nickname)")
     .eq("shared", true)
+    .eq("hidden", false)
     .order("shared_at", { ascending: false })
     .limit(60);
   if (nbError) throw new Error(nbError.message);
 
-  const stories = (notebooks || []) as unknown as Array<
+  const stories = ((notebooks || []) as unknown as Array<
     Database["public"]["Tables"]["notebooks"]["Row"] & { profiles: { nickname: string } }
-  >;
+  >).filter((s) => !blockedOwners.has(s.owner_id));
   if (stories.length === 0) return [];
 
   const ids = stories.map((s) => s.id);
@@ -116,6 +123,7 @@ export const getSharedStory = createServerFn({ method: "GET" })
       .select("*, profiles!inner(nickname)")
       .eq("id", data.id)
       .eq("shared", true)
+      .eq("hidden", false)
       .single();
     if (nbError || !notebook) throw new Error("Story not found");
 
