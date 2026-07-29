@@ -63,6 +63,14 @@ function TellYourStoryPage() {
             <h2 className="font-serif text-2xl text-ink-900">The Board</h2>
             <span className="text-sm text-ink-500">Tap a card to reveal. Take your time.</span>
           </div>
+          <div className="note-card mb-6 p-4 text-sm text-ink-700">
+            <strong>Community rules:</strong> no abusive, hateful, or identifying content — ever. Report
+            anything that breaks these rules with the flag on any card; we review reports within 24 hours
+            and remove violating stories and accounts. You can also block a storyteller. By sharing a
+            story you agree to our{" "}
+            <Link to="/terms" className="text-rose-600 underline">Terms of Use</Link> and{" "}
+            <Link to="/privacy" className="text-rose-600 underline">Privacy Policy</Link>.
+          </div>
           <StoriesBoard />
         </section>
       )}

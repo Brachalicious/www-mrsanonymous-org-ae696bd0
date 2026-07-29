@@ -14,6 +14,7 @@ import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TellYourStoryRouteImport } from './routes/tell-your-story'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SecurityQuestionsRouteImport } from './routes/security-questions'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -27,6 +28,7 @@ import { Route as BoardRouteImport } from './routes/board'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as NotebooksIdRouteImport } from './routes/notebooks.$id'
+import { Route as AdminModerationRouteImport } from './routes/admin.moderation'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 
 const WomenRoute = WomenRouteImport.update({
@@ -52,6 +54,11 @@ const TellYourStoryRoute = TellYourStoryRouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SecurityQuestionsRoute = SecurityQuestionsRouteImport.update({
@@ -119,6 +126,11 @@ const NotebooksIdRoute = NotebooksIdRouteImport.update({
   path: '/notebooks/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminModerationRoute = AdminModerationRouteImport.update({
+  id: '/admin/moderation',
+  path: '/admin/moderation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminMessagesRoute = AdminMessagesRouteImport.update({
   id: '/admin/messages',
   path: '/admin/messages',
@@ -138,12 +150,14 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
   '/security-questions': typeof SecurityQuestionsRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/tell-your-story': typeof TellYourStoryRoute
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/women': typeof WomenRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/admin/moderation': typeof AdminModerationRoute
   '/notebooks/$id': typeof NotebooksIdRoute
 }
 export interface FileRoutesByTo {
@@ -159,12 +173,14 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
   '/security-questions': typeof SecurityQuestionsRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/tell-your-story': typeof TellYourStoryRoute
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/women': typeof WomenRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/admin/moderation': typeof AdminModerationRoute
   '/notebooks/$id': typeof NotebooksIdRoute
 }
 export interface FileRoutesById {
@@ -181,12 +197,14 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
   '/security-questions': typeof SecurityQuestionsRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/tell-your-story': typeof TellYourStoryRoute
   '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/women': typeof WomenRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/admin/moderation': typeof AdminModerationRoute
   '/notebooks/$id': typeof NotebooksIdRoute
 }
 export interface FileRouteTypes {
@@ -204,12 +222,14 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/resources'
     | '/security-questions'
+    | '/settings'
     | '/signup'
     | '/tell-your-story'
     | '/terms'
     | '/tools'
     | '/women'
     | '/admin/messages'
+    | '/admin/moderation'
     | '/notebooks/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -225,12 +245,14 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/resources'
     | '/security-questions'
+    | '/settings'
     | '/signup'
     | '/tell-your-story'
     | '/terms'
     | '/tools'
     | '/women'
     | '/admin/messages'
+    | '/admin/moderation'
     | '/notebooks/$id'
   id:
     | '__root__'
@@ -246,12 +268,14 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/resources'
     | '/security-questions'
+    | '/settings'
     | '/signup'
     | '/tell-your-story'
     | '/terms'
     | '/tools'
     | '/women'
     | '/admin/messages'
+    | '/admin/moderation'
     | '/notebooks/$id'
   fileRoutesById: FileRoutesById
 }
@@ -268,12 +292,14 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ResourcesRoute: typeof ResourcesRoute
   SecurityQuestionsRoute: typeof SecurityQuestionsRoute
+  SettingsRoute: typeof SettingsRoute
   SignupRoute: typeof SignupRoute
   TellYourStoryRoute: typeof TellYourStoryRoute
   TermsRoute: typeof TermsRoute
   ToolsRoute: typeof ToolsRoute
   WomenRoute: typeof WomenRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
+  AdminModerationRoute: typeof AdminModerationRoute
   NotebooksIdRoute: typeof NotebooksIdRoute
 }
 
@@ -312,6 +338,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/security-questions': {
@@ -405,6 +438,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotebooksIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/moderation': {
+      id: '/admin/moderation'
+      path: '/admin/moderation'
+      fullPath: '/admin/moderation'
+      preLoaderRoute: typeof AdminModerationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/messages': {
       id: '/admin/messages'
       path: '/admin/messages'
@@ -428,12 +468,14 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ResourcesRoute: ResourcesRoute,
   SecurityQuestionsRoute: SecurityQuestionsRoute,
+  SettingsRoute: SettingsRoute,
   SignupRoute: SignupRoute,
   TellYourStoryRoute: TellYourStoryRoute,
   TermsRoute: TermsRoute,
   ToolsRoute: ToolsRoute,
   WomenRoute: WomenRoute,
   AdminMessagesRoute: AdminMessagesRoute,
+  AdminModerationRoute: AdminModerationRoute,
   NotebooksIdRoute: NotebooksIdRoute,
 }
 export const routeTree = rootRouteImport
