@@ -11,10 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WomenRouteImport } from './routes/women'
 import { Route as ToolsRouteImport } from './routes/tools'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TellYourStoryRouteImport } from './routes/tell-your-story'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SecurityQuestionsRouteImport } from './routes/security-questions'
 import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as InboxRouteImport } from './routes/inbox'
 import { Route as GirlsRouteImport } from './routes/girls'
@@ -25,6 +28,7 @@ import { Route as BoardRouteImport } from './routes/board'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as NotebooksIdRouteImport } from './routes/notebooks.$id'
+import { Route as AdminModerationRouteImport } from './routes/admin.moderation'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 
 const WomenRoute = WomenRouteImport.update({
@@ -37,6 +41,11 @@ const ToolsRoute = ToolsRouteImport.update({
   path: '/tools',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TellYourStoryRoute = TellYourStoryRouteImport.update({
   id: '/tell-your-story',
   path: '/tell-your-story',
@@ -47,6 +56,11 @@ const SignupRoute = SignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SecurityQuestionsRoute = SecurityQuestionsRouteImport.update({
   id: '/security-questions',
   path: '/security-questions',
@@ -55,6 +69,11 @@ const SecurityQuestionsRoute = SecurityQuestionsRouteImport.update({
 const ResourcesRoute = ResourcesRouteImport.update({
   id: '/resources',
   path: '/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -107,6 +126,11 @@ const NotebooksIdRoute = NotebooksIdRouteImport.update({
   path: '/notebooks/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminModerationRoute = AdminModerationRouteImport.update({
+  id: '/admin/moderation',
+  path: '/admin/moderation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminMessagesRoute = AdminMessagesRouteImport.update({
   id: '/admin/messages',
   path: '/admin/messages',
@@ -123,13 +147,17 @@ export interface FileRoutesByFullPath {
   '/girls': typeof GirlsRoute
   '/inbox': typeof InboxRoute
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
   '/security-questions': typeof SecurityQuestionsRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/tell-your-story': typeof TellYourStoryRoute
+  '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/women': typeof WomenRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/admin/moderation': typeof AdminModerationRoute
   '/notebooks/$id': typeof NotebooksIdRoute
 }
 export interface FileRoutesByTo {
@@ -142,13 +170,17 @@ export interface FileRoutesByTo {
   '/girls': typeof GirlsRoute
   '/inbox': typeof InboxRoute
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
   '/security-questions': typeof SecurityQuestionsRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/tell-your-story': typeof TellYourStoryRoute
+  '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/women': typeof WomenRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/admin/moderation': typeof AdminModerationRoute
   '/notebooks/$id': typeof NotebooksIdRoute
 }
 export interface FileRoutesById {
@@ -162,13 +194,17 @@ export interface FileRoutesById {
   '/girls': typeof GirlsRoute
   '/inbox': typeof InboxRoute
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
   '/security-questions': typeof SecurityQuestionsRoute
+  '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
   '/tell-your-story': typeof TellYourStoryRoute
+  '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/women': typeof WomenRoute
   '/admin/messages': typeof AdminMessagesRoute
+  '/admin/moderation': typeof AdminModerationRoute
   '/notebooks/$id': typeof NotebooksIdRoute
 }
 export interface FileRouteTypes {
@@ -183,13 +219,17 @@ export interface FileRouteTypes {
     | '/girls'
     | '/inbox'
     | '/login'
+    | '/privacy'
     | '/resources'
     | '/security-questions'
+    | '/settings'
     | '/signup'
     | '/tell-your-story'
+    | '/terms'
     | '/tools'
     | '/women'
     | '/admin/messages'
+    | '/admin/moderation'
     | '/notebooks/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -202,13 +242,17 @@ export interface FileRouteTypes {
     | '/girls'
     | '/inbox'
     | '/login'
+    | '/privacy'
     | '/resources'
     | '/security-questions'
+    | '/settings'
     | '/signup'
     | '/tell-your-story'
+    | '/terms'
     | '/tools'
     | '/women'
     | '/admin/messages'
+    | '/admin/moderation'
     | '/notebooks/$id'
   id:
     | '__root__'
@@ -221,13 +265,17 @@ export interface FileRouteTypes {
     | '/girls'
     | '/inbox'
     | '/login'
+    | '/privacy'
     | '/resources'
     | '/security-questions'
+    | '/settings'
     | '/signup'
     | '/tell-your-story'
+    | '/terms'
     | '/tools'
     | '/women'
     | '/admin/messages'
+    | '/admin/moderation'
     | '/notebooks/$id'
   fileRoutesById: FileRoutesById
 }
@@ -241,13 +289,17 @@ export interface RootRouteChildren {
   GirlsRoute: typeof GirlsRoute
   InboxRoute: typeof InboxRoute
   LoginRoute: typeof LoginRoute
+  PrivacyRoute: typeof PrivacyRoute
   ResourcesRoute: typeof ResourcesRoute
   SecurityQuestionsRoute: typeof SecurityQuestionsRoute
+  SettingsRoute: typeof SettingsRoute
   SignupRoute: typeof SignupRoute
   TellYourStoryRoute: typeof TellYourStoryRoute
+  TermsRoute: typeof TermsRoute
   ToolsRoute: typeof ToolsRoute
   WomenRoute: typeof WomenRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
+  AdminModerationRoute: typeof AdminModerationRoute
   NotebooksIdRoute: typeof NotebooksIdRoute
 }
 
@@ -267,6 +319,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tell-your-story': {
       id: '/tell-your-story'
       path: '/tell-your-story'
@@ -281,6 +340,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/security-questions': {
       id: '/security-questions'
       path: '/security-questions'
@@ -293,6 +359,13 @@ declare module '@tanstack/react-router' {
       path: '/resources'
       fullPath: '/resources'
       preLoaderRoute: typeof ResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -365,6 +438,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotebooksIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/moderation': {
+      id: '/admin/moderation'
+      path: '/admin/moderation'
+      fullPath: '/admin/moderation'
+      preLoaderRoute: typeof AdminModerationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/messages': {
       id: '/admin/messages'
       path: '/admin/messages'
@@ -385,25 +465,19 @@ const rootRouteChildren: RootRouteChildren = {
   GirlsRoute: GirlsRoute,
   InboxRoute: InboxRoute,
   LoginRoute: LoginRoute,
+  PrivacyRoute: PrivacyRoute,
   ResourcesRoute: ResourcesRoute,
   SecurityQuestionsRoute: SecurityQuestionsRoute,
+  SettingsRoute: SettingsRoute,
   SignupRoute: SignupRoute,
   TellYourStoryRoute: TellYourStoryRoute,
+  TermsRoute: TermsRoute,
   ToolsRoute: ToolsRoute,
   WomenRoute: WomenRoute,
   AdminMessagesRoute: AdminMessagesRoute,
+  AdminModerationRoute: AdminModerationRoute,
   NotebooksIdRoute: NotebooksIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

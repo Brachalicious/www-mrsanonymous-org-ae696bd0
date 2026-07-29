@@ -124,6 +124,7 @@ export type Database = {
         Row: {
           color: string
           created_at: string
+          hidden: boolean
           id: string
           owner_id: string
           share_as: string
@@ -136,6 +137,7 @@ export type Database = {
         Insert: {
           color?: string
           created_at?: string
+          hidden?: boolean
           id?: string
           owner_id: string
           share_as?: string
@@ -148,6 +150,7 @@ export type Database = {
         Update: {
           color?: string
           created_at?: string
+          hidden?: boolean
           id?: string
           owner_id?: string
           share_as?: string
@@ -256,6 +259,65 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      story_blocks: {
+        Row: {
+          created_at: string
+          id: string
+          owner_id: string
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          owner_id: string
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          owner_id?: string
+          session_id?: string
+        }
+        Relationships: []
+      }
+      story_reports: {
+        Row: {
+          created_at: string
+          details: string | null
+          id: string
+          notebook_id: string
+          reason: string
+          session_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          notebook_id: string
+          reason: string
+          session_id: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          notebook_id?: string
+          reason?: string
+          session_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "story_reports_notebook_id_fkey"
+            columns: ["notebook_id"]
+            isOneToOne: false
+            referencedRelation: "notebooks"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
