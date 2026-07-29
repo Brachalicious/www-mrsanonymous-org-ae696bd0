@@ -11,10 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WomenRouteImport } from './routes/women'
 import { Route as ToolsRouteImport } from './routes/tools'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TellYourStoryRouteImport } from './routes/tell-your-story'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SecurityQuestionsRouteImport } from './routes/security-questions'
 import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as InboxRouteImport } from './routes/inbox'
 import { Route as GirlsRouteImport } from './routes/girls'
@@ -37,6 +39,11 @@ const ToolsRoute = ToolsRouteImport.update({
   path: '/tools',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TellYourStoryRoute = TellYourStoryRouteImport.update({
   id: '/tell-your-story',
   path: '/tell-your-story',
@@ -55,6 +62,11 @@ const SecurityQuestionsRoute = SecurityQuestionsRouteImport.update({
 const ResourcesRoute = ResourcesRouteImport.update({
   id: '/resources',
   path: '/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -123,10 +135,12 @@ export interface FileRoutesByFullPath {
   '/girls': typeof GirlsRoute
   '/inbox': typeof InboxRoute
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
   '/security-questions': typeof SecurityQuestionsRoute
   '/signup': typeof SignupRoute
   '/tell-your-story': typeof TellYourStoryRoute
+  '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/women': typeof WomenRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -142,10 +156,12 @@ export interface FileRoutesByTo {
   '/girls': typeof GirlsRoute
   '/inbox': typeof InboxRoute
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
   '/security-questions': typeof SecurityQuestionsRoute
   '/signup': typeof SignupRoute
   '/tell-your-story': typeof TellYourStoryRoute
+  '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/women': typeof WomenRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -162,10 +178,12 @@ export interface FileRoutesById {
   '/girls': typeof GirlsRoute
   '/inbox': typeof InboxRoute
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
   '/security-questions': typeof SecurityQuestionsRoute
   '/signup': typeof SignupRoute
   '/tell-your-story': typeof TellYourStoryRoute
+  '/terms': typeof TermsRoute
   '/tools': typeof ToolsRoute
   '/women': typeof WomenRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -183,10 +201,12 @@ export interface FileRouteTypes {
     | '/girls'
     | '/inbox'
     | '/login'
+    | '/privacy'
     | '/resources'
     | '/security-questions'
     | '/signup'
     | '/tell-your-story'
+    | '/terms'
     | '/tools'
     | '/women'
     | '/admin/messages'
@@ -202,10 +222,12 @@ export interface FileRouteTypes {
     | '/girls'
     | '/inbox'
     | '/login'
+    | '/privacy'
     | '/resources'
     | '/security-questions'
     | '/signup'
     | '/tell-your-story'
+    | '/terms'
     | '/tools'
     | '/women'
     | '/admin/messages'
@@ -221,10 +243,12 @@ export interface FileRouteTypes {
     | '/girls'
     | '/inbox'
     | '/login'
+    | '/privacy'
     | '/resources'
     | '/security-questions'
     | '/signup'
     | '/tell-your-story'
+    | '/terms'
     | '/tools'
     | '/women'
     | '/admin/messages'
@@ -241,10 +265,12 @@ export interface RootRouteChildren {
   GirlsRoute: typeof GirlsRoute
   InboxRoute: typeof InboxRoute
   LoginRoute: typeof LoginRoute
+  PrivacyRoute: typeof PrivacyRoute
   ResourcesRoute: typeof ResourcesRoute
   SecurityQuestionsRoute: typeof SecurityQuestionsRoute
   SignupRoute: typeof SignupRoute
   TellYourStoryRoute: typeof TellYourStoryRoute
+  TermsRoute: typeof TermsRoute
   ToolsRoute: typeof ToolsRoute
   WomenRoute: typeof WomenRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
@@ -265,6 +291,13 @@ declare module '@tanstack/react-router' {
       path: '/tools'
       fullPath: '/tools'
       preLoaderRoute: typeof ToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tell-your-story': {
@@ -293,6 +326,13 @@ declare module '@tanstack/react-router' {
       path: '/resources'
       fullPath: '/resources'
       preLoaderRoute: typeof ResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -385,10 +425,12 @@ const rootRouteChildren: RootRouteChildren = {
   GirlsRoute: GirlsRoute,
   InboxRoute: InboxRoute,
   LoginRoute: LoginRoute,
+  PrivacyRoute: PrivacyRoute,
   ResourcesRoute: ResourcesRoute,
   SecurityQuestionsRoute: SecurityQuestionsRoute,
   SignupRoute: SignupRoute,
   TellYourStoryRoute: TellYourStoryRoute,
+  TermsRoute: TermsRoute,
   ToolsRoute: ToolsRoute,
   WomenRoute: WomenRoute,
   AdminMessagesRoute: AdminMessagesRoute,
