@@ -30,6 +30,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as NotebooksIdRouteImport } from './routes/notebooks.$id'
 import { Route as AdminModerationRouteImport } from './routes/admin.moderation'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
 const WomenRoute = WomenRouteImport.update({
   id: '/women',
@@ -136,6 +137,12 @@ const AdminMessagesRoute = AdminMessagesRouteImport.update({
   path: '/admin/messages',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -159,6 +166,7 @@ export interface FileRoutesByFullPath {
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/notebooks/$id': typeof NotebooksIdRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -182,6 +190,7 @@ export interface FileRoutesByTo {
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/notebooks/$id': typeof NotebooksIdRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -206,6 +215,7 @@ export interface FileRoutesById {
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/moderation': typeof AdminModerationRoute
   '/notebooks/$id': typeof NotebooksIdRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -231,6 +241,7 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/moderation'
     | '/notebooks/$id'
+    | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -254,6 +265,7 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/moderation'
     | '/notebooks/$id'
+    | '/lovable/email/transactional/preview'
   id:
     | '__root__'
     | '/'
@@ -277,6 +289,7 @@ export interface FileRouteTypes {
     | '/admin/messages'
     | '/admin/moderation'
     | '/notebooks/$id'
+    | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -301,6 +314,7 @@ export interface RootRouteChildren {
   AdminMessagesRoute: typeof AdminMessagesRoute
   AdminModerationRoute: typeof AdminModerationRoute
   NotebooksIdRoute: typeof NotebooksIdRoute
+  LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -452,6 +466,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -477,7 +498,18 @@ const rootRouteChildren: RootRouteChildren = {
   AdminMessagesRoute: AdminMessagesRoute,
   AdminModerationRoute: AdminModerationRoute,
   NotebooksIdRoute: NotebooksIdRoute,
+  LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
