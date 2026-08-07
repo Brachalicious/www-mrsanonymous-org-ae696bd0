@@ -36,14 +36,38 @@ export function performQuickExit() {
 
 export function QuickExit() {
   useEffect(() => {
+    function isTyping(target: EventTarget | null) {
+      const el = target as HTMLElement | null;
+      if (!el) return false;
+      const tag = el.tagName;
+      return (
+        tag === "INPUT" ||
+        tag === "TEXTAREA" ||
+        tag === "SELECT" ||
+        el.isContentEditable === true
+      );
+    }
+
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
+        performQuickExit();
+        return;
+      }
+      // "X" key also triggers quick exit (unless the user is typing)
+      if (
+        (e.key === "x" || e.key === "X") &&
+        !e.metaKey &&
+        !e.ctrlKey &&
+        !e.altKey &&
+        !isTyping(e.target)
+      ) {
+        e.preventDefault();
         performQuickExit();
       }
     }
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown, true);
+    return () => window.removeEventListener("keydown", handleKeyDown, true);
   }, []);
 
   return null;

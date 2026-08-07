@@ -33,13 +33,13 @@ function ToolsPage() {
           icon={<AlertTriangle className="h-6 w-6 text-white" />}
           title="Quick Exit"
           color="bg-emergency"
-          summary="Press ESC or click any Quick Exit button to swap this tab to Google."
+          summary="Press ESC or the X key, or click any Quick Exit button, to swap this tab to Google."
         >
           <button onClick={performQuickExit} className="btn-emergency w-full">
             Try Quick Exit
           </button>
           <p className="mt-3 text-xs text-ink-500">
-            Tip: Use your keyboard's ESC key anywhere on the site. It works even when you do not see a button.
+            Tip: Use your keyboard's ESC or X key anywhere on the site. It works even when you do not see a button.
           </p>
         </ToolCard>
 
