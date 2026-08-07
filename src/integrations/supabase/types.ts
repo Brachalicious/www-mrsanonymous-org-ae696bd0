@@ -88,6 +88,39 @@ export type Database = {
           },
         ]
       }
+      journal_entries: {
+        Row: {
+          attachments: Json
+          audience: string
+          audio_path: string | null
+          created_at: string
+          fields: Json
+          id: string
+          owner_id: string
+          updated_at: string
+        }
+        Insert: {
+          attachments?: Json
+          audience?: string
+          audio_path?: string | null
+          created_at?: string
+          fields?: Json
+          id?: string
+          owner_id: string
+          updated_at?: string
+        }
+        Update: {
+          attachments?: Json
+          audience?: string
+          audio_path?: string | null
+          created_at?: string
+          fields?: Json
+          id?: string
+          owner_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       message_replies: {
         Row: {
           author_user_id: string | null
