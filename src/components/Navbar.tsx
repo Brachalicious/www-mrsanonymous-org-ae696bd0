@@ -375,6 +375,13 @@ export function Navbar() {
                 >
                   📬 Inbox
                 </Link>
+                <Link
+                  to="/journal"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg border border-ink-900/30 px-3 py-2 text-center text-sm font-semibold text-ink-900"
+                >
+                  🔒 Private Journal
+                </Link>
                 {isAdmin && (
                   <Link
                     to="/admin/messages"
