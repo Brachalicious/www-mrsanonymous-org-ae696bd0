@@ -19,6 +19,7 @@ import { Route as SecurityQuestionsRouteImport } from './routes/security-questio
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as JournalRouteImport } from './routes/journal'
 import { Route as InboxRouteImport } from './routes/inbox'
 import { Route as GirlsRouteImport } from './routes/girls'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
@@ -80,6 +81,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalRoute = JournalRouteImport.update({
+  id: '/journal',
+  path: '/journal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InboxRoute = InboxRouteImport.update({
@@ -153,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordRoute
   '/girls': typeof GirlsRoute
   '/inbox': typeof InboxRoute
+  '/journal': typeof JournalRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
@@ -177,6 +184,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/girls': typeof GirlsRoute
   '/inbox': typeof InboxRoute
+  '/journal': typeof JournalRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
@@ -202,6 +210,7 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/girls': typeof GirlsRoute
   '/inbox': typeof InboxRoute
+  '/journal': typeof JournalRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
@@ -228,6 +237,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/girls'
     | '/inbox'
+    | '/journal'
     | '/login'
     | '/privacy'
     | '/resources'
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/girls'
     | '/inbox'
+    | '/journal'
     | '/login'
     | '/privacy'
     | '/resources'
@@ -276,6 +287,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/girls'
     | '/inbox'
+    | '/journal'
     | '/login'
     | '/privacy'
     | '/resources'
@@ -301,6 +313,7 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   GirlsRoute: typeof GirlsRoute
   InboxRoute: typeof InboxRoute
+  JournalRoute: typeof JournalRoute
   LoginRoute: typeof LoginRoute
   PrivacyRoute: typeof PrivacyRoute
   ResourcesRoute: typeof ResourcesRoute
@@ -387,6 +400,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal': {
+      id: '/journal'
+      path: '/journal'
+      fullPath: '/journal'
+      preLoaderRoute: typeof JournalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/inbox': {
@@ -485,6 +505,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   GirlsRoute: GirlsRoute,
   InboxRoute: InboxRoute,
+  JournalRoute: JournalRoute,
   LoginRoute: LoginRoute,
   PrivacyRoute: PrivacyRoute,
   ResourcesRoute: ResourcesRoute,
@@ -503,13 +524,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
