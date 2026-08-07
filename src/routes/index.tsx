@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { sendContactMessage } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
 import signalForHelp from "@/assets/signal-for-help.png.asset.json";
 
@@ -252,6 +254,7 @@ function ContactSection() {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("");
   const [sending, setSending] = useState(false);
+  const sendFn = useServerFn(sendContactMessage);
 
   async function send() {
     if (!message.trim()) {
@@ -261,10 +264,17 @@ function ContactSection() {
     setSending(true);
     setStatus("");
     try {
-      // TODO: wire to a server function when backend is ready
-      await new Promise((res) => setTimeout(res, 800));
-      setStatus("✓ Message received. Thank you for trusting us with it.");
+      await sendFn({
+        data: { message: message.trim(), audience: "women", userId: user?.id ?? null },
+      });
+      setStatus(
+        user
+          ? "✓ Message received. Any reply from support will appear in your Inbox."
+          : "✓ Message received. Thank you for trusting us with it."
+      );
       setMessage("");
+    } catch (err) {
+      setStatus((err as Error).message || "Could not send message. Please try again.");
     } finally {
       setSending(false);
     }
