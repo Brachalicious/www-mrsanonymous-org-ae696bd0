@@ -12,12 +12,32 @@ export const sendContactMessage = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("contact_messages").insert({
-      message: data.message,
-      audience: data.audience,
-      sender_user_id: data.userId ?? null,
-    });
+    const { data: inserted, error } = await supabaseAdmin
+      .from("contact_messages")
+      .insert({
+        message: data.message,
+        audience: data.audience,
+        sender_user_id: data.userId ?? null,
+      })
+      .select("id, created_at")
+      .single();
     if (error) throw new Error(error.message);
+
+    try {
+      const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
+      await sendTemplateEmail("contact-notification", "mrsanonymoussupport@gmail.com", {
+        templateData: {
+          message: data.message,
+          audience: data.audience,
+          receivedAt: inserted?.created_at ?? new Date().toISOString(),
+          accountLinked: Boolean(data.userId),
+        },
+        idempotencyKey: `contact-notification-${inserted?.id ?? crypto.randomUUID()}`,
+      });
+    } catch (e) {
+      // Never fail the user's submission because of a notification email problem.
+      console.error("contact notification email failed", e);
+    }
     return { ok: true };
   });
 
