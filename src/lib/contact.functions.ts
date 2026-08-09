@@ -56,14 +56,16 @@ export const listMyMessages = createServerFn({ method: "GET" })
     if (ids.length) {
       const { data: r } = await supabase
         .from("message_replies")
-        .select("id, message_id, body, created_at")
+        .select("id, message_id, body, created_at, author_user_id")
         .in("message_id", ids)
         .order("created_at", { ascending: true });
       replies = r ?? [];
     }
     return (messages ?? []).map((m: any) => ({
       ...m,
-      replies: replies.filter((r) => r.message_id === m.id),
+      replies: replies
+        .filter((r) => r.message_id === m.id)
+        .map((r) => ({ ...r, fromMe: r.author_user_id === userId })),
     }));
   });
 
