@@ -93,8 +93,15 @@ function MessageCard({ m, onReplied }: { m: any; onReplied: () => void }) {
         <div className="mt-5 space-y-3 border-l-2 border-rose-500/40 pl-4">
           {m.replies.map((r: any) => (
             <div key={r.id}>
-              <div className="text-[11px] uppercase tracking-widest text-rose-500">
-                Support · {new Date(r.created_at).toLocaleString()}
+              <div
+                className={`text-[11px] uppercase tracking-widest ${
+                  r.author_user_id && r.author_user_id === m.sender_user_id ? "text-ink-500" : "text-rose-500"
+                }`}
+              >
+                {r.author_user_id && r.author_user_id === m.sender_user_id
+                  ? `${m.sender_nickname ?? "User"} (sender)`
+                  : "Support"}{" "}
+                · {new Date(r.created_at).toLocaleString()}
               </div>
               <p className="mt-1 whitespace-pre-wrap text-ink-900">{r.body}</p>
             </div>
