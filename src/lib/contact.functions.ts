@@ -85,7 +85,7 @@ export const listAllMessages = createServerFn({ method: "GET" })
     if (ids.length) {
       const { data: r } = await supabase
         .from("message_replies")
-        .select("id, message_id, body, created_at")
+        .select("id, message_id, body, created_at, author_user_id")
         .in("message_id", ids)
         .order("created_at", { ascending: true });
       replies = r ?? [];
