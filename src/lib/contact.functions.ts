@@ -109,6 +109,40 @@ export const replyToMessage = createServerFn({ method: "POST" })
     z.object({ messageId: z.string().uuid(), body: z.string().min(1).max(4000) }).parse(data)
   )
   .handler(async ({ data, context }) => {
+    // placeholder-admin
+    return { ok: true, unused: data.messageId, u: context.userId };
+  });
+
+export const replyAsUser = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) =>
+    z.object({ messageId: z.string().uuid(), body: z.string().trim().min(1).max(4000) }).parse(data)
+  )
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    const { data: owned, error: ownErr } = await supabase
+      .from("contact_messages")
+      .select("id")
+      .eq("id", data.messageId)
+      .eq("sender_user_id", userId)
+      .maybeSingle();
+    if (ownErr) throw new Error(ownErr.message);
+    if (!owned) throw new Error("Not found");
+
+    const { error } = await supabase.from("message_replies").insert({
+      message_id: data.messageId,
+      author_user_id: userId,
+      body: data.body,
+    });
+    if (error) throw new Error(error.message);
+    await supabase.from("contact_messages").update({ status: "open" }).eq("id", data.messageId);
+    return { ok: true };
+  });
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) =>
+    z.object({ messageId: z.string().uuid(), body: z.string().min(1).max(4000) }).parse(data)
+  )
+  .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     const { data: adminCheck } = await supabase.rpc("has_role", { _user_id: userId, _role: "admin" });
     if (!adminCheck) throw new Error("Forbidden");
