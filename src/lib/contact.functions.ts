@@ -103,16 +103,6 @@ export const listAllMessages = createServerFn({ method: "GET" })
     }));
   });
 
-export const replyToMessage = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((data) =>
-    z.object({ messageId: z.string().uuid(), body: z.string().min(1).max(4000) }).parse(data)
-  )
-  .handler(async ({ data, context }) => {
-    // placeholder-admin
-    return { ok: true, unused: data.messageId, u: context.userId };
-  });
-
 export const replyAsUser = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) =>
@@ -138,6 +128,8 @@ export const replyAsUser = createServerFn({ method: "POST" })
     await supabase.from("contact_messages").update({ status: "open" }).eq("id", data.messageId);
     return { ok: true };
   });
+
+export const replyToMessage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data) =>
     z.object({ messageId: z.string().uuid(), body: z.string().min(1).max(4000) }).parse(data)
