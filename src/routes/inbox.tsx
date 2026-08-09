@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery } from "@tanstack/react-query";
-import { listMyMessages } from "@/lib/contact.functions";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { listMyMessages, replyAsUser } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
 
 export const Route = createFileRoute("/inbox")({
@@ -70,17 +71,67 @@ function InboxPage() {
               <div className="mt-5 space-y-3 border-l-2 border-rose-500/40 pl-4">
                 {m.replies.map((r: any) => (
                   <div key={r.id}>
-                    <div className="text-[11px] uppercase tracking-widest text-rose-500">
-                      Support · {new Date(r.created_at).toLocaleString()}
+                    <div
+                      className={`text-[11px] uppercase tracking-widest ${r.fromMe ? "text-ink-500" : "text-rose-500"}`}
+                    >
+                      {r.fromMe ? "You" : "Support"} · {new Date(r.created_at).toLocaleString()}
                     </div>
                     <p className="mt-1 whitespace-pre-wrap text-ink-900">{r.body}</p>
                   </div>
                 ))}
               </div>
             )}
+
+            <ReplyBox messageId={m.id} />
           </div>
         ))}
       </div>
     </div>
+  );
+}
+
+function ReplyBox({ messageId }: { messageId: string }) {
+  const [body, setBody] = useState("");
+  const [error, setError] = useState("");
+  const queryClient = useQueryClient();
+  const send = useServerFn(replyAsUser);
+
+  const mutation = useMutation({
+    mutationFn: send,
+    onSuccess: () => {
+      setBody("");
+      setError("");
+      queryClient.invalidateQueries({ queryKey: ["my-messages"] });
+    },
+    onError: (e) => setError((e as Error).message || "Could not send your reply."),
+  });
+
+  return (
+    <form
+      className="mt-5 space-y-2"
+      onSubmit={(e) => {
+        e.preventDefault();
+        const text = body.trim();
+        if (!text) {
+          setError("Write something before sending.");
+          return;
+        }
+        mutation.mutate({ data: { messageId, body: text } });
+      }}
+    >
+      <textarea
+        value={body}
+        onChange={(e) => setBody(e.target.value)}
+        rows={3}
+        maxLength={4000}
+        placeholder="Write back to support…"
+        className="input-soft"
+        data-testid={`inbox-reply-${messageId}`}
+      />
+      {error && <div className="rounded-md bg-emergency/10 px-3 py-2 text-sm text-emergency">{error}</div>}
+      <button type="submit" disabled={mutation.isPending} className="btn-rose">
+        {mutation.isPending ? "Sending…" : "Send reply"}
+      </button>
+    </form>
   );
 }
