@@ -13,6 +13,8 @@ const SENDER_DOMAIN = "notify.mrsanonymous.org"
 // FROM_DOMAIN is the domain shown in the From: header (e.g., "example.com").
 // Can be the root domain when display_from_root is enabled — this is cosmetic only.
 const FROM_DOMAIN = "mrsanonymous.org"
+// Replies should reach a real human inbox, not a no-reply black hole.
+const SUPPORT_EMAIL = "mrsanonymoussupport@gmail.com"
 
 export type SendTemplateEmailResult =
   | { sent: true }
@@ -69,7 +71,7 @@ export async function sendTemplateEmail(
     await sendLovableEmail(
       {
         to: recipient,
-        from: `${SITE_NAME} <noreply@${FROM_DOMAIN}>`,
+        from: `MrsAnonymous Support <support@${FROM_DOMAIN}>`,
         sender_domain: SENDER_DOMAIN,
         subject,
         html,
@@ -77,7 +79,7 @@ export async function sendTemplateEmail(
         purpose: 'transactional',
         label: templateName,
         idempotency_key: options.idempotencyKey || crypto.randomUUID(),
-        reply_to: options.replyTo,
+        reply_to: options.replyTo || SUPPORT_EMAIL,
       },
       { apiKey, sendUrl: process.env['LOVABLE_SEND_URL'] }
     )
