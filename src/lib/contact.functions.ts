@@ -56,14 +56,16 @@ export const listMyMessages = createServerFn({ method: "GET" })
     if (ids.length) {
       const { data: r } = await supabase
         .from("message_replies")
-        .select("id, message_id, body, created_at")
+        .select("id, message_id, body, created_at, author_user_id")
         .in("message_id", ids)
         .order("created_at", { ascending: true });
       replies = r ?? [];
     }
     return (messages ?? []).map((m: any) => ({
       ...m,
-      replies: replies.filter((r) => r.message_id === m.id),
+      replies: replies
+        .filter((r) => r.message_id === m.id)
+        .map((r) => ({ ...r, fromMe: r.author_user_id === userId })),
     }));
   });
 
@@ -83,7 +85,7 @@ export const listAllMessages = createServerFn({ method: "GET" })
     if (ids.length) {
       const { data: r } = await supabase
         .from("message_replies")
-        .select("id, message_id, body, created_at")
+        .select("id, message_id, body, created_at, author_user_id")
         .in("message_id", ids)
         .order("created_at", { ascending: true });
       replies = r ?? [];
@@ -101,6 +103,32 @@ export const listAllMessages = createServerFn({ method: "GET" })
       sender_nickname: m.sender_user_id ? nicks[m.sender_user_id] ?? null : null,
       replies: replies.filter((r) => r.message_id === m.id),
     }));
+  });
+
+export const replyAsUser = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) =>
+    z.object({ messageId: z.string().uuid(), body: z.string().trim().min(1).max(4000) }).parse(data)
+  )
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    const { data: owned, error: ownErr } = await supabase
+      .from("contact_messages")
+      .select("id")
+      .eq("id", data.messageId)
+      .eq("sender_user_id", userId)
+      .maybeSingle();
+    if (ownErr) throw new Error(ownErr.message);
+    if (!owned) throw new Error("Not found");
+
+    const { error } = await supabase.from("message_replies").insert({
+      message_id: data.messageId,
+      author_user_id: userId,
+      body: data.body,
+    });
+    if (error) throw new Error(error.message);
+    await supabase.from("contact_messages").update({ status: "open" }).eq("id", data.messageId);
+    return { ok: true };
   });
 
 export const replyToMessage = createServerFn({ method: "POST" })
