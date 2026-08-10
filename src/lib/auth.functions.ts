@@ -10,6 +10,8 @@ const registerSchema = z.object({
   password: z.string().min(1).max(128),
   audience: z.enum(["women", "girls"]).default("women"),
   country: z.string().min(2).max(3).optional(),
+  state_region: z.string().max(80).optional(),
+  city: z.string().max(80).optional(),
 });
 
 export const registerAnonymousUser = createServerFn({ method: "POST" })
@@ -49,6 +51,8 @@ export const registerAnonymousUser = createServerFn({ method: "POST" })
       nickname: normalizedNickname,
       audience: data.audience,
       country: data.country ?? null,
+      state_region: data.state_region?.trim() || null,
+      city: data.city?.trim() || null,
     });
 
 
