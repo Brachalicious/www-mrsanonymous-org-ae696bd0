@@ -1,5 +1,5 @@
 import React from 'react'
-import { Body, Container, Head, Heading, Hr, Html, Preview, Section, Text } from '@react-email/components'
+import { Body, Button, Container, Head, Heading, Hr, Html, Preview, Section, Text } from '@react-email/components'
 import type { TemplateEntry } from './registry'
 
 interface Props {
@@ -20,6 +20,16 @@ const Email = ({ message, audience, receivedAt, accountLinked }: Props) => (
         <Section style={card}>
           <Text style={body}>{message ?? '(no message content)'}</Text>
         </Section>
+        <Section style={{ textAlign: 'center' as const, margin: '22px 0 6px' }}>
+          <Button href="https://mrsanonymous.org/admin/messages" style={button}>
+            Open admin messages to reply
+          </Button>
+        </Section>
+        <Text style={warn}>
+          Replying to this email does NOT reach the sender. Senders are anonymous and have
+          no email address — you must reply from the admin messages page so your reply lands
+          in their in-app Inbox.
+        </Text>
         <Hr style={hr} />
         <Text style={meta}>Audience: {audience ?? 'women'}</Text>
         <Text style={meta}>Received: {receivedAt ?? new Date().toISOString()}</Text>
@@ -53,3 +63,5 @@ const card = { backgroundColor: '#faf7f5', border: '1px solid #eadfd9', borderRa
 const body = { fontSize: '15px', lineHeight: '1.7', color: '#1a1a1a', whiteSpace: 'pre-wrap' as const, margin: '0' }
 const hr = { borderColor: '#eadfd9', margin: '22px 0 14px' }
 const meta = { fontSize: '12px', color: '#6b6b6b', margin: '4px 0' }
+const button = { backgroundColor: '#c0392b', color: '#ffffff', fontSize: '14px', fontWeight: 'bold' as const, padding: '12px 22px', borderRadius: '999px', textDecoration: 'none' }
+const warn = { fontSize: '12px', lineHeight: '1.6', color: '#8a4b43', backgroundColor: '#fdf1ef', border: '1px solid #f2d6d1', borderRadius: '8px', padding: '10px 12px', margin: '12px 0 0' }
