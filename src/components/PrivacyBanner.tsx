@@ -3,6 +3,7 @@ import { useRouter } from "@tanstack/react-router";
 
 const STORAGE_KEY = "mrsanon:hide-history";
 const DISMISS_KEY = "mrsanon:hide-history-dismissed";
+export const HIDE_HISTORY_CHANGE_EVENT = "mrsanon:hide-history-change";
 
 export function isHideHistoryEnabled() {
   if (typeof window === "undefined") return false;
@@ -47,11 +48,13 @@ export function PrivacyBanner() {
   function enable() {
     window.localStorage.setItem(STORAGE_KEY, "1");
     setEnabled(true);
+    window.dispatchEvent(new CustomEvent(HIDE_HISTORY_CHANGE_EVENT, { detail: true }));
   }
 
   function disable() {
     window.localStorage.removeItem(STORAGE_KEY);
     setEnabled(false);
+    window.dispatchEvent(new CustomEvent(HIDE_HISTORY_CHANGE_EVENT, { detail: false }));
   }
 
   function dismiss() {
