@@ -73,6 +73,14 @@ export function Navbar() {
   const navigate = useNavigate();
   const { lang, setLang, t } = useLanguage();
   const emergency = getEmergency(lang);
+  const fetchUnread = useServerFn(getUnreadMessageCount);
+
+  const { data: unreadCount } = useQuery({
+    queryKey: ["unread-count", user?.id],
+    queryFn: () => fetchUnread(),
+    enabled: !!user,
+    refetchInterval: 30_000,
+  });
 
   const loggedIn = !!user;
   const tabs = getTabs(loggedIn);
