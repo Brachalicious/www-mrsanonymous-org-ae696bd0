@@ -38,6 +38,12 @@ const MY_NOTEBOOKS_TAB: NavItem = {
   kind: "rose",
 };
 
+const INBOX_TAB: NavItem = {
+  to: "/inbox",
+  label: "📬 Inbox",
+  testid: "nav-inbox-tab",
+};
+
 const TAB_LABEL_KEYS: Record<string, string> = {
   "nav-about": "nav.about",
   "nav-women": "nav.women",
@@ -58,6 +64,7 @@ function getTabs(loggedIn: boolean): NavItem[] {
     BASE_TABS[2],
     BASE_TABS[3],
     MY_NOTEBOOKS_TAB,
+    INBOX_TAB,
     BASE_TABS[4],
     BASE_TABS[5],
     BASE_TABS[6],
