@@ -31,6 +31,7 @@ export const sendContactMessage = createServerFn({ method: "POST" })
           audience: data.audience,
           receivedAt: inserted?.created_at ?? new Date().toISOString(),
           accountLinked: Boolean(data.userId),
+          threadId: inserted?.id ?? undefined,
         },
         idempotencyKey: `contact-notification-${inserted?.id ?? crypto.randomUUID()}`,
       });
@@ -150,6 +151,7 @@ export const replyAsUser = createServerFn({ method: "POST" })
           audience: "reply in existing thread",
           receivedAt: new Date().toISOString(),
           accountLinked: true,
+          threadId: data.messageId,
         },
         idempotencyKey: `user-reply-${data.messageId}-${Date.now()}`,
       });
