@@ -200,13 +200,6 @@ export function Navbar() {
               >
                 📓 My Notebooks
               </Link>
-              <Link
-                to="/journal"
-                data-testid="nav-journal"
-                className="rounded-full border border-ink-900/30 px-4 py-1.5 text-xs font-semibold text-ink-900 hover:bg-ink-900 hover:text-white"
-              >
-                🔒 Journal
-              </Link>
               <button
                 data-testid="nav-logout"
                 onClick={handleLogout}
@@ -410,13 +403,6 @@ export function Navbar() {
                       {unreadCount > 9 ? "9+" : unreadCount}
                     </span>
                   )}
-                </Link>
-                <Link
-                  to="/journal"
-                  onClick={() => setOpen(false)}
-                  className="rounded-lg border border-ink-900/30 px-3 py-2 text-center text-sm font-semibold text-ink-900"
-                >
-                  🔒 Private Journal
                 </Link>
                 {isAdmin && (
                   <Link

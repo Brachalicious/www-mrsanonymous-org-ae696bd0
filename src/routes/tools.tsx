@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { performQuickExit } from "@/components/QuickExit";
-import { AlertTriangle, Ban, EyeOff, Hand, HeartPulse, LogOut, MousePointer2, MoveDown, Shield } from "lucide-react";
+import { AlertTriangle, Ban, EyeOff, FileText, Hand, HeartPulse, LogOut, MousePointer2, MoveDown, Shield } from "lucide-react";
 
 export const Route = createFileRoute("/tools")({
   head: () => ({
@@ -93,6 +93,26 @@ function ToolsPage() {
           </div>
           <div className="mt-3 rounded-lg border border-rose-200 bg-rose-50 p-2 text-xs text-rose-700">
             If you are in immediate danger, call local emergency services.
+          </div>
+        </ToolCard>
+
+        <ToolCard
+          icon={<FileText className="h-6 w-6 text-ink-900" />}
+          title="Document an incident"
+          color="bg-cream-200"
+          summary="Privately record dates, details, photos, and voice notes. Only your account can open it."
+        >
+          <div className="flex flex-col gap-2">
+            <Link
+              to="/journal"
+              data-testid="tools-document-incident"
+              className="btn-dark w-full"
+            >
+              Open Private Journal
+            </Link>
+            <p className="text-xs text-ink-500">
+              Nothing here is shared to the public board. Use it to build a record if you ever choose to report.
+            </p>
           </div>
         </ToolCard>
 
