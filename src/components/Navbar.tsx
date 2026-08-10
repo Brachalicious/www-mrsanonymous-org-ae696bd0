@@ -160,9 +160,16 @@ export function Navbar() {
               <Link
                 to="/inbox"
                 data-testid="nav-inbox"
-                className="rounded-full border border-ink-900/30 px-4 py-1.5 text-xs font-semibold text-ink-900 hover:bg-ink-900 hover:text-white"
+                className="relative inline-flex items-center justify-center rounded-full border border-ink-900/30 p-2 text-ink-900 hover:bg-ink-900 hover:text-white"
+                aria-label={t("nav.inbox")}
+                title={t("nav.inbox")}
               >
-                📬 Inbox
+                <MailIcon className="h-5 w-5" />
+                {!!unreadCount && unreadCount > 0 && (
+                  <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-extrabold text-white shadow ring-2 ring-white">
+                    {unreadCount > 9 ? "9+" : unreadCount}
+                  </span>
+                )}
               </Link>
               {isAdmin && (
                 <Link
