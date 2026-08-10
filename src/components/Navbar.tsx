@@ -9,7 +9,7 @@ import { getEmergency } from "@/lib/emergency-numbers";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getUnreadMessageCount } from "@/lib/contact.functions";
-import { isHideHistoryEnabled } from "./PrivacyBanner";
+import { HIDE_HISTORY_CHANGE_EVENT, isHideHistoryEnabled } from "./PrivacyBanner";
 
 
 type NavItem = {
@@ -99,8 +99,15 @@ export function Navbar() {
         setHideHistory(e.newValue === "1");
       }
     }
+    function onHideHistoryChange(e: Event) {
+      setHideHistory((e as CustomEvent<boolean>).detail);
+    }
     window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+    window.addEventListener(HIDE_HISTORY_CHANGE_EVENT, onHideHistoryChange);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      window.removeEventListener(HIDE_HISTORY_CHANGE_EVENT, onHideHistoryChange);
+    };
   }, []);
 
   const loggedIn = !!user;
