@@ -51,19 +51,27 @@ export const listSharedStories = createServerFn({ method: "GET" }).handler(async
 
   const { data: notebooks, error: nbError } = await supabaseAdmin
     .from("notebooks")
-    .select("*, profiles!inner(nickname)")
+    .select("*")
     .eq("shared", true)
     .eq("hidden", false)
     .order("shared_at", { ascending: false })
     .limit(60);
   if (nbError) throw new Error(nbError.message);
 
-  const stories = ((notebooks || []) as unknown as Array<
-    Database["public"]["Tables"]["notebooks"]["Row"] & { profiles: { nickname: string } }
+  const stories = ((notebooks || []) as Array<
+    Database["public"]["Tables"]["notebooks"]["Row"]
   >).filter((s) => !blockedOwners.has(s.owner_id));
   if (stories.length === 0) return [];
 
   const ids = stories.map((s) => s.id);
+
+  const { data: profileRows } = await supabaseAdmin
+    .from("profiles")
+    .select("id, nickname")
+    .in("id", Array.from(new Set(stories.map((s) => s.owner_id))));
+  const nicknameMap = new Map<string, string>(
+    (profileRows || []).map((p: { id: string; nickname: string }) => [p.id, p.nickname]),
+  );
 
   const [{ data: entries }, { data: reactionEvents }] = await Promise.all([
     supabaseAdmin.from("entries").select("notebook_id, content").in("notebook_id", ids).eq("shared", true),
@@ -99,7 +107,7 @@ export const listSharedStories = createServerFn({ method: "GET" }).handler(async
       color: s.color,
       topics: s.topics || [],
       share_as: s.share_as,
-      author: s.share_as === "nickname" ? s.profiles.nickname : "Anonymous",
+      author: s.share_as === "nickname" ? nicknameMap.get(s.owner_id) || "Anonymous" : "Anonymous",
       created_at: s.created_at,
       shared_at: s.shared_at,
       preview: firstEntryMap.get(s.id) || "",
@@ -120,16 +128,24 @@ export const getSharedStory = createServerFn({ method: "GET" })
 
     const { data: notebook, error: nbError } = await supabaseAdmin
       .from("notebooks")
-      .select("*, profiles!inner(nickname)")
+      .select("*")
       .eq("id", data.id)
       .eq("shared", true)
       .eq("hidden", false)
       .single();
     if (nbError || !notebook) throw new Error("Story not found");
 
-    const story = notebook as unknown as Database["public"]["Tables"]["notebooks"]["Row"] & {
-      profiles: { nickname: string };
-    };
+    const story = notebook as Database["public"]["Tables"]["notebooks"]["Row"];
+
+    let authorNickname: string | null = null;
+    if (story.share_as === "nickname") {
+      const { data: prof } = await supabaseAdmin
+        .from("profiles")
+        .select("nickname")
+        .eq("id", story.owner_id)
+        .maybeSingle();
+      authorNickname = prof?.nickname ?? null;
+    }
 
     const [{ data: entries }, { data: reactionEvents }] = await Promise.all([
       supabaseAdmin.from("entries").select("*").eq("notebook_id", data.id).eq("shared", true).order("created_at", { ascending: false }),
@@ -149,7 +165,7 @@ export const getSharedStory = createServerFn({ method: "GET" })
       color: story.color,
       topics: story.topics || [],
       share_as: story.share_as,
-      author: story.share_as === "nickname" ? story.profiles.nickname : "Anonymous",
+      author: authorNickname || "Anonymous",
       created_at: story.created_at,
       shared_at: story.shared_at,
       entries: (entries || []).map((e) => ({
