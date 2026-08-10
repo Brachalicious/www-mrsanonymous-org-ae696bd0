@@ -186,6 +186,7 @@ export function Navbar() {
               {isAdmin && (
                 <Link
                   to="/admin/messages"
+                  search={{ thread: undefined }}
                   data-testid="nav-admin"
                   className="rounded-full border border-rose-500/60 px-4 py-1.5 text-xs font-semibold text-rose-500 hover:bg-rose-500 hover:text-white"
                 >
@@ -407,6 +408,7 @@ export function Navbar() {
                 {isAdmin && (
                   <Link
                     to="/admin/messages"
+                    search={{ thread: undefined }}
                     onClick={() => setOpen(false)}
                     className="rounded-lg border border-rose-500/60 px-3 py-2 text-center text-sm font-semibold text-rose-500"
                   >
