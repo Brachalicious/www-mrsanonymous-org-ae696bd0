@@ -144,9 +144,6 @@ function SignupPage() {
             </div>
           </div>
 
-          {error && (
-            <></>
-          )}
           <label className="block">
             <span className="text-xs font-semibold uppercase tracking-widest text-ink-500">
               Where are you? (for local emergency numbers &amp; help)
