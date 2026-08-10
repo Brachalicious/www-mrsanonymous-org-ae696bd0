@@ -2,6 +2,8 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { PasswordInput } from "@/components/PasswordInput";
+import { COUNTRY_OPTIONS, detectCountry } from "@/lib/emergency-numbers";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/signup")({
   head: () => ({
@@ -22,8 +24,13 @@ function SignupPage() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [audience, setAudience] = useState<"women" | "girls">("women");
+  const [country, setCountry] = useState("US");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setCountry(detectCountry());
+  }, []);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -31,7 +38,12 @@ function SignupPage() {
     if (password !== confirm) return setError("Passwords do not match.");
     setLoading(true);
     try {
-      await register({ nickname: nickname.trim(), password, audience });
+      await register({ nickname: nickname.trim(), password, audience, country });
+      try {
+        localStorage.setItem("mrsanon:country", country);
+      } catch {
+        /* ignore */
+      }
       navigate({ to: "/security-questions", search: { required: "1" } });
     } catch (e) {
       setError(errMsg(e));
@@ -131,6 +143,31 @@ function SignupPage() {
               </label>
             </div>
           </div>
+
+          {error && (
+            <></>
+          )}
+          <label className="block">
+            <span className="text-xs font-semibold uppercase tracking-widest text-ink-500">
+              Where are you? (for local emergency numbers &amp; help)
+            </span>
+            <select
+              data-testid="signup-country"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              className="input-soft mt-1.5"
+            >
+              {COUNTRY_OPTIONS.map((c) => (
+                <option key={c.code} value={c.code}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+            <span className="mt-1 block text-[11px] text-ink-500">
+              Only your country — never your address. It lets us show the right emergency number and local
+              resources.
+            </span>
+          </label>
 
           {error && (
             <div data-testid="signup-error" className="rounded-md bg-emergency/10 px-3 py-2 text-sm text-emergency">
