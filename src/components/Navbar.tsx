@@ -158,16 +158,22 @@ export function Navbar() {
           >
             ✕ {t("safety.quickExit")}
           </button>
-          {hideHistory && (
-            <span
-              data-testid="hide-history-indicator"
-              className="inline-flex items-center gap-1 rounded-sm border border-white/30 bg-emerald-500/20 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-300"
-              title="History hiding is enabled. Internal links won't add to browser history."
-            >
-              <ShieldIcon className="h-3 w-3" />
-              History hidden
-            </span>
-          )}
+          <button
+            data-testid="hide-history-indicator"
+            onClick={() => {
+              setHideHistoryEnabled(!hideHistory);
+              reopenPrivacyBanner();
+            }}
+            className={`inline-flex items-center gap-1 rounded-sm border px-2 py-1 text-[10px] font-semibold uppercase tracking-wider ${
+              hideHistory
+                ? "border-emerald-300/60 bg-emerald-500/20 text-emerald-300"
+                : "border-white/30 bg-white/5 text-white/80 hover:bg-white/15"
+            }`}
+            title="Hide this site from your browser's back button"
+          >
+            <ShieldIcon className="h-3 w-3" />
+            {hideHistory ? "History hidden" : "Hide history"}
+          </button>
           <a
             data-testid="safety-strip-call-911"
             href={`tel:${emergency.police}`}
