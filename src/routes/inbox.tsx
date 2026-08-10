@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { listAllMessages, listMyMessages, replyAsUser, replyToMessage } from "@/lib/contact.functions";
+import { listMyMessages, replyAsUser } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
 
 export const Route = createFileRoute("/inbox")({
@@ -20,19 +20,12 @@ export const Route = createFileRoute("/inbox")({
 });
 
 function InboxPage() {
-  const { user, isAdmin, loading } = useAuth();
+  const { user, loading } = useAuth();
   const fetchFn = useServerFn(listMyMessages);
-  const fetchSupportFn = useServerFn(listAllMessages);
   const q = useQuery({
     queryKey: ["my-messages", user?.id],
     queryFn: () => fetchFn(),
     enabled: !!user,
-  });
-  const supportQuery = useQuery({
-    queryKey: ["admin-messages"],
-    queryFn: () => fetchSupportFn(),
-    enabled: !!user && isAdmin,
-    retry: false,
   });
 
   if (loading) return <div className="mx-auto max-w-3xl px-5 py-16 text-ink-500">Loading…</div>;
@@ -50,68 +43,10 @@ function InboxPage() {
   }
 
   const messages = (q.data as any[]) ?? [];
-  const supportMessages = (supportQuery.data as any[]) ?? [];
-  // Only admins ever see the Support Inbox section.
-  const canSeeSupportInbox = isAdmin;
-
   return (
     <div className="mx-auto max-w-3xl px-5 py-12">
       <h1 className="font-serif text-4xl text-ink-900">Your Inbox</h1>
       <p className="mt-2 text-ink-700">Messages you sent us and any replies from support.</p>
-
-      {canSeeSupportInbox && (
-        <section className="mt-8 border-y border-rose-500/30 py-6" aria-labelledby="support-inbox-heading">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <h2 id="support-inbox-heading" className="font-serif text-2xl text-ink-900">Support Inbox</h2>
-              <p className="mt-1 text-sm text-ink-700">Messages from users waiting for support.</p>
-            </div>
-            <Link to="/admin/messages" search={{ thread: undefined }} className="rounded-full border border-ink-900/30 px-4 py-2 text-sm font-semibold text-ink-900">Full view</Link>
-          </div>
-          {supportQuery.isLoading && <p className="mt-4 text-ink-500">Loading support messages…</p>}
-          {supportQuery.isError && (
-            <div role="alert" className="mt-4 rounded-md bg-emergency/10 px-3 py-2 text-sm text-emergency">
-              Support messages could not load. Log out, log back into the admin account, and try again.
-            </div>
-          )}
-          {!supportQuery.isLoading && !supportQuery.isError && (
-            <div className="mt-4 space-y-4">
-              {supportMessages.length === 0 ? (
-                <p className="text-sm text-ink-500">No support messages yet.</p>
-              ) : (
-                supportMessages.map((message) => (
-                  <div key={message.id} className="note-card p-5">
-                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs uppercase tracking-widest text-ink-500">
-                      <span>{message.sender_nickname ? `From ${message.sender_nickname}` : "Anonymous visitor"}</span>
-                      <span>{new Date(message.created_at).toLocaleString()}</span>
-                    </div>
-                    <p className="mt-2 whitespace-pre-wrap text-sm text-ink-900">{message.message}</p>
-                    {message.replies?.length > 0 && (
-                      <div className="mt-4 space-y-3 border-l-2 border-rose-500/40 pl-4">
-                        {message.replies.map((r: any) => (
-                          <div key={r.id}>
-                            <div className="text-[11px] uppercase tracking-widest text-ink-500">
-                              {new Date(r.created_at).toLocaleString()}
-                            </div>
-                            <p className="mt-1 whitespace-pre-wrap text-sm text-ink-900">{r.body}</p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    {message.sender_user_id ? (
-                      <AdminReplyBox messageId={message.id} />
-                    ) : (
-                      <p className="mt-3 text-xs text-ink-500">
-                        Sent without an account — no inbox to reply into.
-                      </p>
-                    )}
-                  </div>
-                ))
-              )}
-            </div>
-          )}
-        </section>
-      )}
 
       {q.isLoading && <p className="mt-6 text-ink-500">Loading…</p>}
       {messages.length === 0 && !q.isLoading && (
@@ -155,27 +90,21 @@ function InboxPage() {
 }
 
 function ReplyBox({ messageId }: { messageId: string }) {
-  return <ThreadReplyBox messageId={messageId} admin={false} />;
+  return <ThreadReplyBox messageId={messageId} />;
 }
 
-function AdminReplyBox({ messageId }: { messageId: string }) {
-  return <ThreadReplyBox messageId={messageId} admin />;
-}
-
-function ThreadReplyBox({ messageId, admin }: { messageId: string; admin: boolean }) {
+function ThreadReplyBox({ messageId }: { messageId: string }) {
   const [body, setBody] = useState("");
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
   const sendUser = useServerFn(replyAsUser);
-  const sendAdmin = useServerFn(replyToMessage);
-  const send = admin ? sendAdmin : sendUser;
 
   const mutation = useMutation({
-    mutationFn: send,
+    mutationFn: sendUser,
     onSuccess: () => {
       setBody("");
       setError("");
-      queryClient.invalidateQueries({ queryKey: admin ? ["admin-messages"] : ["my-messages"] });
+      queryClient.invalidateQueries({ queryKey: ["my-messages"] });
     },
     onError: (e) => setError((e as Error).message || "Could not send your reply."),
   });
@@ -198,9 +127,9 @@ function ThreadReplyBox({ messageId, admin }: { messageId: string; admin: boolea
         onChange={(e) => setBody(e.target.value)}
         rows={3}
         maxLength={4000}
-        placeholder={admin ? "Reply to this person…" : "Write back to support…"}
+        placeholder="Write back to support…"
         className="input-soft"
-        data-testid={`${admin ? "admin" : "inbox"}-reply-${messageId}`}
+        data-testid={`inbox-reply-${messageId}`}
       />
       {error && <div className="rounded-md bg-emergency/10 px-3 py-2 text-sm text-emergency">{error}</div>}
       <button type="submit" disabled={mutation.isPending} className="btn-rose">

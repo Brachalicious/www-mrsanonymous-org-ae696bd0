@@ -87,9 +87,10 @@ export const listAllMessages = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
-    const { data: adminCheck } = await supabase.rpc("has_role", { _user_id: userId, _role: "admin" });
-    if (!adminCheck) throw new Error("Forbidden");
-    const { data: messages, error } = await supabase
+    const { data: adminCheck, error: roleError } = await supabase.rpc("has_role", { _user_id: userId, _role: "admin" });
+    if (roleError || !adminCheck) throw new Error("Forbidden");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: messages, error } = await supabaseAdmin
       .from("contact_messages")
       .select("id, message, audience, status, created_at, sender_user_id")
       .order("created_at", { ascending: false });
@@ -97,7 +98,7 @@ export const listAllMessages = createServerFn({ method: "GET" })
     const ids = (messages ?? []).map((m: any) => m.id);
     let replies: any[] = [];
     if (ids.length) {
-      const { data: r } = await supabase
+      const { data: r } = await supabaseAdmin
         .from("message_replies")
         .select("id, message_id, body, created_at, author_user_id")
         .in("message_id", ids)
@@ -108,7 +109,6 @@ export const listAllMessages = createServerFn({ method: "GET" })
     const userIds = Array.from(new Set((messages ?? []).map((m: any) => m.sender_user_id).filter(Boolean)));
     let nicks: Record<string, string> = {};
     if (userIds.length) {
-      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
       const { data: profs } = await supabaseAdmin.from("profiles").select("id, nickname").in("id", userIds);
       for (const p of (profs ?? []) as any[]) nicks[p.id] = p.nickname ?? "friend";
     }
