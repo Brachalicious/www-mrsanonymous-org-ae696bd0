@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -9,6 +9,8 @@ import { getEmergency } from "@/lib/emergency-numbers";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getUnreadMessageCount } from "@/lib/contact.functions";
+import { isHideHistoryEnabled } from "./PrivacyBanner";
+
 
 type NavItem = {
   to: string;
