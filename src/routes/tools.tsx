@@ -3,8 +3,8 @@ import { useState } from "react";
 import { performQuickExit } from "@/components/QuickExit";
 import { AlertTriangle, EyeOff, FileText, Hand, HeartPulse, MousePointer2, MoveDown } from "lucide-react";
 
-
 export const Route = createFileRoute("/tools")({
+
   head: () => ({
     meta: [
       { title: "Safety tools — MrsANONymous.org" },
