@@ -90,10 +90,10 @@ function InboxPage() {
 }
 
 function ReplyBox({ messageId }: { messageId: string }) {
-  return <ThreadReplyBox messageId={messageId} admin={false} />;
+  return <ThreadReplyBox messageId={messageId} />;
 }
 
-function ThreadReplyBox({ messageId }: { messageId: string; admin?: boolean }) {
+function ThreadReplyBox({ messageId }: { messageId: string }) {
   const [body, setBody] = useState("");
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
