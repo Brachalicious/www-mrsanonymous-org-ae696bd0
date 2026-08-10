@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { listAllMessages, listMyMessages, replyAsUser } from "@/lib/contact.functions";
+import { listAllMessages, listMyMessages, replyAsUser, replyToMessage } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
 
 export const Route = createFileRoute("/inbox")({
@@ -63,7 +63,7 @@ function InboxPage() {
               <h2 id="support-inbox-heading" className="font-serif text-2xl text-ink-900">Support Inbox</h2>
               <p className="mt-1 text-sm text-ink-700">Messages from users waiting for support.</p>
             </div>
-            <Link to="/admin/messages" className="btn-rose">Open &amp; reply</Link>
+            <Link to="/admin/messages" className="rounded-full border border-ink-900/30 px-4 py-2 text-sm font-semibold text-ink-900">Full view</Link>
           </div>
           {supportQuery.isLoading && <p className="mt-4 text-ink-500">Loading support messages…</p>}
           {supportQuery.isError && (
@@ -72,23 +72,37 @@ function InboxPage() {
             </div>
           )}
           {!supportQuery.isLoading && !supportQuery.isError && (
-            <div className="mt-4 space-y-3">
+            <div className="mt-4 space-y-4">
               {supportMessages.length === 0 ? (
                 <p className="text-sm text-ink-500">No support messages yet.</p>
               ) : (
-                supportMessages.slice(0, 5).map((message) => (
-                  <Link
-                    key={message.id}
-                    to="/admin/messages"
-                    search={{ thread: message.id }}
-                    className="block border-l-2 border-rose-500 px-4 py-2 hover:bg-rose-500/5"
-                  >
+                supportMessages.map((message) => (
+                  <div key={message.id} className="note-card p-5">
                     <div className="flex flex-wrap items-center justify-between gap-2 text-xs uppercase tracking-widest text-ink-500">
                       <span>{message.sender_nickname ? `From ${message.sender_nickname}` : "Anonymous visitor"}</span>
                       <span>{new Date(message.created_at).toLocaleString()}</span>
                     </div>
-                    <p className="mt-2 line-clamp-2 whitespace-pre-wrap text-sm text-ink-900">{message.message}</p>
-                  </Link>
+                    <p className="mt-2 whitespace-pre-wrap text-sm text-ink-900">{message.message}</p>
+                    {message.replies?.length > 0 && (
+                      <div className="mt-4 space-y-3 border-l-2 border-rose-500/40 pl-4">
+                        {message.replies.map((r: any) => (
+                          <div key={r.id}>
+                            <div className="text-[11px] uppercase tracking-widest text-ink-500">
+                              {new Date(r.created_at).toLocaleString()}
+                            </div>
+                            <p className="mt-1 whitespace-pre-wrap text-sm text-ink-900">{r.body}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {message.sender_user_id ? (
+                      <AdminReplyBox messageId={message.id} />
+                    ) : (
+                      <p className="mt-3 text-xs text-ink-500">
+                        Sent without an account — no inbox to reply into.
+                      </p>
+                    )}
+                  </div>
                 ))
               )}
             </div>
@@ -138,17 +152,27 @@ function InboxPage() {
 }
 
 function ReplyBox({ messageId }: { messageId: string }) {
+  return <ThreadReplyBox messageId={messageId} admin={false} />;
+}
+
+function AdminReplyBox({ messageId }: { messageId: string }) {
+  return <ThreadReplyBox messageId={messageId} admin />;
+}
+
+function ThreadReplyBox({ messageId, admin }: { messageId: string; admin: boolean }) {
   const [body, setBody] = useState("");
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
-  const send = useServerFn(replyAsUser);
+  const sendUser = useServerFn(replyAsUser);
+  const sendAdmin = useServerFn(replyToMessage);
+  const send = admin ? sendAdmin : sendUser;
 
   const mutation = useMutation({
     mutationFn: send,
     onSuccess: () => {
       setBody("");
       setError("");
-      queryClient.invalidateQueries({ queryKey: ["my-messages"] });
+      queryClient.invalidateQueries({ queryKey: admin ? ["admin-messages"] : ["my-messages"] });
     },
     onError: (e) => setError((e as Error).message || "Could not send your reply."),
   });
@@ -171,9 +195,9 @@ function ReplyBox({ messageId }: { messageId: string }) {
         onChange={(e) => setBody(e.target.value)}
         rows={3}
         maxLength={4000}
-        placeholder="Write back to support…"
+        placeholder={admin ? "Reply to this person…" : "Write back to support…"}
         className="input-soft"
-        data-testid={`inbox-reply-${messageId}`}
+        data-testid={`${admin ? "admin" : "inbox"}-reply-${messageId}`}
       />
       {error && <div className="rounded-md bg-emergency/10 px-3 py-2 text-sm text-emergency">{error}</div>}
       <button type="submit" disabled={mutation.isPending} className="btn-rose">
