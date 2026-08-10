@@ -7,9 +7,10 @@ interface Props {
   audience?: string
   receivedAt?: string
   accountLinked?: boolean
+  threadId?: string
 }
 
-const Email = ({ message, audience, receivedAt, accountLinked }: Props) => (
+const Email = ({ message, audience, receivedAt, accountLinked, threadId }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
     <Preview>New anonymous message from MrsANONymous.org</Preview>
@@ -21,8 +22,15 @@ const Email = ({ message, audience, receivedAt, accountLinked }: Props) => (
           <Text style={body}>{message ?? '(no message content)'}</Text>
         </Section>
         <Section style={{ textAlign: 'center' as const, margin: '22px 0 6px' }}>
-          <Button href="https://mrsanonymous.org/admin/messages" style={button}>
-            Open admin messages to reply
+          <Button
+            href={
+              threadId
+                ? `https://mrsanonymous.org/admin/messages?thread=${threadId}`
+                : 'https://mrsanonymous.org/admin/messages'
+            }
+            style={button}
+          >
+            Reply to this message
           </Button>
         </Section>
         <Text style={warn}>
@@ -52,6 +60,7 @@ export const template = {
     audience: 'women',
     receivedAt: new Date().toISOString(),
     accountLinked: true,
+    threadId: '00000000-0000-0000-0000-000000000000',
   },
 } satisfies TemplateEntry
 
