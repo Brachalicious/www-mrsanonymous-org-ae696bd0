@@ -31,7 +31,7 @@ function InboxPage() {
   const supportQuery = useQuery({
     queryKey: ["admin-messages"],
     queryFn: () => fetchSupportFn(),
-    enabled: !!user,
+    enabled: !!user && isAdmin,
     retry: false,
   });
 
@@ -51,10 +51,8 @@ function InboxPage() {
 
   const messages = (q.data as any[]) ?? [];
   const supportMessages = (supportQuery.data as any[]) ?? [];
-  // Show the support section for admins, while it is loading/erroring, or whenever
-  // the server actually returned support messages (stale client role state is common).
-  const canSeeSupportInbox =
-    isAdmin || supportQuery.isLoading || supportQuery.isError || supportMessages.length > 0;
+  // Only admins ever see the Support Inbox section.
+  const canSeeSupportInbox = isAdmin;
 
   return (
     <div className="mx-auto max-w-3xl px-5 py-12">
