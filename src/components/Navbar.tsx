@@ -9,7 +9,7 @@ import { getEmergency } from "@/lib/emergency-numbers";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getUnreadMessageCount } from "@/lib/contact.functions";
-import { HIDE_HISTORY_CHANGE_EVENT, isHideHistoryEnabled } from "./PrivacyBanner";
+import { HIDE_HISTORY_CHANGE_EVENT, isHideHistoryEnabled, reopenPrivacyBanner, setHideHistoryEnabled } from "./PrivacyBanner";
 
 
 type NavItem = {
