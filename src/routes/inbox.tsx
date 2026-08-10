@@ -63,7 +63,7 @@ function InboxPage() {
               <h2 id="support-inbox-heading" className="font-serif text-2xl text-ink-900">Support Inbox</h2>
               <p className="mt-1 text-sm text-ink-700">Messages from users waiting for support.</p>
             </div>
-            <Link to="/admin/messages" className="rounded-full border border-ink-900/30 px-4 py-2 text-sm font-semibold text-ink-900">Full view</Link>
+            <Link to="/admin/messages" search={{}} className="rounded-full border border-ink-900/30 px-4 py-2 text-sm font-semibold text-ink-900">Full view</Link>
           </div>
           {supportQuery.isLoading && <p className="mt-4 text-ink-500">Loading support messages…</p>}
           {supportQuery.isError && (
