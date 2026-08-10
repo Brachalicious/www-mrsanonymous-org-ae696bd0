@@ -117,6 +117,29 @@ export function PrivateJournal() {
     setForm((f) => ({ ...f, [key]: value }));
   }
 
+  const draftReport = buildReportText({
+    fields: form,
+    fieldDefs: fields,
+    attachments: pendingFiles.map((f) => ({ name: f.name })),
+    hasAudio: !!audioBlob,
+  });
+  const hasDraft = fields.some((f) => (form[f.key] ?? "").trim().length > 0);
+
+  function entryReport(e: Entry) {
+    return buildReportText({
+      fields: e.fields ?? {},
+      fieldDefs: e.audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS,
+      createdAt: e.created_at,
+      attachments: e.attachments ?? [],
+      hasAudio: !!e.audio_path,
+    });
+  }
+
+  async function doShare(text: string, createdAt?: string) {
+    const msg = await shareReport(text, createdAt);
+    if (msg) setStatus(msg);
+  }
+
   function onPickFiles(list: FileList | null) {
     const picked = Array.from(list ?? []).filter((f) => f.size <= MAX_FILE_BYTES);
     if (picked.length !== (list?.length ?? 0)) setStatus("Some files were skipped (over 25MB).");
