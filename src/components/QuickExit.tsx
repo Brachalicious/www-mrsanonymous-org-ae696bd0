@@ -4,35 +4,24 @@ const QUICK_EXIT_URL = "https://www.google.com";
 
 export function performQuickExit() {
   try {
-    // Wipe same-origin history so Back can't return to the app.
-    try {
-      window.history.replaceState(null, "", window.location.href);
-      for (let i = 0; i < 20; i++) {
-        window.history.pushState(null, "", window.location.href);
-      }
-      // If the user does hit Back (to a pushed dummy entry), immediately
-      // forward them to Google again.
-      window.addEventListener("popstate", () => {
-        window.location.replace(QUICK_EXIT_URL);
-      });
-    } catch {
-      // ignore history errors
-    }
+    // Replace the current history entry with the safe URL so this app
+    // does NOT remain in the browser's back/forward history.
+    // If the abuser presses Back after exit, they will skip over the
+    // site entirely and land on whatever page was visited before it.
+    window.location.replace(QUICK_EXIT_URL);
 
-    // Also try to open Google in a new tab so the current tab can be closed
-    // by the user without leaving a trail in this one.
+    // Also try to open Google in a new tab so the current tab can be
+    // closed without leaving a trail in this one.
     try {
       window.open(QUICK_EXIT_URL, "_blank", "noopener,noreferrer");
     } catch {
-      // popup blocked; that's fine, we still redirect below
+      // popup blocked; the replace above already handled the current tab
     }
-
-    // Replace current tab with Google (no new history entry created here).
-    window.location.replace(QUICK_EXIT_URL);
   } catch {
     window.location.href = QUICK_EXIT_URL;
   }
 }
+
 
 export function QuickExit() {
   useEffect(() => {
