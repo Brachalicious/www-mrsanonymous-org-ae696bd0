@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { listMyMessages, replyAsUser } from "@/lib/contact.functions";
+import { listAllMessages, listMyMessages, replyAsUser } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
 
 export const Route = createFileRoute("/inbox")({
@@ -20,12 +20,18 @@ export const Route = createFileRoute("/inbox")({
 });
 
 function InboxPage() {
-  const { user, loading } = useAuth();
+  const { user, isAdmin, loading } = useAuth();
   const fetchFn = useServerFn(listMyMessages);
+  const fetchSupportFn = useServerFn(listAllMessages);
   const q = useQuery({
     queryKey: ["my-messages", user?.id],
     queryFn: () => fetchFn(),
     enabled: !!user,
+  });
+  const supportQuery = useQuery({
+    queryKey: ["admin-messages", user?.id],
+    queryFn: () => fetchSupportFn(),
+    enabled: !!user && isAdmin,
   });
 
   if (loading) return <div className="mx-auto max-w-3xl px-5 py-16 text-ink-500">Loading…</div>;
@@ -43,11 +49,52 @@ function InboxPage() {
   }
 
   const messages = (q.data as any[]) ?? [];
+  const supportMessages = (supportQuery.data as any[]) ?? [];
 
   return (
     <div className="mx-auto max-w-3xl px-5 py-12">
       <h1 className="font-serif text-4xl text-ink-900">Your Inbox</h1>
       <p className="mt-2 text-ink-700">Messages you sent us and any replies from support.</p>
+
+      {isAdmin && (
+        <section className="mt-8 border-y border-rose-500/30 py-6" aria-labelledby="support-inbox-heading">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 id="support-inbox-heading" className="font-serif text-2xl text-ink-900">Support Inbox</h2>
+              <p className="mt-1 text-sm text-ink-700">Messages from users waiting for support.</p>
+            </div>
+            <Link to="/admin/messages" className="btn-rose">Open &amp; reply</Link>
+          </div>
+          {supportQuery.isLoading && <p className="mt-4 text-ink-500">Loading support messages…</p>}
+          {supportQuery.isError && (
+            <div role="alert" className="mt-4 rounded-md bg-emergency/10 px-3 py-2 text-sm text-emergency">
+              Support messages could not load. Log out, log back into the admin account, and try again.
+            </div>
+          )}
+          {!supportQuery.isLoading && !supportQuery.isError && (
+            <div className="mt-4 space-y-3">
+              {supportMessages.length === 0 ? (
+                <p className="text-sm text-ink-500">No support messages yet.</p>
+              ) : (
+                supportMessages.slice(0, 5).map((message) => (
+                  <Link
+                    key={message.id}
+                    to="/admin/messages"
+                    search={{ thread: message.id }}
+                    className="block border-l-2 border-rose-500 px-4 py-2 hover:bg-rose-500/5"
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs uppercase tracking-widest text-ink-500">
+                      <span>{message.sender_nickname ? `From ${message.sender_nickname}` : "Anonymous visitor"}</span>
+                      <span>{new Date(message.created_at).toLocaleString()}</span>
+                    </div>
+                    <p className="mt-2 line-clamp-2 whitespace-pre-wrap text-sm text-ink-900">{message.message}</p>
+                  </Link>
+                ))
+              )}
+            </div>
+          )}
+        </section>
+      )}
 
       {q.isLoading && <p className="mt-6 text-ink-500">Loading…</p>}
       {messages.length === 0 && !q.isLoading && (
