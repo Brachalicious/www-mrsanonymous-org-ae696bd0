@@ -25,6 +25,8 @@ function SignupPage() {
   const [confirm, setConfirm] = useState("");
   const [audience, setAudience] = useState<"women" | "girls">("women");
   const [country, setCountry] = useState("US");
+  const [stateRegion, setStateRegion] = useState("");
+  const [city, setCity] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -38,7 +40,14 @@ function SignupPage() {
     if (password !== confirm) return setError("Passwords do not match.");
     setLoading(true);
     try {
-      await register({ nickname: nickname.trim(), password, audience, country });
+      await register({
+        nickname: nickname.trim(),
+        password,
+        audience,
+        country,
+        state_region: stateRegion.trim() || undefined,
+        city: city.trim() || undefined,
+      });
       try {
         localStorage.setItem("mrsanon:country", country);
       } catch {
@@ -165,6 +174,39 @@ function SignupPage() {
               resources.
             </span>
           </label>
+
+          <div className="grid grid-cols-2 gap-3">
+            <label className="block">
+              <span className="text-xs font-semibold uppercase tracking-widest text-ink-500">
+                State / Region <span className="normal-case tracking-normal">(optional)</span>
+              </span>
+              <input
+                data-testid="signup-state"
+                value={stateRegion}
+                onChange={(e) => setStateRegion(e.target.value)}
+                className="input-soft mt-1.5"
+                placeholder="e.g. Texas"
+                maxLength={80}
+              />
+            </label>
+            <label className="block">
+              <span className="text-xs font-semibold uppercase tracking-widest text-ink-500">
+                City <span className="normal-case tracking-normal">(optional)</span>
+              </span>
+              <input
+                data-testid="signup-city"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                className="input-soft mt-1.5"
+                placeholder="e.g. Austin"
+                maxLength={80}
+              />
+            </label>
+          </div>
+          <p className="text-[11px] text-ink-500">
+            State and city are optional — they only help us show shelters and hotlines closer to you. Never
+            enter your street address.
+          </p>
 
           {error && (
             <div data-testid="signup-error" className="rounded-md bg-emergency/10 px-3 py-2 text-sm text-emergency">
