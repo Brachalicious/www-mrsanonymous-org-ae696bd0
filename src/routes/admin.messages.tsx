@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -6,6 +6,9 @@ import { listAllMessages, replyToMessage } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
 
 export const Route = createFileRoute("/admin/messages")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    thread: typeof search['thread'] === "string" ? (search['thread'] as string) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Admin — Support Messages" },
@@ -18,6 +21,7 @@ export const Route = createFileRoute("/admin/messages")({
 
 function AdminMessages() {
   const { user, isAdmin, loading } = useAuth();
+  const { thread } = Route.useSearch();
   const list = useServerFn(listAllMessages);
   const qc = useQueryClient();
   const q = useQuery({
@@ -59,15 +63,27 @@ function AdminMessages() {
 
       <div className="mt-8 space-y-6">
         {messages.map((m) => (
-          <MessageCard key={m.id} m={m} onReplied={() => qc.invalidateQueries({ queryKey: ["admin-messages"] })} />
+          <MessageCard
+            key={m.id}
+            m={m}
+            highlighted={thread === m.id}
+            onReplied={() => qc.invalidateQueries({ queryKey: ["admin-messages"] })}
+          />
         ))}
       </div>
     </div>
   );
 }
 
-function MessageCard({ m, onReplied }: { m: any; onReplied: () => void }) {
+function MessageCard({ m, highlighted, onReplied }: { m: any; highlighted?: boolean; onReplied: () => void }) {
   const [body, setBody] = useState("");
+  const cardRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (highlighted && cardRef.current) {
+      cardRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [highlighted]);
   const reply = useServerFn(replyToMessage);
   const mutation = useMutation({
     mutationFn: reply,
@@ -80,7 +96,7 @@ function MessageCard({ m, onReplied }: { m: any; onReplied: () => void }) {
   const canReplyToAccount = !!m.sender_user_id;
 
   return (
-    <div className="note-card p-6">
+    <div ref={cardRef} className={`note-card p-6 ${highlighted ? "ring-2 ring-rose-500" : ""}`}>
       <div className="flex items-center justify-between text-xs uppercase tracking-widest text-ink-500">
         <span>
           {m.sender_nickname ? `From ${m.sender_nickname}` : "Anonymous visitor"} · {m.audience}
