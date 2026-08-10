@@ -152,26 +152,27 @@ export function Navbar() {
         </Link>
 
         <div className="hidden items-center gap-3 lg:flex">
+          <Link
+            to={loggedIn ? "/inbox" : "/login"}
+            data-testid="nav-inbox"
+            className="relative inline-flex items-center gap-1.5 rounded-full border border-ink-900/30 px-3 py-1.5 text-xs font-semibold text-ink-900 hover:bg-ink-900 hover:text-white"
+            aria-label={t("nav.inbox")}
+            title={t("nav.inbox")}
+          >
+            <MailIcon className="h-5 w-5" />
+            <span className="hidden sm:inline">{t("nav.inbox")}</span>
+            {loggedIn && !!unreadCount && unreadCount > 0 && (
+              <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-extrabold text-white shadow ring-2 ring-white">
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
+          </Link>
+
           {loggedIn ? (
             <>
               <span className="text-xs text-ink-500">
                 Hello, <span className="font-semibold text-ink-900">{profile?.nickname || "friend"}</span>
               </span>
-              <Link
-                to="/inbox"
-                data-testid="nav-inbox"
-                className="relative inline-flex items-center gap-1.5 rounded-full border border-ink-900/30 px-3 py-1.5 text-xs font-semibold text-ink-900 hover:bg-ink-900 hover:text-white"
-                aria-label={t("nav.inbox")}
-                title={t("nav.inbox")}
-              >
-                <MailIcon className="h-5 w-5" />
-                <span className="hidden sm:inline">{t("nav.inbox")}</span>
-                {!!unreadCount && unreadCount > 0 && (
-                  <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-extrabold text-white shadow ring-2 ring-white">
-                    {unreadCount > 9 ? "9+" : unreadCount}
-                  </span>
-                )}
-              </Link>
               {isAdmin && (
                 <Link
                   to="/admin/messages"
@@ -420,6 +421,14 @@ export function Navbar() {
             )}
             {!loggedIn && (
               <>
+                <Link
+                  to="/inbox"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center justify-center gap-2 rounded-lg border border-ink-900/30 px-3 py-2 text-center text-sm font-semibold text-ink-900"
+                >
+                  <MailIcon className="h-4 w-4" />
+                  {t("nav.inbox")}
+                </Link>
                 <Link
                   to="/login"
                   onClick={() => setOpen(false)}
