@@ -41,6 +41,19 @@ export const sendContactMessage = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+export const getUnreadMessageCount = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    const { count, error } = await supabase
+      .from("contact_messages")
+      .select("id", { count: "exact", head: true })
+      .eq("sender_user_id", userId)
+      .eq("status", "replied");
+    if (error) throw new Error(error.message);
+    return count ?? 0;
+  });
+
 export const listMyMessages = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {

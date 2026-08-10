@@ -6,6 +6,9 @@ import { performQuickExit } from "./QuickExit";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES, type LangCode } from "@/lib/translations";
 import { getEmergency } from "@/lib/emergency-numbers";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { getUnreadMessageCount } from "@/lib/contact.functions";
 
 type NavItem = {
   to: string;
@@ -70,6 +73,14 @@ export function Navbar() {
   const navigate = useNavigate();
   const { lang, setLang, t } = useLanguage();
   const emergency = getEmergency(lang);
+  const fetchUnread = useServerFn(getUnreadMessageCount);
+
+  const { data: unreadCount } = useQuery({
+    queryKey: ["unread-count", user?.id],
+    queryFn: () => fetchUnread(),
+    enabled: !!user,
+    refetchInterval: 30_000,
+  });
 
   const loggedIn = !!user;
   const tabs = getTabs(loggedIn);
@@ -149,9 +160,17 @@ export function Navbar() {
               <Link
                 to="/inbox"
                 data-testid="nav-inbox"
-                className="rounded-full border border-ink-900/30 px-4 py-1.5 text-xs font-semibold text-ink-900 hover:bg-ink-900 hover:text-white"
+                className="relative inline-flex items-center gap-1.5 rounded-full border border-ink-900/30 px-3 py-1.5 text-xs font-semibold text-ink-900 hover:bg-ink-900 hover:text-white"
+                aria-label={t("nav.inbox")}
+                title={t("nav.inbox")}
               >
-                📬 Inbox
+                <MailIcon className="h-5 w-5" />
+                <span className="hidden sm:inline">{t("nav.inbox")}</span>
+                {!!unreadCount && unreadCount > 0 && (
+                  <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-500 px-1 text-[10px] font-extrabold text-white shadow ring-2 ring-white">
+                    {unreadCount > 9 ? "9+" : unreadCount}
+                  </span>
+                )}
               </Link>
               {isAdmin && (
                 <Link
@@ -371,9 +390,15 @@ export function Navbar() {
                 <Link
                   to="/inbox"
                   onClick={() => setOpen(false)}
-                  className="rounded-lg border border-ink-900/30 px-3 py-2 text-center text-sm font-semibold text-ink-900"
+                  className="relative flex items-center justify-center gap-2 rounded-lg border border-ink-900/30 px-3 py-2 text-center text-sm font-semibold text-ink-900"
                 >
-                  📬 Inbox
+                  <MailIcon className="h-4 w-4" />
+                  {t("nav.inbox")}
+                  {!!unreadCount && unreadCount > 0 && (
+                    <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-500 px-1.5 text-[10px] font-extrabold text-white">
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </span>
+                  )}
                 </Link>
                 <Link
                   to="/journal"
@@ -415,6 +440,25 @@ export function Navbar() {
         </div>
       )}
     </header>
+  );
+}
+
+function MailIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+      <polyline points="22,6 12,13 2,6" />
+    </svg>
   );
 }
 
