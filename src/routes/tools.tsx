@@ -142,10 +142,10 @@ function ToolsPage() {
             </a>
           </div>
         </ToolCard>
-
       </div>
 
       <div className="mt-10 text-center">
+
         <Link to="/resources" className="text-sm font-semibold text-rose-600 hover:underline">
           Browse full resources directory →
         </Link>
