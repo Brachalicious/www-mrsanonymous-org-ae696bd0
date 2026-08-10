@@ -8,6 +8,8 @@ export interface Profile {
   nickname: string | null;
   audience: string | null;
   country: string | null;
+  state_region?: string | null;
+  city?: string | null;
   created_at: string;
   updated_at: string | null;
 }
@@ -23,6 +25,8 @@ interface AuthContextValue {
     password: string;
     audience: "women" | "girls";
     country?: string;
+    state_region?: string;
+    city?: string;
   }) => Promise<void>;
   logout: () => Promise<void>;
   errMsg: (e: unknown) => string;
@@ -113,13 +117,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     password,
     audience,
     country,
+    state_region,
+    city,
   }: {
     nickname: string;
     password: string;
     audience: "women" | "girls";
     country?: string;
+    state_region?: string;
+    city?: string;
   }) {
-    const { email } = await registerAnonymousUser({ data: { nickname, password, audience, country } });
+    const { email } = await registerAnonymousUser({
+      data: { nickname, password, audience, country, state_region, city },
+    });
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
   }
