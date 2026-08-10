@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -9,6 +9,8 @@ import { getEmergency } from "@/lib/emergency-numbers";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getUnreadMessageCount } from "@/lib/contact.functions";
+import { isHideHistoryEnabled } from "./PrivacyBanner";
+
 
 type NavItem = {
   to: string;
@@ -77,6 +79,7 @@ function getTabs(loggedIn: boolean): NavItem[] {
 export function Navbar() {
   const { user, profile, isAdmin } = useAuth();
   const [open, setOpen] = useState(false);
+  const [hideHistory, setHideHistory] = useState(false);
   const navigate = useNavigate();
   const { lang, setLang, t } = useLanguage();
   const emergency = getEmergency(lang);
@@ -89,8 +92,20 @@ export function Navbar() {
     refetchInterval: 30_000,
   });
 
+  useEffect(() => {
+    setHideHistory(isHideHistoryEnabled());
+    function onStorage(e: StorageEvent) {
+      if (e.key === "mrsanon:hide-history") {
+        setHideHistory(e.newValue === "1");
+      }
+    }
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
+
   const loggedIn = !!user;
   const tabs = getTabs(loggedIn);
+
 
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -136,12 +151,23 @@ export function Navbar() {
           >
             ✕ {t("safety.quickExit")}
           </button>
+          {hideHistory && (
+            <span
+              data-testid="hide-history-indicator"
+              className="inline-flex items-center gap-1 rounded-sm border border-white/30 bg-emerald-500/20 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-300"
+              title="History hiding is enabled. Internal links won't add to browser history."
+            >
+              <ShieldIcon className="h-3 w-3" />
+              History hidden
+            </span>
+          )}
           <a
             data-testid="safety-strip-call-911"
             href={`tel:${emergency.police}`}
             className="inline-flex items-center gap-2 rounded-sm border border-red-400 bg-red-600 px-4 py-2 text-xs font-extrabold uppercase tracking-widest text-white shadow ring-1 ring-red-300/60 hover:bg-red-700"
             title={`Immediate danger? Tap to call ${emergency.policeLabel}.`}
           >
+
             <span aria-hidden className="text-lg leading-none">🖐️➡️✊</span>
             <span className="leading-none">
               {t("safety.callEmergency")} {emergency.policeLabel}
@@ -465,6 +491,24 @@ function MailIcon({ className }: { className?: string }) {
     >
       <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
       <polyline points="22,6 12,13 2,6" />
+    </svg>
+  );
+}
+
+function ShieldIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
     </svg>
   );
 }
