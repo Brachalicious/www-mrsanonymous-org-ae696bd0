@@ -53,7 +53,16 @@ function AdminMessages() {
 
   return (
     <div className="mx-auto max-w-4xl px-5 py-12">
-      <h1 className="font-serif text-4xl text-ink-900">Support Inbox</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="font-serif text-4xl text-ink-900">Support Inbox</h1>
+        <Link
+          to="/inbox"
+          data-testid="admin-my-inbox"
+          className="inline-flex items-center gap-2 rounded-full border border-ink-900/30 px-4 py-2 text-sm font-semibold text-ink-900 hover:bg-ink-900 hover:text-white"
+        >
+          📬 My Inbox
+        </Link>
+      </div>
       <p className="mt-2 text-ink-700">Reply to visitor messages. Replies appear in the visitor's Inbox — no email is sent or required.</p>
 
       {q.isLoading && <p className="mt-6 text-ink-500">Loading…</p>}
