@@ -141,6 +141,21 @@ export const replyAsUser = createServerFn({ method: "POST" })
     });
     if (error) throw new Error(error.message);
     await supabase.from("contact_messages").update({ status: "open" }).eq("id", data.messageId);
+
+    try {
+      const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
+      await sendTemplateEmail("contact-notification", "mrsanonymoussupport@gmail.com", {
+        templateData: {
+          message: data.body,
+          audience: "reply in existing thread",
+          receivedAt: new Date().toISOString(),
+          accountLinked: true,
+        },
+        idempotencyKey: `user-reply-${data.messageId}-${Date.now()}`,
+      });
+    } catch (e) {
+      console.error("user reply notification email failed", e);
+    }
     return { ok: true };
   });
 
