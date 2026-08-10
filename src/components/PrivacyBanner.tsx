@@ -10,6 +10,17 @@ export function isHideHistoryEnabled() {
   return window.localStorage.getItem(STORAGE_KEY) === "1";
 }
 
+export function setHideHistoryEnabled(next: boolean) {
+  if (next) window.localStorage.setItem(STORAGE_KEY, "1");
+  else window.localStorage.removeItem(STORAGE_KEY);
+  window.dispatchEvent(new CustomEvent(HIDE_HISTORY_CHANGE_EVENT, { detail: next }));
+}
+
+export function reopenPrivacyBanner() {
+  window.localStorage.removeItem(DISMISS_KEY);
+  window.dispatchEvent(new CustomEvent(HIDE_HISTORY_CHANGE_EVENT, { detail: isHideHistoryEnabled() }));
+}
+
 export function PrivacyBanner() {
   const router = useRouter();
   const [ready, setReady] = useState(false);
@@ -21,6 +32,15 @@ export function PrivacyBanner() {
     setEnabled(window.localStorage.getItem(STORAGE_KEY) === "1");
     setDismissed(window.localStorage.getItem(DISMISS_KEY) === "1");
     setReady(true);
+  }, []);
+
+  useEffect(() => {
+    function sync(e: Event) {
+      setEnabled(!!(e as CustomEvent<boolean>).detail);
+      setDismissed(window.localStorage.getItem(DISMISS_KEY) === "1");
+    }
+    window.addEventListener(HIDE_HISTORY_CHANGE_EVENT, sync);
+    return () => window.removeEventListener(HIDE_HISTORY_CHANGE_EVENT, sync);
   }, []);
 
   // When enabled, in-app navigation replaces the current history entry
