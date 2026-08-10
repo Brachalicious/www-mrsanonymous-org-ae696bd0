@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { listAllMessages, replyToMessage } from "@/lib/contact.functions";
@@ -41,12 +41,7 @@ function AdminMessages() {
     );
   }
   if (!isAdmin) {
-    return (
-      <div className="mx-auto max-w-3xl px-5 py-16 text-center">
-        <h1 className="font-serif text-3xl text-ink-900">Not authorized</h1>
-        <p className="mt-3 text-ink-700">This page is only available to support administrators.</p>
-      </div>
-    );
+    return <Navigate to="/inbox" replace />;
   }
 
   const messages = (q.data as any[]) ?? [];
