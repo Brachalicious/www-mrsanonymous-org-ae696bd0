@@ -2,6 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { getEmergency } from "@/lib/emergency-numbers";
+import {
+  buildReportText,
+  downloadReport,
+  shareReport,
+  smsReportHref,
+} from "@/lib/incident-report";
 import {
   createJournalEntry,
   deleteJournalEntry,
@@ -64,6 +72,9 @@ function emptyFor(fields: Field[]) {
 
 export function PrivateJournal() {
   const { user, profile, loading: authLoading } = useAuth();
+  const { lang } = useLanguage();
+  const emergency = getEmergency(lang);
+  const smsNumber = emergency.sms ?? emergency.police;
   const audience: "women" | "girls" = profile?.audience === "girls" ? "girls" : "women";
   const fields = audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS;
 
@@ -104,6 +115,29 @@ export function PrivateJournal() {
 
   function update(key: string, value: string) {
     setForm((f) => ({ ...f, [key]: value }));
+  }
+
+  const draftReport = buildReportText({
+    fields: form,
+    fieldDefs: fields,
+    attachments: pendingFiles.map((f) => ({ name: f.name })),
+    hasAudio: !!audioBlob,
+  });
+  const hasDraft = fields.some((f) => (form[f.key] ?? "").trim().length > 0);
+
+  function entryReport(e: Entry) {
+    return buildReportText({
+      fields: e.fields ?? {},
+      fieldDefs: e.audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS,
+      createdAt: e.created_at,
+      attachments: e.attachments ?? [],
+      hasAudio: !!e.audio_path,
+    });
+  }
+
+  async function doShare(text: string, createdAt?: string) {
+    const msg = await shareReport(text, createdAt);
+    if (msg) setStatus(msg);
   }
 
   function onPickFiles(list: FileList | null) {
@@ -335,6 +369,47 @@ export function PrivateJournal() {
           </button>
           {status && <span className="text-xs text-ink-600">{status}</span>}
         </div>
+
+        <div className="mt-5 rounded-xl border border-ink-300/70 bg-cream-100 p-4">
+          <h3 className="text-sm font-semibold text-ink-900">📄 Incident report</h3>
+          <p className="mt-1 text-xs text-ink-500">
+            Turn what you wrote above into a report you can save as a file, share with police,
+            an advocate or a lawyer, or text to emergency services.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              disabled={!hasDraft}
+              onClick={() => downloadReport(draftReport)}
+              className="btn-ghost text-xs disabled:opacity-50"
+            >
+              Download .txt
+            </button>
+            <button
+              type="button"
+              disabled={!hasDraft}
+              onClick={() => doShare(draftReport)}
+              className="btn-ghost text-xs disabled:opacity-50"
+            >
+              Share report
+            </button>
+            {emergency.smsSupported && (
+              <a
+                href={hasDraft ? smsReportHref(smsNumber, draftReport) : undefined}
+                aria-disabled={!hasDraft}
+                className={`inline-flex items-center justify-center gap-1.5 rounded-full bg-red-600 px-4 py-2 text-xs font-extrabold uppercase tracking-widest text-white hover:bg-red-700 ${
+                  hasDraft ? "" : "pointer-events-none opacity-50"
+                }`}
+              >
+                Text {smsNumber}
+              </a>
+            )}
+          </div>
+          <p className="mt-2 text-[11px] text-ink-400">
+            Texting emergency services isn’t available everywhere. If you’re in danger, call{" "}
+            {emergency.policeLabel}.
+          </p>
+        </div>
       </div>
 
       {showEntries && (
@@ -350,6 +425,30 @@ export function PrivateJournal() {
                 <button type="button" onClick={() => remove(e.id)} className="text-xs text-rose-600 underline">
                   Delete
                 </button>
+              </div>
+              <div className="mb-3 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => downloadReport(entryReport(e), e.created_at)}
+                  className="rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
+                >
+                  📄 Download report
+                </button>
+                <button
+                  type="button"
+                  onClick={() => doShare(entryReport(e), e.created_at)}
+                  className="rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
+                >
+                  ↗ Share
+                </button>
+                {emergency.smsSupported && (
+                  <a
+                    href={smsReportHref(smsNumber, entryReport(e))}
+                    className="rounded-full bg-red-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white hover:bg-red-700"
+                  >
+                    Text {smsNumber}
+                  </a>
+                )}
               </div>
               <dl className="space-y-2 text-sm">
                 {(e.audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS).map((f) => {
