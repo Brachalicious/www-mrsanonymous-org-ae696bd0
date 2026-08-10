@@ -79,6 +79,7 @@ function getTabs(loggedIn: boolean): NavItem[] {
 export function Navbar() {
   const { user, profile, isAdmin } = useAuth();
   const [open, setOpen] = useState(false);
+  const [hideHistory, setHideHistory] = useState(false);
   const navigate = useNavigate();
   const { lang, setLang, t } = useLanguage();
   const emergency = getEmergency(lang);
@@ -91,8 +92,20 @@ export function Navbar() {
     refetchInterval: 30_000,
   });
 
+  useEffect(() => {
+    setHideHistory(isHideHistoryEnabled());
+    function onStorage(e: StorageEvent) {
+      if (e.key === "mrsanon:hide-history") {
+        setHideHistory(e.newValue === "1");
+      }
+    }
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
+
   const loggedIn = !!user;
   const tabs = getTabs(loggedIn);
+
 
   async function handleLogout() {
     await supabase.auth.signOut();
