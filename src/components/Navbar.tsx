@@ -222,16 +222,6 @@ export function Navbar() {
               <span className="text-xs text-ink-500">
                 Hello, <span className="font-semibold text-ink-900">{profile?.nickname || "friend"}</span>
               </span>
-              {isAdmin && (
-                <Link
-                  to="/admin/messages"
-                  search={{ thread: undefined }}
-                  data-testid="nav-admin"
-                  className="rounded-full border border-rose-500/60 px-4 py-1.5 text-xs font-semibold text-rose-500 hover:bg-rose-500 hover:text-white"
-                >
-                  📬 Support Inbox
-                </Link>
-              )}
               <Link
                 to="/tell-your-story"
                 search={{ tab: "mine" }}
