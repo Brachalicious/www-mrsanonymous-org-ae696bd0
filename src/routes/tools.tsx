@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { performQuickExit } from "@/components/QuickExit";
-import { AlertTriangle, Ban, EyeOff, Hand, HeartPulse, LogOut, MousePointer2, MoveDown, Shield } from "lucide-react";
+import { AlertTriangle, Ban, EyeOff, FileText, Hand, HeartPulse, LogOut, MousePointer2, MoveDown, Shield } from "lucide-react";
 
 export const Route = createFileRoute("/tools")({
   head: () => ({
