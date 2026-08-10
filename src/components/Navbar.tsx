@@ -83,6 +83,7 @@ export function Navbar() {
   const [hideHistory, setHideHistory] = useState(false);
   const navigate = useNavigate();
   const { lang, setLang, t } = useLanguage();
+  const { country: region } = useRegion();
   const emergency = getEmergency(lang, region);
   const fetchUnread = useServerFn(getUnreadMessageCount);
 

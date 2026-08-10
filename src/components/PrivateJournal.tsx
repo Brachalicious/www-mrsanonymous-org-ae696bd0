@@ -74,6 +74,7 @@ function emptyFor(fields: Field[]) {
 export function PrivateJournal() {
   const { user, profile, loading: authLoading } = useAuth();
   const { lang } = useLanguage();
+  const { country: region } = useRegion();
   const emergency = getEmergency(lang, region);
   const smsNumber = emergency.sms ?? emergency.police;
   const audience: "women" | "girls" = profile?.audience === "girls" ? "girls" : "women";

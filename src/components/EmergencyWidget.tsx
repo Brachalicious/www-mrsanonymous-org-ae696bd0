@@ -19,6 +19,7 @@ type Loc = {
 
 export function EmergencyWidget() {
   const { t, lang: uiLang } = useLanguage();
+  const { country: region } = useRegion();
   const emergency = getEmergency(uiLang, region);
   const [open, setOpen] = useState(false);
   const [loc, setLoc] = useState<Loc | null>(null);
