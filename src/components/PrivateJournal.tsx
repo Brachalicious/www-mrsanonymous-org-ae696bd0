@@ -2,6 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { getEmergency } from "@/lib/emergency-numbers";
+import {
+  buildReportText,
+  downloadReport,
+  shareReport,
+  smsReportHref,
+} from "@/lib/incident-report";
 import {
   createJournalEntry,
   deleteJournalEntry,
@@ -64,6 +72,9 @@ function emptyFor(fields: Field[]) {
 
 export function PrivateJournal() {
   const { user, profile, loading: authLoading } = useAuth();
+  const { lang } = useLanguage();
+  const emergency = getEmergency(lang);
+  const smsNumber = emergency.sms ?? emergency.police;
   const audience: "women" | "girls" = profile?.audience === "girls" ? "girls" : "women";
   const fields = audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS;
 
