@@ -436,6 +436,25 @@ export function Navbar() {
   );
 }
 
+function MailIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+      <polyline points="22,6 12,13 2,6" />
+    </svg>
+  );
+}
+
 function tabClassName(kind?: "dark" | "rose") {
   if (kind === "rose") {
     return "inline-flex items-center rounded-md bg-rose-500 px-3 py-2 text-[11px] font-bold uppercase tracking-widest text-white hover:bg-rose-600";
