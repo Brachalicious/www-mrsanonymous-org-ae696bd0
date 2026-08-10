@@ -163,7 +163,7 @@ export function Navbar() {
 
         <div className="hidden items-center gap-3 lg:flex">
           <Link
-            to={loggedIn ? "/inbox" : "/login"}
+            to={loggedIn ? (isAdmin ? "/admin/messages" : "/inbox") : "/login"}
             data-testid="nav-inbox"
             className="relative inline-flex items-center gap-1.5 rounded-full border border-ink-900/30 px-3 py-1.5 text-xs font-semibold text-ink-900 hover:bg-ink-900 hover:text-white"
             aria-label={t("nav.inbox")}
@@ -185,7 +185,7 @@ export function Navbar() {
               </span>
               {isAdmin && (
                 <Link
-                  to="/inbox"
+                  to="/admin/messages"
                   data-testid="nav-admin"
                   className="rounded-full border border-rose-500/60 px-4 py-1.5 text-xs font-semibold text-rose-500 hover:bg-rose-500 hover:text-white"
                 >
@@ -392,7 +392,7 @@ export function Navbar() {
             {loggedIn && (
               <>
                 <Link
-                  to="/inbox"
+                  to={isAdmin ? "/admin/messages" : "/inbox"}
                   onClick={() => setOpen(false)}
                   className="relative flex items-center justify-center gap-2 rounded-lg border border-ink-900/30 px-3 py-2 text-center text-sm font-semibold text-ink-900"
                 >
@@ -406,7 +406,7 @@ export function Navbar() {
                 </Link>
                 {isAdmin && (
                   <Link
-                    to="/inbox"
+                    to="/admin/messages"
                     onClick={() => setOpen(false)}
                     className="rounded-lg border border-rose-500/60 px-3 py-2 text-center text-sm font-semibold text-rose-500"
                   >
