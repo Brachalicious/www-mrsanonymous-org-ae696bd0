@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS state_region text, ADD COLUMN IF NOT EXISTS city text;

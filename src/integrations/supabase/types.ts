@@ -198,26 +198,32 @@ export type Database = {
       profiles: {
         Row: {
           audience: string
+          city: string | null
           country: string | null
           created_at: string
           id: string
           nickname: string
+          state_region: string | null
           updated_at: string
         }
         Insert: {
           audience?: string
+          city?: string | null
           country?: string | null
           created_at?: string
           id: string
           nickname: string
+          state_region?: string | null
           updated_at?: string
         }
         Update: {
           audience?: string
+          city?: string | null
           country?: string | null
           created_at?: string
           id?: string
           nickname?: string
+          state_region?: string | null
           updated_at?: string
         }
         Relationships: []
