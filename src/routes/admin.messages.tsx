@@ -66,8 +66,15 @@ function AdminMessages() {
       <p className="mt-2 text-ink-700">Reply to visitor messages. Replies appear in the visitor's Inbox — no email is sent or required.</p>
 
       {q.isLoading && <p className="mt-6 text-ink-500">Loading…</p>}
+      {q.isError && (
+        <div role="alert" className="mt-6 rounded-md bg-emergency/10 px-4 py-3 text-sm text-emergency">
+          Support messages could not load. Please log out, log back into the BrittanyJ admin account, and try again.
+        </div>
+      )}
       {messages.length === 0 && !q.isLoading && (
-        <div className="note-card mt-8 p-6 text-ink-700">No messages yet.</div>
+        <div className="note-card mt-8 p-6 text-ink-700">
+          {q.isError ? "Your support inbox is temporarily unavailable." : "No messages yet."}
+        </div>
       )}
 
       <div className="mt-8 space-y-6">
