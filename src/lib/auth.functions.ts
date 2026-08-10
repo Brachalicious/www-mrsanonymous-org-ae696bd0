@@ -9,6 +9,7 @@ const registerSchema = z.object({
   nickname: z.string().min(2).max(40),
   password: z.string().min(1).max(128),
   audience: z.enum(["women", "girls"]).default("women"),
+  country: z.string().min(2).max(3).optional(),
 });
 
 export const registerAnonymousUser = createServerFn({ method: "POST" })
@@ -47,6 +48,7 @@ export const registerAnonymousUser = createServerFn({ method: "POST" })
       id: userData.user.id,
       nickname: normalizedNickname,
       audience: data.audience,
+      country: data.country ?? null,
     });
 
 

@@ -3,6 +3,7 @@ import { Phone, X, HeartPulse, MapPin, MessageSquare, Settings } from "lucide-re
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES, translateToEnglish, type LangCode } from "@/lib/translations";
 import { getEmergency } from "@/lib/emergency-numbers";
+import { useRegion } from "@/hooks/use-region";
 
 const MSG_KEY = "mrsanon:panic-message";
 const MSG_LANG_KEY = "mrsanon:panic-msg-lang";
@@ -18,7 +19,8 @@ type Loc = {
 
 export function EmergencyWidget() {
   const { t, lang: uiLang } = useLanguage();
-  const emergency = getEmergency(uiLang);
+  const { country: region } = useRegion();
+  const emergency = getEmergency(uiLang, region);
   const [open, setOpen] = useState(false);
   const [loc, setLoc] = useState<Loc | null>(null);
   const [locError, setLocError] = useState<string | null>(null);

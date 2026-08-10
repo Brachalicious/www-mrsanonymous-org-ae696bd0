@@ -6,6 +6,7 @@ import { performQuickExit } from "./QuickExit";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES, type LangCode } from "@/lib/translations";
 import { getEmergency } from "@/lib/emergency-numbers";
+import { useRegion } from "@/hooks/use-region";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getUnreadMessageCount } from "@/lib/contact.functions";
@@ -82,7 +83,8 @@ export function Navbar() {
   const [hideHistory, setHideHistory] = useState(false);
   const navigate = useNavigate();
   const { lang, setLang, t } = useLanguage();
-  const emergency = getEmergency(lang);
+  const { country: region } = useRegion();
+  const emergency = getEmergency(lang, region);
   const fetchUnread = useServerFn(getUnreadMessageCount);
 
   const { data: unreadCount } = useQuery({

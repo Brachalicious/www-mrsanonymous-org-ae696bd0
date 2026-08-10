@@ -7,6 +7,7 @@ export interface Profile {
   id: string;
   nickname: string | null;
   audience: string | null;
+  country: string | null;
   created_at: string;
   updated_at: string | null;
 }
@@ -17,7 +18,12 @@ interface AuthContextValue {
   isAdmin: boolean;
   loading: boolean;
   login: (creds: { nickname: string; password: string }) => Promise<void>;
-  register: (creds: { nickname: string; password: string; audience: "women" | "girls" }) => Promise<void>;
+  register: (creds: {
+    nickname: string;
+    password: string;
+    audience: "women" | "girls";
+    country?: string;
+  }) => Promise<void>;
   logout: () => Promise<void>;
   errMsg: (e: unknown) => string;
 }
@@ -106,12 +112,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     nickname,
     password,
     audience,
+    country,
   }: {
     nickname: string;
     password: string;
     audience: "women" | "girls";
+    country?: string;
   }) {
-    const { email } = await registerAnonymousUser({ data: { nickname, password, audience } });
+    const { email } = await registerAnonymousUser({ data: { nickname, password, audience, country } });
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
   }

@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getEmergency } from "@/lib/emergency-numbers";
+import { useRegion } from "@/hooks/use-region";
 import {
   buildReportText,
   downloadReport,
@@ -73,7 +74,8 @@ function emptyFor(fields: Field[]) {
 export function PrivateJournal() {
   const { user, profile, loading: authLoading } = useAuth();
   const { lang } = useLanguage();
-  const emergency = getEmergency(lang);
+  const { country: region } = useRegion();
+  const emergency = getEmergency(lang, region);
   const smsNumber = emergency.sms ?? emergency.police;
   const audience: "women" | "girls" = profile?.audience === "girls" ? "girls" : "women";
   const fields = audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS;
