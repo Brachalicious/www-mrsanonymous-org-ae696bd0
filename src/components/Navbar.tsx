@@ -422,6 +422,14 @@ export function Navbar() {
             {!loggedIn && (
               <>
                 <Link
+                  to="/inbox"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center justify-center gap-2 rounded-lg border border-ink-900/30 px-3 py-2 text-center text-sm font-semibold text-ink-900"
+                >
+                  <MailIcon className="h-4 w-4" />
+                  {t("nav.inbox")}
+                </Link>
+                <Link
                   to="/login"
                   onClick={() => setOpen(false)}
                   className="rounded-lg border border-ink-900/30 px-3 py-2 text-center text-sm font-semibold text-ink-900"
