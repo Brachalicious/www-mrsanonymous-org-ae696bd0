@@ -6,6 +6,9 @@ import { performQuickExit } from "./QuickExit";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES, type LangCode } from "@/lib/translations";
 import { getEmergency } from "@/lib/emergency-numbers";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { getUnreadMessageCount } from "@/lib/contact.functions";
 
 type NavItem = {
   to: string;
