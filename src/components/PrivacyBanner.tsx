@@ -60,7 +60,7 @@ export function PrivacyBanner() {
   }
 
   return (
-    <div className="border-b border-ink-900/10 bg-ink-900 text-paper-50">
+    <div className="border-b border-ink-900/10 bg-ink-900 text-white">
       <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2 text-sm">
         <p className="flex-1 min-w-[240px]">
           <span className="font-semibold">For added privacy:</span>{" "}
@@ -71,7 +71,7 @@ export function PrivacyBanner() {
 
         <div className="flex items-center gap-2">
           {enabled ? (
-            <button onClick={disable} className="rounded-full border border-paper-50/40 px-3 py-1 hover:bg-paper-50/10">
+            <button onClick={disable} className="rounded-full border border-white/40 px-3 py-1 hover:bg-white/10">
               Turn off
             </button>
           ) : (
@@ -79,12 +79,12 @@ export function PrivacyBanner() {
               Enable
             </button>
           )}
-          <button onClick={dismiss} className="rounded-full border border-paper-50/40 px-3 py-1 hover:bg-paper-50/10">
+          <button onClick={dismiss} className="rounded-full border border-white/40 px-3 py-1 hover:bg-white/10">
             Dismiss
           </button>
           <button
             onClick={() => setShowLearnMore((v) => !v)}
-            className="rounded-full px-3 py-1 underline underline-offset-4 hover:bg-paper-50/10"
+            className="rounded-full px-3 py-1 underline underline-offset-4 hover:bg-white/10"
           >
             Learn More
           </button>
@@ -92,7 +92,8 @@ export function PrivacyBanner() {
       </div>
 
       {showLearnMore && (
-        <div className="mx-auto max-w-5xl px-4 pb-4 text-sm leading-relaxed text-paper-50/90">
+        <div className="mx-auto max-w-5xl px-4 pb-4 text-sm leading-relaxed text-white/90">
+
           <p className="mb-2">
             Enabling this keeps MrsANONymous from adding new entries to your browser's back button
             while you browse. Pressing <strong>X</strong> or <strong>Esc</strong> instantly leaves for
