@@ -389,9 +389,15 @@ export function Navbar() {
                 <Link
                   to="/inbox"
                   onClick={() => setOpen(false)}
-                  className="rounded-lg border border-ink-900/30 px-3 py-2 text-center text-sm font-semibold text-ink-900"
+                  className="relative flex items-center justify-center gap-2 rounded-lg border border-ink-900/30 px-3 py-2 text-center text-sm font-semibold text-ink-900"
                 >
-                  📬 Inbox
+                  <MailIcon className="h-4 w-4" />
+                  {t("nav.inbox")}
+                  {!!unreadCount && unreadCount > 0 && (
+                    <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-500 px-1.5 text-[10px] font-extrabold text-white">
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </span>
+                  )}
                 </Link>
                 <Link
                   to="/journal"
