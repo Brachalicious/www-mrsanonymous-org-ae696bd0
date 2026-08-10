@@ -97,6 +97,26 @@ function ToolsPage() {
         </ToolCard>
 
         <ToolCard
+          icon={<FileText className="h-6 w-6 text-ink-900" />}
+          title="Document an incident"
+          color="bg-cream-200"
+          summary="Privately record dates, details, photos, and voice notes. Only your account can open it."
+        >
+          <div className="flex flex-col gap-2">
+            <Link
+              to="/journal"
+              data-testid="tools-document-incident"
+              className="btn-dark w-full"
+            >
+              Open Private Journal
+            </Link>
+            <p className="text-xs text-ink-500">
+              Nothing here is shared to the public board. Use it to build a record if you ever choose to report.
+            </p>
+          </div>
+        </ToolCard>
+
+        <ToolCard
           icon={<Shield className="h-6 w-6 text-ink-900" />}
           title="Cover your tracks"
           color="bg-cream-200"
