@@ -198,6 +198,7 @@ export type Database = {
       profiles: {
         Row: {
           audience: string
+          country: string | null
           created_at: string
           id: string
           nickname: string
@@ -205,6 +206,7 @@ export type Database = {
         }
         Insert: {
           audience?: string
+          country?: string | null
           created_at?: string
           id: string
           nickname: string
@@ -212,6 +214,7 @@ export type Database = {
         }
         Update: {
           audience?: string
+          country?: string | null
           created_at?: string
           id?: string
           nickname?: string
