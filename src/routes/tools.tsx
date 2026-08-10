@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { performQuickExit } from "@/components/QuickExit";
-import { AlertTriangle, Ban, EyeOff, FileText, Hand, HeartPulse, LogOut, MousePointer2, MoveDown, Shield } from "lucide-react";
+import { AlertTriangle, EyeOff, FileText, Hand, HeartPulse, MousePointer2, MoveDown } from "lucide-react";
 
 export const Route = createFileRoute("/tools")({
+
   head: () => ({
     meta: [
       { title: "Safety tools — MrsANONymous.org" },
@@ -117,30 +118,6 @@ function ToolsPage() {
         </ToolCard>
 
         <ToolCard
-          icon={<Shield className="h-6 w-6 text-ink-900" />}
-          title="Cover your tracks"
-          color="bg-cream-200"
-          summary="Clear browser history, use private mode, and avoid shared devices."
-        >
-          <ul className="list-disc space-y-1 pl-4 text-sm text-ink-700">
-            <li>Use your browser's private / incognito mode.</li>
-            <li>Clear history, cookies, and cache after visiting.</li>
-            <li>Close all tabs and log out of shared accounts.</li>
-          </ul>
-        </ToolCard>
-
-        <ToolCard
-          icon={<Ban className="h-6 w-6 text-ink-900" />}
-          title="Do not save passwords"
-          color="bg-cream-200"
-          summary="Never let a browser save your MrsANONymous password on a shared device."
-        >
-          <p className="text-sm text-ink-700">
-            If your browser offers to remember your password, choose "Never". An abuser may check saved passwords.
-          </p>
-        </ToolCard>
-
-        <ToolCard
           icon={<MousePointer2 className="h-6 w-6 text-ink-900" />}
           title="Need help now?"
           color="bg-cream-200"
@@ -168,6 +145,7 @@ function ToolsPage() {
       </div>
 
       <div className="mt-10 text-center">
+
         <Link to="/resources" className="text-sm font-semibold text-rose-600 hover:underline">
           Browse full resources directory →
         </Link>
