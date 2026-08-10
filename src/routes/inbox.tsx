@@ -31,7 +31,8 @@ function InboxPage() {
   const supportQuery = useQuery({
     queryKey: ["admin-messages", user?.id],
     queryFn: () => fetchSupportFn(),
-    enabled: !!user && isAdmin,
+    enabled: !!user,
+    retry: false,
   });
 
   if (loading) return <div className="mx-auto max-w-3xl px-5 py-16 text-ink-500">Loading…</div>;
@@ -50,13 +51,14 @@ function InboxPage() {
 
   const messages = (q.data as any[]) ?? [];
   const supportMessages = (supportQuery.data as any[]) ?? [];
+  const canSeeSupportInbox = isAdmin || supportMessages.length > 0;
 
   return (
     <div className="mx-auto max-w-3xl px-5 py-12">
       <h1 className="font-serif text-4xl text-ink-900">Your Inbox</h1>
       <p className="mt-2 text-ink-700">Messages you sent us and any replies from support.</p>
 
-      {isAdmin && (
+      {canSeeSupportInbox && (
         <section className="mt-8 border-y border-rose-500/30 py-6" aria-labelledby="support-inbox-heading">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
