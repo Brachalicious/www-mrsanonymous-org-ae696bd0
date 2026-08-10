@@ -443,16 +443,6 @@ export function Navbar() {
                     </span>
                   )}
                 </Link>
-                {isAdmin && (
-                  <Link
-                    to="/admin/messages"
-                    search={{ thread: undefined }}
-                    onClick={() => setOpen(false)}
-                    className="rounded-lg border border-rose-500/60 px-3 py-2 text-center text-sm font-semibold text-rose-500"
-                  >
-                    📬 Support Inbox
-                  </Link>
-                )}
               </>
             )}
             {!loggedIn && (
