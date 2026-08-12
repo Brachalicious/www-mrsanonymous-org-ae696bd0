@@ -39,6 +39,7 @@ export function NotebookCover({
         {themed && theme.image && (
           <CoverImage path={theme.image} className="absolute inset-0 h-full w-full object-cover" />
         )}
+        {themed && !theme.image && <div className="marble-speckle" aria-hidden="true" />}
         {themed && (
           <div className="absolute inset-y-0 left-0 z-10 w-3" style={{ backgroundColor: theme.spine }} />
         )}
