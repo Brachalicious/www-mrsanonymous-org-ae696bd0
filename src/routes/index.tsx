@@ -97,6 +97,26 @@ function Index() {
       {/* The Hand Signal */}
       <HandSignalSection />
 
+      {/* Get the app */}
+      <section className="mx-auto max-w-7xl px-5 py-16 lg:px-10">
+        <div className="flex flex-col items-center gap-6 rounded-3xl border-2 border-ink-900 bg-white p-8 text-center sm:p-12">
+          <img src="/app-icon-192.png" alt="MrsANONymous app icon" width={88} height={88} className="rounded-2xl shadow-lg" />
+          <h2 className="font-serif text-3xl text-ink-900">Get the app on your phone</h2>
+          <p className="max-w-xl text-ink-700">
+            Install MrsANONymous in under 30 seconds on iPhone or Android — free, no account traces,
+            and it can be disguised as a calculator on your home screen.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link to="/download" data-testid="home-download-ios" className="btn-rose">📱 iPhone / iPad</Link>
+            <Link to="/download" data-testid="home-download-android" className="btn-ghost">🤖 Android</Link>
+          </div>
+          <p className="text-xs text-ink-400">
+            No app store account needed · <Link to="/privacy" className="underline">Privacy</Link> ·{" "}
+            <Link to="/terms" className="underline">Terms</Link>
+          </p>
+        </div>
+      </section>
+
       {/* Quick paths */}
       <section className="mx-auto max-w-7xl px-5 pb-20 lg:px-10">
         <div className="grid gap-5 md:grid-cols-3">
