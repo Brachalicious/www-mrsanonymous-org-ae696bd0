@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { BookOpen, Lock, Globe } from "lucide-react";
-import { getCoverStyle } from "@/lib/notebook-covers";
+import { getCoverStyle, decodeTheme, isTheme } from "@/lib/notebook-covers";
+import { CoverImage } from "./CoverImage";
 
 interface NotebookCoverProps {
   id: string;
@@ -22,6 +23,8 @@ export function NotebookCover({
   jitter = 0,
 }: NotebookCoverProps) {
   const { className, style } = getCoverStyle(color);
+  const theme = decodeTheme(color);
+  const themed = isTheme(color);
   return (
     <Link
       to="/notebooks/$id"
@@ -33,6 +36,12 @@ export function NotebookCover({
         className={`marble-base ${className} relative h-52 w-40 p-5 text-white`}
         style={style}
       >
+        {themed && theme.image && (
+          <CoverImage path={theme.image} className="absolute inset-0 h-full w-full object-cover" />
+        )}
+        {themed && (
+          <div className="absolute inset-y-0 left-0 z-10 w-3" style={{ backgroundColor: theme.spine }} />
+        )}
         <div className="notebook-tape" />
         <div className="relative z-10 flex h-full flex-col">
           <div className="flex items-start justify-between">
