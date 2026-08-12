@@ -296,7 +296,7 @@ export function Navbar() {
                 <li key={tab.testid}>
                   <a
                     href={tab.to}
-                    target="_blank"
+
                     rel="noopener noreferrer"
                     data-testid={tab.testid}
                     className={className}
@@ -366,7 +366,7 @@ export function Navbar() {
                   <a
                     key={tab.testid}
                     href={tab.to}
-                    target="_blank"
+
                     rel="noopener noreferrer"
                     data-testid={`${tab.testid}-mobile`}
                     onClick={() => setOpen(false)}

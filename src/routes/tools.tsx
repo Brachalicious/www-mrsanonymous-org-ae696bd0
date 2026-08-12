@@ -126,7 +126,7 @@ function ToolsPage() {
           <div className="flex flex-col gap-2">
             <a
               href="https://www.thehotline.org/"
-              target="_blank"
+
               rel="noopener noreferrer"
               className="btn-dark w-full"
             >
@@ -134,7 +134,7 @@ function ToolsPage() {
             </a>
             <a
               href="https://childhelphotline.org/"
-              target="_blank"
+
               rel="noopener noreferrer"
               className="btn-dark w-full"
             >

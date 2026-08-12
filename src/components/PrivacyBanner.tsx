@@ -47,7 +47,6 @@ export function PrivacyBanner() {
   // history entry instead of adding to it, so the back button reveals nothing.
   useEffect(() => {
     function onClick(e: MouseEvent) {
-      if (!isHideHistoryEnabled()) return;
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const anchor = (e.target as HTMLElement | null)?.closest?.("a");
       if (!anchor) return;
@@ -57,18 +56,21 @@ export function PrivacyBanner() {
       const destination = new URL(href, window.location.href);
       if (destination.protocol !== "http:" && destination.protocol !== "https:") return;
 
+      const hideHistory = isHideHistoryEnabled();
+
       e.preventDefault();
       e.stopPropagation();
 
       if (destination.origin === window.location.origin) {
         void router.navigate({
           to: `${destination.pathname}${destination.search}${destination.hash}`,
-          replace: true,
+          replace: hideHistory,
         });
         return;
       }
 
-      window.location.replace(destination.href);
+      if (hideHistory) window.location.replace(destination.href);
+      else window.location.assign(destination.href);
     }
 
     document.addEventListener("click", onClick, true);

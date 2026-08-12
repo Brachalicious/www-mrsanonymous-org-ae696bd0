@@ -231,7 +231,7 @@ export function PrivateJournal() {
       setStatus("Could not open that file.");
       return;
     }
-    window.open(data.signedUrl, "_blank", "noopener");
+    window.location.assign(data.signedUrl);
   }
 
   async function remove(id: string) {

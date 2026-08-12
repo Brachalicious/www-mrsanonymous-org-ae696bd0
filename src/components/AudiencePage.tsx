@@ -95,7 +95,7 @@ export function AudiencePage({ audience }: AudiencePageProps) {
           </Link>
           <a
             href={isGirls ? "https://childhelphotline.org/" : "https://www.thehotline.org/"}
-            target="_blank"
+
             rel="noopener noreferrer"
             data-testid={`audience-cta-help-${audience}`}
             className="btn-ghost"
