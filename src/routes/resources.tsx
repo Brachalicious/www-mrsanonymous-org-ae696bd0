@@ -629,8 +629,6 @@ function ResourcesPage() {
                   <a
                     data-testid={`resource-link-${slug(it.name)}`}
                     href={it.href}
-                    target={it.href?.startsWith("http") ? "_blank" : undefined}
-                    rel="noreferrer"
                     className="btn-rose !px-4 !py-2 !text-xs"
                   >
                     {it.phone || "Visit"}
@@ -715,8 +713,6 @@ function LocationFinder() {
                     <a
                       data-testid={`location-link-${slug(it.name)}`}
                       href={it.href}
-                      target="_blank"
-                      rel="noreferrer"
                       className="btn-rose shrink-0 !px-4 !py-2 !text-xs"
                     >
                       Visit
@@ -735,8 +731,6 @@ function LocationFinder() {
           <a
             data-testid="location-directory-link"
             href={`https://www.domesticshelters.org/help/${state.toLowerCase()}`}
-            target="_blank"
-            rel="noreferrer"
             className="btn-ghost mt-4 inline-flex !px-5 !py-2.5 !text-xs"
           >
             Browse all domestic violence programs in {stateName} →
@@ -781,8 +775,6 @@ function LocationFinder() {
                   <a
                     data-testid={`intl-link-${slug(it.name)}`}
                     href={it.href}
-                    target="_blank"
-                    rel="noreferrer"
                     className="btn-rose shrink-0 !px-4 !py-2 !text-xs"
                   >
                     Visit
@@ -794,8 +786,6 @@ function LocationFinder() {
           <a
             data-testid="intl-directory-link"
             href="https://nomoredirectory.org/"
-            target="_blank"
-            rel="noreferrer"
             className="btn-ghost mt-4 inline-flex !px-5 !py-2.5 !text-xs"
           >
             More services in {intl.name} — NO MORE Global Directory →
@@ -812,8 +802,6 @@ function LocationFinder() {
           <a
             data-testid="intl-other-directory-link"
             href="https://nomoredirectory.org/"
-            target="_blank"
-            rel="noreferrer"
             className="btn-rose mt-4 inline-flex !px-5 !py-2.5 !text-xs"
           >
             Find a helpline in your country →
