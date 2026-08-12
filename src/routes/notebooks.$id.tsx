@@ -13,18 +13,9 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { EntryEditor } from "@/components/EntryEditor";
 import { ArrowLeft, Lock, Globe, Share2, BookOpen, Palette, Check, X } from "lucide-react";
-import { getCoverStyle, COVER_PRESETS, isPreset } from "@/lib/notebook-covers";
-
-const PRESET_COLORS = [
-  "#B91C1C",
-  "#1E3A8A",
-  "#065F46",
-  "#7C2D12",
-  "#4C1D95",
-  "#831843",
-  "#134E4A",
-  "#3730A3",
-];
+import { getCoverStyle, decodeTheme, isTheme, themePageStyle } from "@/lib/notebook-covers";
+import { CoverDesigner } from "@/components/CoverDesigner";
+import { CoverImage } from "@/components/CoverImage";
 
 const MAX_TOPICS = 8;
 const TOPIC_OPTIONS = [
@@ -154,6 +145,18 @@ function NotebookDetailPage() {
         className={`marble-base ${getCoverStyle(notebook.color).className} relative mb-8 overflow-hidden rounded-3xl p-8 text-white`}
         style={getCoverStyle(notebook.color).style}
       >
+        {isTheme(notebook.color) && decodeTheme(notebook.color).image && (
+          <CoverImage
+            path={decodeTheme(notebook.color).image!}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
+        {isTheme(notebook.color) && (
+          <div
+            className="absolute inset-y-0 left-0 z-10 w-4"
+            style={{ backgroundColor: decodeTheme(notebook.color).spine }}
+          />
+        )}
         <div className="notebook-tape" />
         <div className="relative z-10">
           <div className="flex items-start justify-between">
@@ -230,65 +233,16 @@ function NotebookDetailPage() {
 
       {editingCover && (
         <div className="note-card mb-6 p-5">
-          <h3 className="font-serif text-lg text-ink-900">Choose a cover</h3>
+          <h3 className="font-serif text-lg text-ink-900">Design your cover</h3>
+          <p className="mt-1 text-sm text-ink-500">
+            Pick colors for the cover, the spine and the pages — mix two colors, or upload your own image.
+          </p>
           <div className="mt-4">
-            <span className="text-xs font-semibold uppercase tracking-widest text-ink-500">Cover designs</span>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {COVER_PRESETS.map((p) => (
-                <button
-                  key={p.id}
-                  type="button"
-                  onClick={() => updateMutation.mutate({ data: { id, color: p.id } })}
-                  title={p.label}
-                  aria-label={`Select ${p.label} cover`}
-                  className={`h-10 w-10 overflow-hidden rounded-lg border-2 flex items-center justify-center transition ${
-                    notebook.color === p.id ? "border-ink-900 scale-110" : "border-transparent"
-                  }`}
-                  style={{ backgroundImage: p.preview }}
-                >
-                  <span className="rounded-full bg-white/70 px-1 text-xs" aria-hidden="true">
-                    {p.emoji}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="mt-4">
-            <span className="text-xs font-semibold uppercase tracking-widest text-ink-500">Solid colors</span>
-            <div className="mt-2 flex flex-wrap items-center gap-2">
-              {PRESET_COLORS.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  onClick={() => updateMutation.mutate({ data: { id, color: c } })}
-                  className={`h-8 w-8 rounded-full border-2 transition ${
-                    notebook.color === c ? "border-ink-900 scale-110" : "border-transparent"
-                  }`}
-                  style={{ backgroundColor: c }}
-                  aria-label={`Select color ${c}`}
-                />
-              ))}
-              <label
-                className={`relative flex h-8 w-8 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 ${
-                  !isPreset(notebook.color) && !PRESET_COLORS.includes(notebook.color)
-                    ? "border-ink-900 scale-110"
-                    : "border-ink-300"
-                }`}
-                title="Pick any color"
-                style={{
-                  background:
-                    "conic-gradient(from 0deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)",
-                }}
-              >
-                <input
-                  type="color"
-                  value={isPreset(notebook.color) ? "#B91C1C" : notebook.color}
-                  onChange={(e) => updateMutation.mutate({ data: { id, color: e.target.value } })}
-                  className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                  aria-label="Custom color picker"
-                />
-              </label>
-            </div>
+            <CoverDesigner
+              value={notebook.color}
+              onChange={(color) => updateMutation.mutate({ data: { id, color } })}
+              saving={updateMutation.isPending}
+            />
           </div>
         </div>
       )}
@@ -309,7 +263,11 @@ function NotebookDetailPage() {
             <p className="text-center text-ink-500">No pages yet. Write your first one above.</p>
           )}
           {entries.map((entry) => (
-            <article key={entry.id} className="note-card p-5">
+            <article
+              key={entry.id}
+              className="note-card p-5"
+              style={themePageStyle(notebook.color)}
+            >
               <div className="flex items-start justify-between">
                 <div className="text-xs text-ink-500">
                   {new Date(entry.created_at).toLocaleDateString()}

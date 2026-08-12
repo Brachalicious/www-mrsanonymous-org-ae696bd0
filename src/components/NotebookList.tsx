@@ -6,18 +6,8 @@ import { NotebookCover } from "./NotebookCover";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "@tanstack/react-router";
 import { Plus, Trash2 } from "lucide-react";
-import { COVER_PRESETS, isPreset } from "@/lib/notebook-covers";
-
-const PRESET_COLORS = [
-  "#B91C1C",
-  "#1E3A8A",
-  "#065F46",
-  "#7C2D12",
-  "#4C1D95",
-  "#831843",
-  "#134E4A",
-  "#3730A3",
-];
+import { CoverDesigner } from "./CoverDesigner";
+import { DEFAULT_THEME, encodeTheme } from "@/lib/notebook-covers";
 
 export function NotebookList() {
   const { user } = useAuth();
@@ -27,7 +17,7 @@ export function NotebookList() {
   const remove = useServerFn(deleteNotebook);
 
   const [title, setTitle] = useState("");
-  const [color, setColor] = useState(PRESET_COLORS[0]);
+  const [color, setColor] = useState(encodeTheme(DEFAULT_THEME));
   const [open, setOpen] = useState(false);
 
   const { data: notebooks = [], isLoading } = useQuery({
@@ -113,75 +103,8 @@ export function NotebookList() {
               autoFocus
             />
           </label>
-          <div className="mt-4">
-            <span className="text-xs font-semibold uppercase tracking-widest text-ink-500">
-              Cover designs
-            </span>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {COVER_PRESETS.map((p) => (
-                <button
-                  key={p.id}
-                  type="button"
-                  onClick={() => setColor(p.id)}
-                  title={p.label}
-                  aria-label={`Select ${p.label} cover`}
-                  className={`h-10 w-10 overflow-hidden rounded-lg border-2 text-lg leading-none transition flex items-center justify-center ${
-                    color === p.id ? "border-ink-900 scale-110" : "border-transparent"
-                  }`}
-                  style={{ backgroundImage: p.preview }}
-                >
-                  <span
-                    className="rounded-full bg-white/70 px-1 text-xs"
-                    aria-hidden="true"
-                  >
-                    {p.emoji}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-4">
-            <span className="text-xs font-semibold uppercase tracking-widest text-ink-500">
-              Solid colors
-            </span>
-            <div className="mt-2 flex flex-wrap items-center gap-2">
-              {PRESET_COLORS.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  onClick={() => setColor(c)}
-                  className={`h-8 w-8 rounded-full border-2 transition ${
-                    color === c ? "border-ink-900 scale-110" : "border-transparent"
-                  }`}
-                  style={{ backgroundColor: c }}
-                  aria-label={`Select color ${c}`}
-                />
-              ))}
-              <label
-                className={`relative flex h-8 w-8 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 ${
-                  !isPreset(color) && !PRESET_COLORS.includes(color)
-                    ? "border-ink-900 scale-110"
-                    : "border-ink-300"
-                }`}
-                title="Pick any color"
-                style={{
-                  background:
-                    "conic-gradient(from 0deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)",
-                }}
-              >
-                <input
-                  type="color"
-                  value={isPreset(color) ? "#B91C1C" : color}
-                  onChange={(e) => setColor(e.target.value)}
-                  className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                  aria-label="Custom color picker"
-                />
-              </label>
-              {!isPreset(color) && (
-                <span className="ml-1 font-mono text-xs text-ink-500">{color}</span>
-              )}
-            </div>
+          <div className="mt-5">
+            <CoverDesigner value={color} onChange={setColor} />
           </div>
           <div className="mt-5 flex gap-3">
             <button type="submit" disabled={createMutation.isPending} className="btn-rose">
