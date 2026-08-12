@@ -11,7 +11,6 @@ export function Footer() {
               <span className="font-serif text-2xl italic text-rose-500">ANONymous</span>
               <span className="font-serif text-xl text-ink-300">.org</span>
             </div>
-            <span className="text-[10px] lowercase tracking-[0.18em] text-ink-400">fight domestic violence project</span>
           </Link>
 
           <nav className="flex flex-wrap justify-center gap-6 text-sm text-ink-500">
