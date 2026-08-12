@@ -7,6 +7,16 @@ import signalForHelp from "@/assets/signal-for-help.png.asset.json";
 
 export const Route = createFileRoute("/")({
   component: Index,
+  head: () => ({
+    meta: [
+      { title: "MrsANONymous — Anonymous Domestic Violence Support & Safety App" },
+      { name: "description", content: "A free, 100% anonymous safety space for women and girls facing domestic violence. Share your story, find local help, and install the discreet safety app." },
+      { property: "og:title", content: "MrsANONymous — Anonymous Support & Safety App" },
+      { property: "og:description", content: "Share your story anonymously, find local emergency help, and install the free discreet safety app." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
 });
 
 function Index() {
@@ -39,6 +49,9 @@ function Index() {
               <a href="#contact" data-testid="home-cta-contact" className="btn-ghost">
                 Contact Us Anonymously
               </a>
+              <Link to="/download" data-testid="home-cta-download" className="btn-ghost">
+                📱 Download the App
+              </Link>
             </div>
 
             <div className="mt-8 flex flex-wrap items-center gap-3 text-xs text-ink-500">
