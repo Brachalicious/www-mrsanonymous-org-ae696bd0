@@ -176,7 +176,7 @@ function Index() {
             </Link>
             <a
               href="https://www.thehotline.org/"
-              target="_blank"
+
               rel="noopener noreferrer"
               data-testid="home-help-women"
               className="btn-rose"
@@ -185,7 +185,7 @@ function Index() {
             </a>
             <a
               href="https://childhelphotline.org/"
-              target="_blank"
+
               rel="noopener noreferrer"
               data-testid="home-help-girls"
               className="rounded-full border border-white/40 bg-white px-6 py-3 text-sm font-semibold text-ink-900 hover:bg-white/90"
@@ -217,7 +217,7 @@ function PathCard({
     return (
       <a
         href={to}
-        target="_blank"
+
         rel="noopener noreferrer"
         data-testid={testid}
         className="note-card group block p-7"
