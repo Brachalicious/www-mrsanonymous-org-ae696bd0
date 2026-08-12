@@ -123,10 +123,6 @@ function Index() {
             <Link to="/download" data-testid="home-download-ios" className="btn-rose text-base">📱 iPhone / iPad</Link>
             <Link to="/download" data-testid="home-download-android" className="btn-ghost text-base">🤖 Android</Link>
           </div>
-          <p className="text-xs text-ink-400">
-            No app store account needed · <Link to="/privacy" className="underline">Privacy</Link> ·{" "}
-            <Link to="/terms" className="underline">Terms</Link>
-          </p>
         </div>
       </section>
 
