@@ -7,6 +7,16 @@ import signalForHelp from "@/assets/signal-for-help.png.asset.json";
 
 export const Route = createFileRoute("/")({
   component: Index,
+  head: () => ({
+    meta: [
+      { title: "MrsANONymous — Anonymous Domestic Violence Support & Safety App" },
+      { name: "description", content: "A free, 100% anonymous safety space for women and girls facing domestic violence. Share your story, find local help, and install the discreet safety app." },
+      { property: "og:title", content: "MrsANONymous — Anonymous Support & Safety App" },
+      { property: "og:description", content: "Share your story anonymously, find local emergency help, and install the free discreet safety app." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
 });
 
 function Index() {
@@ -39,6 +49,9 @@ function Index() {
               <a href="#contact" data-testid="home-cta-contact" className="btn-ghost">
                 Contact Us Anonymously
               </a>
+              <Link to="/download" data-testid="home-cta-download" className="btn-ghost">
+                📱 Download the App
+              </Link>
             </div>
 
             <div className="mt-8 flex flex-wrap items-center gap-3 text-xs text-ink-500">
@@ -83,6 +96,26 @@ function Index() {
 
       {/* The Hand Signal */}
       <HandSignalSection />
+
+      {/* Get the app */}
+      <section className="mx-auto max-w-7xl px-5 py-16 lg:px-10">
+        <div className="flex flex-col items-center gap-6 rounded-3xl border-2 border-ink-900 bg-white p-8 text-center sm:p-12">
+          <img src="/app-icon-192.png" alt="MrsANONymous app icon" width={88} height={88} className="rounded-2xl shadow-lg" />
+          <h2 className="font-serif text-3xl text-ink-900">Get the app on your phone</h2>
+          <p className="max-w-xl text-ink-700">
+            Install MrsANONymous in under 30 seconds on iPhone or Android — free, no account traces,
+            and it can be disguised as a calculator on your home screen.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Link to="/download" data-testid="home-download-ios" className="btn-rose">📱 iPhone / iPad</Link>
+            <Link to="/download" data-testid="home-download-android" className="btn-ghost">🤖 Android</Link>
+          </div>
+          <p className="text-xs text-ink-400">
+            No app store account needed · <Link to="/privacy" className="underline">Privacy</Link> ·{" "}
+            <Link to="/terms" className="underline">Terms</Link>
+          </p>
+        </div>
+      </section>
 
       {/* Quick paths */}
       <section className="mx-auto max-w-7xl px-5 pb-20 lg:px-10">
