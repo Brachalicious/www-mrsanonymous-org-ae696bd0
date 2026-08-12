@@ -13,18 +13,9 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { EntryEditor } from "@/components/EntryEditor";
 import { ArrowLeft, Lock, Globe, Share2, BookOpen, Palette, Check, X } from "lucide-react";
-import { getCoverStyle, COVER_PRESETS, isPreset } from "@/lib/notebook-covers";
-
-const PRESET_COLORS = [
-  "#B91C1C",
-  "#1E3A8A",
-  "#065F46",
-  "#7C2D12",
-  "#4C1D95",
-  "#831843",
-  "#134E4A",
-  "#3730A3",
-];
+import { getCoverStyle, decodeTheme, isTheme, themePageStyle } from "@/lib/notebook-covers";
+import { CoverDesigner } from "@/components/CoverDesigner";
+import { CoverImage } from "@/components/CoverImage";
 
 const MAX_TOPICS = 8;
 const TOPIC_OPTIONS = [
@@ -154,6 +145,18 @@ function NotebookDetailPage() {
         className={`marble-base ${getCoverStyle(notebook.color).className} relative mb-8 overflow-hidden rounded-3xl p-8 text-white`}
         style={getCoverStyle(notebook.color).style}
       >
+        {isTheme(notebook.color) && decodeTheme(notebook.color).image && (
+          <CoverImage
+            path={decodeTheme(notebook.color).image!}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
+        {isTheme(notebook.color) && (
+          <div
+            className="absolute inset-y-0 left-0 z-10 w-4"
+            style={{ backgroundColor: decodeTheme(notebook.color).spine }}
+          />
+        )}
         <div className="notebook-tape" />
         <div className="relative z-10">
           <div className="flex items-start justify-between">
