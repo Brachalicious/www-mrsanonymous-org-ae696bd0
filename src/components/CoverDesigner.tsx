@@ -188,7 +188,7 @@ export function CoverDesigner({
               onChange={(v) => apply({ coverB: v })}
             />
           )}
-          <ColorRow label="Spine" value={theme.spine} onChange={(v) => apply({ spine: v })} />
+          <ColorRow label="Binder / spine" value={theme.spine} onChange={(v) => apply({ spine: v })} />
           <ColorRow label="Pages" value={theme.page} onChange={(v) => apply({ page: v })} />
         </div>
       </div>
