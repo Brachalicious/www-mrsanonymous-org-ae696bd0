@@ -99,6 +99,77 @@ export function isPreset(color: string | null | undefined): boolean {
   return typeof color === "string" && color.startsWith("preset:");
 }
 
+/* ------------------------------------------------------------------
+ * Custom themes: cover (1 or 2 mixed colors), spine color, page color.
+ * Encoded in notebooks.color as:  theme:RRGGBB[.RRGGBB]-RRGGBB-RRGGBB
+ * Uploaded cover images are encoded as:  img:<storage path>|RRGGBB-RRGGBB
+ * ------------------------------------------------------------------ */
+
+export type NotebookTheme = {
+  coverA: string;
+  coverB: string | null;
+  spine: string;
+  page: string;
+  image?: string | null;
+};
+
+export const DEFAULT_THEME: NotebookTheme = {
+  coverA: "#B91C1C",
+  coverB: null,
+  spine: "#7F1D1D",
+  page: "#FFFDF7",
+  image: null,
+};
+
+const hex = (v: string) => (v.startsWith("#") ? v : `#${v}`);
+const bare = (v: string) => v.replace("#", "");
+
+export function isTheme(color: string | null | undefined): boolean {
+  return typeof color === "string" && (color.startsWith("theme:") || color.startsWith("img:"));
+}
+
+export function encodeTheme(t: NotebookTheme): string {
+  const cover = t.coverB ? `${bare(t.coverA)}.${bare(t.coverB)}` : bare(t.coverA);
+  const tail = `${cover}-${bare(t.spine)}-${bare(t.page)}`;
+  return t.image ? `img:${t.image}|${tail}` : `theme:${tail}`;
+}
+
+export function decodeTheme(color: string | null | undefined): NotebookTheme {
+  if (typeof color !== "string") return { ...DEFAULT_THEME };
+  let image: string | null = null;
+  let body = color;
+  if (color.startsWith("img:")) {
+    const [path, rest] = color.slice(4).split("|");
+    image = path || null;
+    body = rest ? `theme:${rest}` : "";
+  }
+  if (body.startsWith("theme:")) {
+    const [cover, spine, page] = body.slice(6).split("-");
+    const [a, b] = (cover || "").split(".");
+    return {
+      coverA: a ? hex(a) : DEFAULT_THEME.coverA,
+      coverB: b ? hex(b) : null,
+      spine: spine ? hex(spine) : DEFAULT_THEME.spine,
+      page: page ? hex(page) : DEFAULT_THEME.page,
+      image,
+    };
+  }
+  if (image) return { ...DEFAULT_THEME, image };
+  if (isPreset(color)) return { ...DEFAULT_THEME };
+  return { ...DEFAULT_THEME, coverA: color || DEFAULT_THEME.coverA, spine: color || DEFAULT_THEME.spine };
+}
+
+/** Background CSS for a themed cover (ignores image; images are layered separately). */
+export function themeCoverBackground(t: NotebookTheme): string {
+  return t.coverB ? `linear-gradient(140deg, ${t.coverA}, ${t.coverB})` : t.coverA;
+}
+
+/** Page (paper) background for entries in a themed notebook. */
+export function themePageStyle(color: string | null | undefined): React.CSSProperties {
+  const t = decodeTheme(color);
+  return isTheme(color) ? { backgroundColor: t.page } : {};
+}
+
 export function getPreset(color: string | null | undefined): CoverPreset | undefined {
   if (!isPreset(color)) return undefined;
   return COVER_PRESETS.find((p) => p.id === color);
@@ -114,6 +185,10 @@ export function getCoverStyle(color: string | null | undefined): {
       className: preset.className,
       style: preset.textColor ? { color: preset.textColor } : {},
     };
+  }
+  if (isTheme(color)) {
+    const t = decodeTheme(color);
+    return { className: "", style: { background: themeCoverBackground(t) } };
   }
   return {
     className: "",
