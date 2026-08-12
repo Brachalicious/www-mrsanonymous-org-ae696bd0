@@ -90,8 +90,8 @@ export function CoverDesigner({
   async function handleUpload(file: File) {
     if (!user) return;
     setUploadError(null);
-    if (file.size > 5 * 1024 * 1024) {
-      setUploadError("Please choose an image under 5 MB.");
+    if (file.size > 25 * 1024 * 1024) {
+      setUploadError("Please choose an image under 25 MB.");
       return;
     }
     setUploading(true);
@@ -121,16 +121,20 @@ export function CoverDesigner({
             style={{ background: themeCoverBackground(theme) }}
           >
             {theme.image && <CoverImage path={theme.image} className="absolute inset-0 h-full w-full object-cover" />}
+            {!theme.image && <div className="marble-speckle" aria-hidden="true" />}
             <div
-              className="absolute inset-y-0 left-0 w-3"
+              className="absolute inset-y-0 left-0 z-10 w-3"
               style={{ backgroundColor: theme.spine }}
             />
             <div
-              className="absolute bottom-2 right-2 h-8 w-10 rounded-sm shadow-inner"
+              className="absolute bottom-2 right-2 z-10 h-8 w-10 rounded-sm shadow-inner"
               style={{ backgroundColor: theme.page }}
+              title="Page color"
             />
           </div>
-          <p className="mt-1.5 text-center text-[11px] text-ink-400">Preview</p>
+          <p className="mt-1.5 text-center text-[11px] text-ink-400">
+            Preview — left strip is the binder, small square is the page color
+          </p>
         </div>
 
         <div className="min-w-[260px] flex-1">
@@ -150,7 +154,7 @@ export function CoverDesigner({
 
             <label className="btn-ghost inline-flex cursor-pointer items-center gap-2 text-sm">
               {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />}
-              <span>+ Upload image</span>
+              <span>+ Upload image (up to 25 MB)</span>
               <input
                 type="file"
                 accept="image/*"
