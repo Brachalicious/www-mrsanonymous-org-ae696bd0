@@ -43,26 +43,37 @@ export function PrivacyBanner() {
     return () => window.removeEventListener(HIDE_HISTORY_CHANGE_EVENT, sync);
   }, []);
 
-  // When enabled, in-app navigation replaces the current history entry
-  // instead of adding to it, so the back button reveals nothing.
+  // When enabled, every web link stays in this tab and replaces the current
+  // history entry instead of adding to it, so the back button reveals nothing.
   useEffect(() => {
-    if (!enabled) return;
-
     function onClick(e: MouseEvent) {
+      if (!isHideHistoryEnabled()) return;
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const anchor = (e.target as HTMLElement | null)?.closest?.("a");
       if (!anchor) return;
       const href = anchor.getAttribute("href");
-      const target = anchor.getAttribute("target");
-      if (!href || !href.startsWith("/") || (target && target !== "_self")) return;
+      if (!href || anchor.hasAttribute("download")) return;
+
+      const destination = new URL(href, window.location.href);
+      if (destination.protocol !== "http:" && destination.protocol !== "https:") return;
+
       e.preventDefault();
       e.stopPropagation();
-      void router.navigate({ to: href, replace: true });
+
+      if (destination.origin === window.location.origin) {
+        void router.navigate({
+          to: `${destination.pathname}${destination.search}${destination.hash}`,
+          replace: true,
+        });
+        return;
+      }
+
+      window.location.replace(destination.href);
     }
 
     document.addEventListener("click", onClick, true);
     return () => document.removeEventListener("click", onClick, true);
-  }, [enabled, router]);
+  }, [router]);
 
   if (!ready || (dismissed && !enabled)) return null;
 
