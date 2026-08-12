@@ -46,9 +46,8 @@ export function PrivacyBanner() {
   // When enabled, every web link stays in this tab and replaces the current
   // history entry instead of adding to it, so the back button reveals nothing.
   useEffect(() => {
-    if (!enabled) return;
-
     function onClick(e: MouseEvent) {
+      if (!isHideHistoryEnabled()) return;
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const anchor = (e.target as HTMLElement | null)?.closest?.("a");
       if (!anchor) return;
@@ -74,7 +73,7 @@ export function PrivacyBanner() {
 
     document.addEventListener("click", onClick, true);
     return () => document.removeEventListener("click", onClick, true);
-  }, [enabled, router]);
+  }, [router]);
 
   if (!ready || (dismissed && !enabled)) return null;
 
