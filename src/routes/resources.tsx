@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
+import { isHideHistoryEnabled } from "@/components/PrivacyBanner";
 
 type ResourceItem = {
   name: string;
@@ -593,8 +594,18 @@ export const Route = createFileRoute("/resources")({
 });
 
 function ResourcesPage() {
+  function keepPrivateLinksInCurrentTab(event: MouseEvent<HTMLDivElement>) {
+    if (!isHideHistoryEnabled() || event.button !== 0) return;
+    const anchor = (event.target as HTMLElement).closest("a");
+    const href = anchor?.href;
+    if (!href || !href.startsWith("http")) return;
+    event.preventDefault();
+    event.stopPropagation();
+    window.location.replace(href);
+  }
+
   return (
-    <div className="paper-bg">
+    <div className="paper-bg" onClickCapture={keepPrivateLinksInCurrentTab}>
       <div className="mx-auto max-w-4xl px-5 py-16 lg:px-10">
         <span className="hand-note text-2xl">help is real</span>
         <h1 className="mt-2 font-serif text-5xl text-ink-900">Resources</h1>
