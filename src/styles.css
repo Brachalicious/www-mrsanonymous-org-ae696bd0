@@ -289,6 +289,25 @@
   backdrop-filter: blur(2px);
 }
 
+/* Composition-notebook marble speckle, tinted by whatever color sits underneath */
+@utility marble-speckle {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image:
+    radial-gradient(ellipse 12px 7px at 12% 18%, rgba(255, 255, 255, 0.85), transparent 60%),
+    radial-gradient(ellipse 9px 14px at 68% 12%, rgba(0, 0, 0, 0.55), transparent 60%),
+    radial-gradient(ellipse 16px 8px at 82% 44%, rgba(255, 255, 255, 0.7), transparent 60%),
+    radial-gradient(ellipse 10px 10px at 33% 55%, rgba(0, 0, 0, 0.45), transparent 60%),
+    radial-gradient(ellipse 14px 9px at 55% 78%, rgba(255, 255, 255, 0.75), transparent 60%),
+    radial-gradient(ellipse 8px 12px at 18% 88%, rgba(0, 0, 0, 0.5), transparent 60%),
+    radial-gradient(ellipse 11px 6px at 90% 82%, rgba(255, 255, 255, 0.6), transparent 60%),
+    radial-gradient(ellipse 7px 9px at 44% 30%, rgba(0, 0, 0, 0.35), transparent 60%);
+  background-size: 70px 70px;
+  mix-blend-mode: overlay;
+}
+
 @utility paper-lines {
   background-image: repeating-linear-gradient(
     transparent,
