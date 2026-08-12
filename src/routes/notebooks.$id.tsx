@@ -263,7 +263,11 @@ function NotebookDetailPage() {
             <p className="text-center text-ink-500">No pages yet. Write your first one above.</p>
           )}
           {entries.map((entry) => (
-            <article key={entry.id} className="note-card p-5">
+            <article
+              key={entry.id}
+              className="note-card p-5"
+              style={themePageStyle(notebook.color)}
+            >
               <div className="flex items-start justify-between">
                 <div className="text-xs text-ink-500">
                   {new Date(entry.created_at).toLocaleDateString()}
