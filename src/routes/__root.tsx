@@ -20,6 +20,7 @@ import { QuickExit } from "@/components/QuickExit";
 import { EmergencyWidget } from "@/components/EmergencyWidget";
 import { CalcGate } from "@/components/CalcGate";
 import { PrivacyBanner } from "@/components/PrivacyBanner";
+import { BackToSite } from "@/components/BackToSite";
 
 function NotFoundComponent() {
   return (
@@ -163,6 +164,7 @@ function RootComponent() {
             <Footer />
             <EmergencyWidget />
             <QuickExit />
+            <BackToSite />
             <CalcGate />
           </div>
         </LanguageProvider>
