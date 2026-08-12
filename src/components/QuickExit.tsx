@@ -6,17 +6,8 @@ export function performQuickExit() {
   try {
     // Replace the current history entry with the safe URL so this app
     // does NOT remain in the browser's back/forward history.
-    // If the abuser presses Back after exit, they will skip over the
-    // site entirely and land on whatever page was visited before it.
+    // Never open a new tab — the exit must stay in the current tab.
     window.location.replace(QUICK_EXIT_URL);
-
-    // Also try to open Google in a new tab so the current tab can be
-    // closed without leaving a trail in this one.
-    try {
-      window.open(QUICK_EXIT_URL, "_blank", "noopener,noreferrer");
-    } catch {
-      // popup blocked; the replace above already handled the current tab
-    }
   } catch {
     window.location.href = QUICK_EXIT_URL;
   }
