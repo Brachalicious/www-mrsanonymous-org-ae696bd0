@@ -99,16 +99,29 @@ function Index() {
 
       {/* Get the app */}
       <section className="mx-auto max-w-7xl px-5 py-16 lg:px-10">
-        <div className="flex flex-col items-center gap-6 rounded-3xl border-2 border-ink-900 bg-white p-8 text-center sm:p-12">
-          <img src="/app-icon-192.png" alt="MrsANONymous app icon" width={88} height={88} className="rounded-2xl shadow-lg" />
-          <h2 className="font-serif text-3xl text-ink-900">Get the app on your phone</h2>
-          <p className="max-w-xl text-ink-700">
-            Install MrsANONymous in under 30 seconds on iPhone or Android — free, no account traces,
-            and it can be disguised as a calculator on your home screen.
-          </p>
+        <div className="flex flex-col items-center gap-7 rounded-3xl border-2 border-ink-900 bg-white p-8 text-center sm:p-14">
+          <div className="relative">
+            <img
+              src="/app-icon-512.png"
+              alt="MrsANONymous app icon — download the free safety app"
+              width={160}
+              height={160}
+              className="rounded-[2rem] shadow-2xl"
+            />
+            <span className="absolute -right-3 -top-3 flex h-10 w-10 items-center justify-center rounded-full bg-rose-500 text-lg shadow-lg">
+              📱
+            </span>
+          </div>
+          <div>
+            <h2 className="font-serif text-3xl text-ink-900 sm:text-4xl">Download the App Here</h2>
+            <p className="mx-auto mt-3 max-w-xl text-lg text-ink-700">
+              Install MrsANONymous in under 30 seconds on iPhone or Android — free, no account traces,
+              and it can be disguised as a calculator on your home screen.
+            </p>
+          </div>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link to="/download" data-testid="home-download-ios" className="btn-rose">📱 iPhone / iPad</Link>
-            <Link to="/download" data-testid="home-download-android" className="btn-ghost">🤖 Android</Link>
+            <Link to="/download" data-testid="home-download-ios" className="btn-rose text-base">📱 iPhone / iPad</Link>
+            <Link to="/download" data-testid="home-download-android" className="btn-ghost text-base">🤖 Android</Link>
           </div>
           <p className="text-xs text-ink-400">
             No app store account needed · <Link to="/privacy" className="underline">Privacy</Link> ·{" "}
