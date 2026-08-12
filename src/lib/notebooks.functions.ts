@@ -40,7 +40,7 @@ function normalizeTopics(topics: string[]) {
 
 const createNotebookSchema = z.object({
   title: z.string().min(1).max(120),
-  color: z.string().max(24).default("#B91C1C"),
+  color: z.string().max(512).default("#B91C1C"),
 });
 
 const notebookIdSchema = z.object({ id: z.string().uuid() });
@@ -48,7 +48,7 @@ const notebookIdSchema = z.object({ id: z.string().uuid() });
 const updateNotebookSchema = z.object({
   id: z.string().uuid(),
   title: z.string().min(1).max(120).optional(),
-  color: z.string().max(24).optional(),
+  color: z.string().max(512).optional(),
 });
 
 const shareNotebookSchema = z.object({
