@@ -56,7 +56,8 @@ export function PrivacyBanner() {
       const target = anchor.getAttribute("target");
       if (!href || !href.startsWith("/") || (target && target !== "_self")) return;
       e.preventDefault();
-      router.navigate({ href, replace: true });
+      e.stopPropagation();
+      void router.navigate({ to: href, replace: true });
     }
 
     document.addEventListener("click", onClick, true);
