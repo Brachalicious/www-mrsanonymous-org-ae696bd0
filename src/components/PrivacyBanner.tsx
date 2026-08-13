@@ -46,12 +46,6 @@ export function PrivacyBanner() {
   // When enabled, every web link stays in this tab and replaces the current
   // history entry instead of adding to it, so the back button reveals nothing.
   useEffect(() => {
-    function forceSameTabTargets(root: ParentNode = document) {
-      root.querySelectorAll<HTMLAnchorElement>("a[href]").forEach((anchor) => {
-        if (!anchor.hasAttribute("download")) anchor.target = "_self";
-      });
-    }
-
     function onClick(e: MouseEvent) {
       const anchor = (e.target as HTMLElement | null)?.closest?.("a");
       if (!anchor) return;
@@ -65,7 +59,6 @@ export function PrivacyBanner() {
 
       e.preventDefault();
       e.stopPropagation();
-      anchor.target = "_self";
 
       if (destination.origin === window.location.origin) {
         void router.navigate({
@@ -79,13 +72,9 @@ export function PrivacyBanner() {
       else window.location.assign(destination.href);
     }
 
-    forceSameTabTargets();
-    const observer = new MutationObserver(() => forceSameTabTargets());
-    observer.observe(document.body, { childList: true, subtree: true });
     document.addEventListener("click", onClick, true);
     document.addEventListener("auxclick", onClick, true);
     return () => {
-      observer.disconnect();
       document.removeEventListener("click", onClick, true);
       document.removeEventListener("auxclick", onClick, true);
     };

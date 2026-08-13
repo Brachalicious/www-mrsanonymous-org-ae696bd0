@@ -123,9 +123,15 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <base target="_self" />
         <HeadContent />
       </head>
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){function sameTab(e){var a=e.target&&e.target.closest?e.target.closest('a[href]'):null;if(!a||a.hasAttribute('download'))return;var h=a.getAttribute('href');if(!h)return;var u;try{u=new URL(h,location.href)}catch(_){return}if(u.protocol!=='http:'&&u.protocol!=='https:')return;var hidden=localStorage.getItem('mrsanon:hide-history')==='1';var newTab=e.type==='auxclick'||e.button===1||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey||a.target==='_blank';if(!hidden&&!newTab)return;e.preventDefault();e.stopImmediatePropagation();if(hidden)location.replace(u.href);else location.assign(u.href)}document.addEventListener('click',sameTab,true);document.addEventListener('auxclick',sameTab,true)})();`,
+          }}
+        />
         {children}
         <Scripts />
       </body>
