@@ -268,18 +268,29 @@ export function Navbar() {
           )}
         </div>
 
-        <button
-          data-testid="nav-mobile-toggle"
-          onClick={() => setOpen((v) => !v)}
-          className="rounded-lg border border-ink-300/40 p-2 lg:hidden"
-          aria-label="Toggle menu"
-        >
+        <div className="flex items-center gap-2 lg:hidden">
+          {!loggedIn && (
+            <Link
+              to="/login"
+              data-testid="nav-login-mobile"
+              className="rounded-full bg-ink-900 px-4 py-2 text-xs font-extrabold uppercase tracking-widest text-white shadow"
+            >
+              Log in
+            </Link>
+          )}
+          <button
+            data-testid="nav-mobile-toggle"
+            onClick={() => setOpen((v) => !v)}
+            className="rounded-lg border border-ink-300/40 p-2"
+            aria-label="Toggle menu"
+          >
           <div className="space-y-1">
             <div className="h-0.5 w-5 bg-ink-900" />
             <div className="h-0.5 w-5 bg-ink-900" />
             <div className="h-0.5 w-5 bg-ink-900" />
           </div>
-        </button>
+          </button>
+        </div>
       </div>
 
       {/* Desktop nav */}
