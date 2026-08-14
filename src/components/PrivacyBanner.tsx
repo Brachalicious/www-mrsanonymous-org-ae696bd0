@@ -69,13 +69,13 @@ export function PrivacyBanner() {
         return;
       }
 
-      if (hideHistory) {
-        // Keep the user inside the app so the "Back to MrsANONymous" overlay stays available.
-        // The target URL is stashed in sessionStorage so the address bar never shows it.
-        void router.navigate({ to: "/go", search: { r: stashGoUrl(destination.href) }, replace: true });
-        return;
-      }
-      window.location.assign(destination.href);
+      // Keep every outside resource inside the protected viewer so the address bar
+      // remains on MrsANONymous and the persistent back button stays available.
+      void router.navigate({
+        to: "/go",
+        search: { r: stashGoUrl(destination.href) },
+        replace: hideHistory,
+      });
     }
 
     document.addEventListener("click", onClick, true);
