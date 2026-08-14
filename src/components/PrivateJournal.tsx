@@ -10,7 +10,10 @@ import {
   downloadReport,
   shareReport,
   smsReportHref,
+  printReport,
 } from "@/lib/incident-report";
+import { IncidentMedia } from "@/components/IncidentMedia";
+import { applyNameVisibility } from "@/lib/redact";
 import {
   createJournalEntry,
   deleteJournalEntry,
@@ -28,6 +31,7 @@ type Field = {
 };
 
 const GIRLS_FIELDS: Field[] = [
+  { key: "realName", label: "Your real name (optional — hidden on screen)", type: "text", placeholder: "Only needed for official reports" },
   { key: "day", label: "Day (if you remember)", type: "text", placeholder: "e.g. Tuesday" },
   { key: "date", label: "Date (if you remember)", type: "date" },
   { key: "time", label: "Time (if you remember)", type: "time" },
@@ -39,6 +43,7 @@ const GIRLS_FIELDS: Field[] = [
 ];
 
 const WOMEN_FIELDS: Field[] = [
+  { key: "realName", label: "Your real name (optional — hidden on screen)", type: "text", placeholder: "Only needed for official reports" },
   {
     key: "incidentType",
     label: "Type of incident",
