@@ -7,6 +7,10 @@ import { translateText } from "@/lib/translations";
 import type { LangCode } from "@/lib/translations";
 
 const originals = new WeakMap<Text, string>();
+// Text nodes we have written into, mapped to the exact value we wrote.
+// Lets us detect when React re-renders a node with new content so we don't
+// clobber fresh UI text with a stale "original".
+const applied = new WeakMap<Text, string>();
 // cache: `${lang}\u0001${text}` -> translated
 const cache = new Map<string, string>();
 
@@ -90,15 +94,25 @@ async function translateNow(lang: LangCode) {
   if (typeof document === "undefined") return;
   const nodes = collectTextNodes(document.body);
 
-  // Ensure originals stored.
+  // Ensure originals stored. If the app rewrote a node since we last touched
+  // it, treat the new value as the source text.
   for (const n of nodes) {
-    if (!originals.has(n)) originals.set(n, n.nodeValue ?? "");
+    const ours = applied.get(n);
+    if (!originals.has(n) || (ours !== undefined && ours !== n.nodeValue)) {
+      originals.set(n, n.nodeValue ?? "");
+      applied.delete(n);
+    }
   }
 
   if (lang === "en") {
     for (const n of nodes) {
+      // Only restore nodes we actually translated.
+      if (applied.get(n) !== n.nodeValue) continue;
       const orig = originals.get(n);
-      if (orig !== undefined && n.nodeValue !== orig) n.nodeValue = orig;
+      if (orig !== undefined && n.nodeValue !== orig) {
+        n.nodeValue = orig;
+        applied.delete(n);
+      }
     }
     return;
   }
@@ -110,7 +124,10 @@ async function translateNow(lang: LangCode) {
     const key = `${lang}\u0001${orig}`;
     const cached = cache.get(key);
     if (cached !== undefined) {
-      if (n.nodeValue !== cached) n.nodeValue = cached;
+      if (n.nodeValue !== cached) {
+        n.nodeValue = cached;
+        applied.set(n, cached);
+      }
     } else {
       need.push({ node: n, text: orig });
     }
@@ -129,6 +146,7 @@ async function translateNow(lang: LangCode) {
     cache.set(`${lang}\u0001${text}`, out);
     if (currentLang === lang && node.isConnected) {
       node.nodeValue = out;
+      applied.set(node, out);
     }
   }
 }
