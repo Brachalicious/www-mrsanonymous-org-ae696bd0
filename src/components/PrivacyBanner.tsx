@@ -27,6 +27,7 @@ export function PrivacyBanner() {
   const [enabled, setEnabled] = useState(false);
   const [dismissed, setDismissed] = useState(true);
   const [showLearnMore, setShowLearnMore] = useState(false);
+  console.log("PB render", { ready, enabled, dismissed });
 
   useEffect(() => {
     setEnabled(window.localStorage.getItem(STORAGE_KEY) === "1");
