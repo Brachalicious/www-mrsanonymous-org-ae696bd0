@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
 import { StoriesBoard } from "@/components/StoriesBoard";
 import { NotebookList } from "@/components/NotebookList";
+import { IncidentReportsList } from "@/components/IncidentReportsList";
 
 export const Route = createFileRoute("/tell-your-story")({
   validateSearch: z.object({
@@ -78,6 +79,7 @@ function TellYourStoryPage() {
       {tab === "mine" && (
         <section aria-label="My notebooks">
           <NotebookList />
+          <IncidentReportsList />
         </section>
       )}
     </div>
