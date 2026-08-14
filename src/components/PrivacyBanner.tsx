@@ -68,8 +68,12 @@ export function PrivacyBanner() {
         return;
       }
 
-      if (hideHistory) window.location.replace(destination.href);
-      else window.location.assign(destination.href);
+      if (hideHistory) {
+        // Keep the user inside the app so the "Back to MrsANONymous" overlay stays available.
+        void router.navigate({ to: "/go", search: { url: destination.href }, replace: true });
+        return;
+      }
+      window.location.assign(destination.href);
     }
 
     document.addEventListener("click", onClick, true);

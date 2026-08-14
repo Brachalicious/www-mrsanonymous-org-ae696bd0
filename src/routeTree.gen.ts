@@ -21,6 +21,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as JournalRouteImport } from './routes/journal'
 import { Route as InboxRouteImport } from './routes/inbox'
+import { Route as GoRouteImport } from './routes/go'
 import { Route as GirlsRouteImport } from './routes/girls'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as DownloadRouteImport } from './routes/download'
@@ -93,6 +94,11 @@ const InboxRoute = InboxRouteImport.update({
   path: '/inbox',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GoRoute = GoRouteImport.update({
+  id: '/go',
+  path: '/go',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GirlsRoute = GirlsRouteImport.update({
   id: '/girls',
   path: '/girls',
@@ -158,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/download': typeof DownloadRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/girls': typeof GirlsRoute
+  '/go': typeof GoRoute
   '/inbox': typeof InboxRoute
   '/journal': typeof JournalRoute
   '/login': typeof LoginRoute
@@ -183,6 +190,7 @@ export interface FileRoutesByTo {
   '/download': typeof DownloadRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/girls': typeof GirlsRoute
+  '/go': typeof GoRoute
   '/inbox': typeof InboxRoute
   '/journal': typeof JournalRoute
   '/login': typeof LoginRoute
@@ -209,6 +217,7 @@ export interface FileRoutesById {
   '/download': typeof DownloadRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/girls': typeof GirlsRoute
+  '/go': typeof GoRoute
   '/inbox': typeof InboxRoute
   '/journal': typeof JournalRoute
   '/login': typeof LoginRoute
@@ -236,6 +245,7 @@ export interface FileRouteTypes {
     | '/download'
     | '/forgot-password'
     | '/girls'
+    | '/go'
     | '/inbox'
     | '/journal'
     | '/login'
@@ -261,6 +271,7 @@ export interface FileRouteTypes {
     | '/download'
     | '/forgot-password'
     | '/girls'
+    | '/go'
     | '/inbox'
     | '/journal'
     | '/login'
@@ -286,6 +297,7 @@ export interface FileRouteTypes {
     | '/download'
     | '/forgot-password'
     | '/girls'
+    | '/go'
     | '/inbox'
     | '/journal'
     | '/login'
@@ -312,6 +324,7 @@ export interface RootRouteChildren {
   DownloadRoute: typeof DownloadRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   GirlsRoute: typeof GirlsRoute
+  GoRoute: typeof GoRoute
   InboxRoute: typeof InboxRoute
   JournalRoute: typeof JournalRoute
   LoginRoute: typeof LoginRoute
@@ -416,6 +429,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InboxRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/go': {
+      id: '/go'
+      path: '/go'
+      fullPath: '/go'
+      preLoaderRoute: typeof GoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/girls': {
       id: '/girls'
       path: '/girls'
@@ -504,6 +524,7 @@ const rootRouteChildren: RootRouteChildren = {
   DownloadRoute: DownloadRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   GirlsRoute: GirlsRoute,
+  GoRoute: GoRoute,
   InboxRoute: InboxRoute,
   JournalRoute: JournalRoute,
   LoginRoute: LoginRoute,
