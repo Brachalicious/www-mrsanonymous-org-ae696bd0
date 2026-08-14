@@ -235,7 +235,18 @@ export function PrivateJournal() {
   }
 
   async function uploadOne(file: Blob, filename: string, contentType: string) {
-    const path = `${user!.id}/${crypto.randomUUID()}-${filename}`;
+    // Storage keys allow only a safe subset of characters — strip spaces, colons, etc.
+    const dot = filename.lastIndexOf(".");
+    const base = (dot > 0 ? filename.slice(0, dot) : filename)
+      .normalize("NFKD")
+      .replace(/[^a-zA-Z0-9._-]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 60);
+    const ext = (dot > 0 ? filename.slice(dot + 1) : "")
+      .replace(/[^a-zA-Z0-9]+/g, "")
+      .slice(0, 10);
+    const safe = `${base || "file"}${ext ? `.${ext}` : ""}`;
+    const path = `${user!.id}/${crypto.randomUUID()}-${safe}`;
     const { error } = await supabase.storage.from("evidence").upload(path, file, {
       contentType,
       upsert: false,
