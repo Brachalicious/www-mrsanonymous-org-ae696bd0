@@ -92,6 +92,7 @@ export function PrivateJournal() {
   const [status, setStatus] = useState("");
   const [saving, setSaving] = useState(false);
   const [showEntries, setShowEntries] = useState(false);
+  const [openEntryId, setOpenEntryId] = useState<string | null>(null);
   const [chats, setChats] = useState<ReportConversation[]>([]);
   const [selectedChats, setSelectedChats] = useState<string[]>([]);
 
@@ -522,77 +523,103 @@ export function PrivateJournal() {
         <div className="space-y-4">
           <h3 className="font-serif text-xl text-ink-900">Saved entries</h3>
           {entries.length === 0 && <p className="text-sm text-ink-500">Nothing saved yet.</p>}
-          {entries.map((e) => (
-            <article key={e.id} className="note-card p-5">
-              <div className="mb-3 flex items-center justify-between gap-3">
-                <span className="text-xs uppercase tracking-widest text-ink-500">
-                  {new Date(e.created_at).toLocaleString()}
-                </span>
-                <button type="button" onClick={() => remove(e.id)} className="text-xs text-rose-600 underline">
-                  Delete
-                </button>
-              </div>
-              <div className="mb-3 flex flex-wrap gap-2">
+          {entries.map((e) => {
+            const isOpen = openEntryId === e.id;
+            const firstLine = Object.values(e.fields ?? {})
+              .map((v) => (v ?? "").toString().trim())
+              .find((v) => v.length > 0);
+            return (
+              <article key={e.id} className="note-card overflow-hidden p-0">
                 <button
                   type="button"
-                  onClick={() => downloadReport(entryReport(e), e.created_at)}
-                  className="rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
+                  onClick={() => setOpenEntryId((id) => (id === e.id ? null : e.id))}
+                  className="flex w-full items-center justify-between gap-3 p-5 text-left transition-colors hover:bg-cream-100/50"
                 >
-                  📄 Download report
+                  <div className="min-w-0">
+                    <span className="text-xs uppercase tracking-widest text-ink-500">
+                      {new Date(e.created_at).toLocaleString()}
+                    </span>
+                    <p className="mt-0.5 truncate text-sm text-ink-700">
+                      {firstLine ? firstLine.slice(0, 90) : "Tap to view saved entry"}
+                    </p>
+                  </div>
+                  <span className="shrink-0 text-lg text-ink-400" aria-hidden="true">
+                    {isOpen ? "▲" : "▼"}
+                  </span>
                 </button>
-                <button
-                  type="button"
-                  onClick={() => doShare(entryReport(e), e.created_at)}
-                  className="rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
-                >
-                  ↗ Share
-                </button>
-                {emergency.smsSupported && (
-                  <a
-                    href={smsReportHref(smsNumber, entryReport(e))}
-                    className="rounded-full bg-red-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white hover:bg-red-700"
-                  >
-                    Text {smsNumber}
-                  </a>
-                )}
-              </div>
-              <dl className="space-y-2 text-sm">
-                {[...(e.audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS), CHAT_FIELD].map((f) => {
-                  const v = (e.fields?.[f.key] ?? "").trim();
-                  if (!v) return null;
-                  return (
-                    <div key={f.key}>
-                      <dt className="text-xs font-semibold uppercase tracking-wide text-ink-500">{f.label}</dt>
-                      <dd className="whitespace-pre-wrap text-ink-800">{v}</dd>
+                {isOpen && (
+                  <div className="border-t border-ink-200/60 p-5">
+                    <div className="mb-4 flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => downloadReport(entryReport(e), e.created_at)}
+                        className="rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
+                      >
+                        📄 Download report
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => doShare(entryReport(e), e.created_at)}
+                        className="rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
+                      >
+                        ↗ Share
+                      </button>
+                      {emergency.smsSupported && (
+                        <a
+                          href={smsReportHref(smsNumber, entryReport(e))}
+                          className="rounded-full bg-red-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white hover:bg-red-700"
+                        >
+                          Text {smsNumber}
+                        </a>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => remove(e.id)}
+                        className="ml-auto text-xs text-rose-600 underline"
+                      >
+                        Delete
+                      </button>
                     </div>
-                  );
-                })}
-              </dl>
-              {(e.attachments ?? []).length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {(e.attachments ?? []).map((a) => (
-                    <button
-                      key={a.path}
-                      type="button"
-                      onClick={() => openAttachment(a.path)}
-                      className="rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
-                    >
-                      📎 {a.name}
-                    </button>
-                  ))}
-                </div>
-              )}
-              {e.audio_path && (
-                <button
-                  type="button"
-                  onClick={() => openAttachment(e.audio_path!)}
-                  className="mt-3 rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
-                >
-                  🎙️ Play voice note
-                </button>
-              )}
-            </article>
-          ))}
+                    <dl className="space-y-2 text-sm">
+                      {[...(e.audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS), CHAT_FIELD].map((f) => {
+                        const v = (e.fields?.[f.key] ?? "").trim();
+                        if (!v) return null;
+                        return (
+                          <div key={f.key}>
+                            <dt className="text-xs font-semibold uppercase tracking-wide text-ink-500">{f.label}</dt>
+                            <dd className="whitespace-pre-wrap text-ink-800">{v}</dd>
+                          </div>
+                        );
+                      })}
+                    </dl>
+                    {(e.attachments ?? []).length > 0 && (
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {(e.attachments ?? []).map((a) => (
+                          <button
+                            key={a.path}
+                            type="button"
+                            onClick={() => openAttachment(a.path)}
+                            className="rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
+                          >
+                            📎 {a.name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    {e.audio_path && (
+                      <button
+                        type="button"
+                        onClick={() => openAttachment(e.audio_path!)}
+                        className="mt-3 rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
+                      >
+                        🎙️ Play voice note
+                      </button>
+                    )}
+                  </div>
+                )}
+              </article>
+            );
+          })}
         </div>
       )}
     </div>
