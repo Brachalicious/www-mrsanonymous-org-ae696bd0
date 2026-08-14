@@ -235,18 +235,16 @@ export function PrivateJournal() {
   }
 
   async function uploadOne(file: Blob, filename: string, contentType: string) {
-    // Storage keys allow only a safe subset of characters — strip spaces, colons, etc.
+    if (!user) throw new Error("Please log in again before saving.");
+
+    // Never put the original filename in a storage key. Screenshot names can
+    // contain invisible Unicode spaces and punctuation rejected by storage.
     const dot = filename.lastIndexOf(".");
-    const base = (dot > 0 ? filename.slice(0, dot) : filename)
-      .normalize("NFKD")
-      .replace(/[^a-zA-Z0-9._-]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-      .slice(0, 60);
     const ext = (dot > 0 ? filename.slice(dot + 1) : "")
-      .replace(/[^a-zA-Z0-9]+/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "")
       .slice(0, 10);
-    const safe = `${base || "file"}${ext ? `.${ext}` : ""}`;
-    const path = `${user!.id}/${crypto.randomUUID()}-${safe}`;
+    const path = `${user.id}/${crypto.randomUUID()}${ext ? `.${ext}` : ""}`;
     const { error } = await supabase.storage.from("evidence").upload(path, file, {
       contentType,
       upsert: false,
