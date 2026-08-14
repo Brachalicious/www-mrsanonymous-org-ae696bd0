@@ -186,11 +186,30 @@ export function PrivateJournal() {
   });
   const hasDraft =
     fields.some((f) => (form[f.key] ?? "").trim().length > 0) || includedChats.length > 0;
+  const draftReportWithName = buildReportText({
+    fields: form,
+    fieldDefs: fields,
+    attachments: pendingFiles.map((f) => ({ name: f.name })),
+    hasAudio: !!audioBlob,
+    conversations: includedChats,
+  });
 
   function entryReport(e: Entry) {
     const defs = e.audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS;
     return buildReportText({
       fields: applyNameVisibility(e.fields ?? {}, showRealName),
+      fieldDefs: [...defs, CHAT_FIELD],
+      createdAt: e.created_at,
+      attachments: e.attachments ?? [],
+      hasAudio: !!e.audio_path,
+    });
+  }
+
+  /** Same report but with the real name unmasked — for police, lawyers, advocates. */
+  function entryReportWithName(e: Entry) {
+    const defs = e.audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS;
+    return buildReportText({
+      fields: e.fields ?? {},
       fieldDefs: [...defs, CHAT_FIELD],
       createdAt: e.created_at,
       attachments: e.attachments ?? [],
@@ -497,6 +516,16 @@ export function PrivateJournal() {
             >
               ↗ Share report
             </button>
+            {(form.realName ?? "").trim() && !showRealName && (
+              <button
+                type="button"
+                disabled={!hasDraft}
+                onClick={() => doShare(draftReportWithName)}
+                className="rounded-full border border-rose-300 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-100 disabled:pointer-events-none disabled:opacity-50"
+              >
+                ↗ Share with real name
+              </button>
+            )}
             {emergency.smsSupported && (
               <a
                 href={hasDraft ? smsReportHref(smsNumber, draftReport) : undefined}
@@ -561,6 +590,24 @@ export function PrivateJournal() {
                       >
                         ↗ Share
                       </button>
+                      {(e.fields?.realName ?? "").trim() && !showRealName && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => doShare(entryReportWithName(e), e.created_at)}
+                            className="rounded-full border border-rose-300 bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700 hover:bg-rose-100"
+                          >
+                            ↗ Share with real name
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => downloadReport(entryReportWithName(e), e.created_at)}
+                            className="rounded-full border border-rose-300 bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700 hover:bg-rose-100"
+                          >
+                            📄 Download with real name
+                          </button>
+                        </>
+                      )}
                       <button
                         type="button"
                         onClick={() => setStatus(printReport(entryReport(e)) || "")}

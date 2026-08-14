@@ -89,6 +89,7 @@ export function IncidentReportsList() {
             const open = openId === e.id;
             const preview = Object.values(e.fields ?? {}).find((v) => v?.trim()) ?? "Report";
             const text = toText(e, showName);
+            const hasRealName = Boolean((e.fields?.realName ?? "").trim());
             return (
               <li key={e.id} className="note-card overflow-hidden">
                 <button
@@ -122,6 +123,26 @@ export function IncidentReportsList() {
                       >
                         ↗ Share report
                       </button>
+                      {hasRealName && !showName && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={async () =>
+                              setStatus(await shareReport(toText(e, true), e.created_at))
+                            }
+                            className="rounded-full border border-rose-300 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-100"
+                          >
+                            ↗ Share with real name
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => downloadReport(toText(e, true), e.created_at)}
+                            className="rounded-full border border-rose-300 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-100"
+                          >
+                            📄 Download with real name
+                          </button>
+                        </>
+                      )}
                       <button
                         type="button"
                         onClick={() => setStatus(printReport(text))}
