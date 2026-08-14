@@ -100,6 +100,7 @@ export function PrivateJournal() {
   const [openEntryId, setOpenEntryId] = useState<string | null>(null);
   const [chats, setChats] = useState<ReportConversation[]>([]);
   const [selectedChats, setSelectedChats] = useState<string[]>([]);
+  const [showRealName, setShowRealName] = useState(false);
 
   const recorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -177,7 +178,7 @@ export function PrivateJournal() {
   }
 
   const draftReport = buildReportText({
-    fields: form,
+    fields: applyNameVisibility(form, showRealName),
     fieldDefs: fields,
     attachments: pendingFiles.map((f) => ({ name: f.name })),
     hasAudio: !!audioBlob,
@@ -189,7 +190,7 @@ export function PrivateJournal() {
   function entryReport(e: Entry) {
     const defs = e.audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS;
     return buildReportText({
-      fields: e.fields ?? {},
+      fields: applyNameVisibility(e.fields ?? {}, showRealName),
       fieldDefs: [...defs, CHAT_FIELD],
       createdAt: e.created_at,
       attachments: e.attachments ?? [],
