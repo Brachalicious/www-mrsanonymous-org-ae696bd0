@@ -570,6 +570,22 @@ export function PrivateJournal() {
                       >
                         ↗ Share
                       </button>
+                      <button
+                        type="button"
+                        onClick={() => setStatus(printReport(entryReport(e)) || "")}
+                        className="rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
+                      >
+                        🖨️ Print
+                      </button>
+                      {(e.fields?.realName ?? "").trim() && (
+                        <button
+                          type="button"
+                          onClick={() => setShowRealName((s) => !s)}
+                          className="rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
+                        >
+                          {showRealName ? "🙈 Hide real name" : "👁️ Show real name"}
+                        </button>
+                      )}
                       {emergency.smsSupported && (
                         <a
                           href={smsReportHref(smsNumber, entryReport(e))}
@@ -588,7 +604,7 @@ export function PrivateJournal() {
                     </div>
                     <dl className="space-y-2 text-sm">
                       {[...(e.audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS), CHAT_FIELD].map((f) => {
-                        const v = (e.fields?.[f.key] ?? "").trim();
+                        const v = (applyNameVisibility(e.fields ?? {}, showRealName)[f.key] ?? "").trim();
                         if (!v) return null;
                         return (
                           <div key={f.key}>
@@ -598,29 +614,7 @@ export function PrivateJournal() {
                         );
                       })}
                     </dl>
-                    {(e.attachments ?? []).length > 0 && (
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {(e.attachments ?? []).map((a) => (
-                          <button
-                            key={a.path}
-                            type="button"
-                            onClick={() => openAttachment(a.path)}
-                            className="rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
-                          >
-                            📎 {a.name}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                    {e.audio_path && (
-                      <button
-                        type="button"
-                        onClick={() => openAttachment(e.audio_path!)}
-                        className="mt-3 rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
-                      >
-                        🎙️ Play voice note
-                      </button>
-                    )}
+                    <IncidentMedia attachments={e.attachments ?? []} audioPath={e.audio_path} />
                   </div>
                 )}
               </article>
