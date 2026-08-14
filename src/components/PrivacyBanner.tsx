@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "@tanstack/react-router";
+import { stashGoUrl } from "@/lib/go-link";
 
 const STORAGE_KEY = "mrsanon:hide-history";
 const DISMISS_KEY = "mrsanon:hide-history-dismissed";
@@ -70,7 +71,8 @@ export function PrivacyBanner() {
 
       if (hideHistory) {
         // Keep the user inside the app so the "Back to MrsANONymous" overlay stays available.
-        void router.navigate({ to: "/go", search: { url: destination.href }, replace: true });
+        // The target URL is stashed in sessionStorage so the address bar never shows it.
+        void router.navigate({ to: "/go", search: { r: stashGoUrl(destination.href) }, replace: true });
         return;
       }
       window.location.assign(destination.href);
