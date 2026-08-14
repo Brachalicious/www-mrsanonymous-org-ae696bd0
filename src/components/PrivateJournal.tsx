@@ -186,6 +186,13 @@ export function PrivateJournal() {
   });
   const hasDraft =
     fields.some((f) => (form[f.key] ?? "").trim().length > 0) || includedChats.length > 0;
+  const draftReportWithName = buildReportText({
+    fields: form,
+    fieldDefs: fields,
+    attachments: pendingFiles.map((f) => ({ name: f.name })),
+    hasAudio: !!audioBlob,
+    conversations: includedChats,
+  });
 
   function entryReport(e: Entry) {
     const defs = e.audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS;
