@@ -24,6 +24,7 @@ function GoPage() {
   const { url } = Route.useSearch();
   const navigate = useNavigate();
   const [blocked, setBlocked] = useState(false);
+  const [fullscreen, setFullscreen] = useState(false);
   const loaded = useRef(false);
 
   useEffect(() => {
@@ -50,7 +51,13 @@ function GoPage() {
   }
 
   return (
-    <div className="relative h-[calc(100vh-3.5rem)] w-full bg-cream-100">
+    <div
+      className={
+        fullscreen
+          ? "fixed inset-0 z-50 w-full bg-cream-100"
+          : "relative h-[calc(100vh-3.5rem)] w-full bg-cream-100"
+      }
+    >
       <div className="flex flex-wrap items-center gap-2 border-b border-ink-900/10 bg-white/95 px-4 py-2 text-sm">
         <button
           type="button"
@@ -63,11 +70,11 @@ function GoPage() {
         <span className="truncate text-ink-500">{host}</span>
         <button
           type="button"
-          onClick={() => window.location.replace(url)}
+          onClick={() => setFullscreen((f) => !f)}
           className="ml-auto inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-rose-600 underline underline-offset-4 hover:bg-rose-50"
         >
           <ExternalLink className="h-4 w-4" />
-          Open full site
+          {fullscreen ? "Exit full site" : "Open full site"}
         </button>
       </div>
 
@@ -99,6 +106,20 @@ function GoPage() {
           referrerPolicy="no-referrer"
         />
       )}
+
+      {/* Always-visible way back, even in full-site view */}
+      <button
+        type="button"
+        onClick={() => {
+          setFullscreen(false);
+          navigate({ to: "/resources" });
+        }}
+        aria-label="Go back to MrsANONymous"
+        className="fixed left-4 bottom-6 z-[60] flex items-center gap-2 rounded-full border border-rose-200 bg-white/95 px-4 py-2 text-sm font-semibold text-ink-900 shadow-lg backdrop-blur transition hover:bg-rose-50"
+      >
+        <ArrowLeft className="h-4 w-4 text-rose-500" />
+        <span>Back to MrsANONymous</span>
+      </button>
     </div>
   );
 }
