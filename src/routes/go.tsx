@@ -79,8 +79,9 @@ function GoPage() {
   }
 
   async function copyLink() {
+    if (!url) return;
     try {
-      await navigator.clipboard.writeText(url!);
+      await navigator.clipboard.writeText(url);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -148,7 +149,7 @@ function GoPage() {
           }}
           className="h-[calc(100%-2.75rem)] w-full border-0"
           referrerPolicy="no-referrer"
-          sandbox="allow-scripts allow-forms allow-popups-to-escape-sandbox"
+          sandbox="allow-scripts allow-forms"
         />
       )}
 
