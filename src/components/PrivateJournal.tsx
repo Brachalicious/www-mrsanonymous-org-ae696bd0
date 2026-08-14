@@ -440,6 +440,35 @@ export function PrivateJournal() {
 
         <div className="mt-5 rounded-xl border border-ink-300/70 bg-cream-100 p-4">
           <h3 className="text-sm font-semibold text-ink-900">📄 Incident report</h3>
+          {chats.length > 0 && (
+            <div className="mt-3 rounded-lg border border-ink-300/70 bg-white/70 p-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-ink-500">
+                Include saved chats
+              </p>
+              <ul className="mt-2 space-y-1">
+                {chats.map((c) => (
+                  <li key={c.title} className="flex items-start gap-2 text-xs text-ink-700">
+                    <input
+                      id={`chat-${c.title}`}
+                      type="checkbox"
+                      className="mt-0.5"
+                      checked={selectedChats.includes(c.title)}
+                      onChange={(ev) =>
+                        setSelectedChats((s) =>
+                          ev.target.checked ? [...s, c.title] : s.filter((t) => t !== c.title),
+                        )
+                      }
+                    />
+                    <label htmlFor={`chat-${c.title}`} className="cursor-pointer">
+                      {c.title}
+                      {c.createdAt ? ` · ${new Date(c.createdAt).toLocaleDateString()}` : ""} ·{" "}
+                      {c.messages.length} messages
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <p className="mt-1 text-xs text-ink-500">
             Turn what you wrote above into a report you can save as a file, share with police,
             an advocate or a lawyer, or text to emergency services.
