@@ -92,6 +92,7 @@ export function PrivateJournal() {
   const [status, setStatus] = useState("");
   const [saving, setSaving] = useState(false);
   const [showEntries, setShowEntries] = useState(false);
+  const [openEntryId, setOpenEntryId] = useState<string | null>(null);
   const [chats, setChats] = useState<ReportConversation[]>([]);
   const [selectedChats, setSelectedChats] = useState<string[]>([]);
 
