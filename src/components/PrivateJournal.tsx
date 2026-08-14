@@ -307,15 +307,6 @@ export function PrivateJournal() {
     }
   }
 
-  async function openAttachment(path: string) {
-    const { data, error } = await supabase.storage.from("evidence").createSignedUrl(path, 300);
-    if (error || !data) {
-      setStatus("Could not open that file.");
-      return;
-    }
-    window.location.assign(data.signedUrl);
-  }
-
   async function remove(id: string) {
     await deleteJournalEntry({ data: { id } });
     refresh();
