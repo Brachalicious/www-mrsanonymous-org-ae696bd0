@@ -516,6 +516,16 @@ export function PrivateJournal() {
             >
               ↗ Share report
             </button>
+            {(form.realName ?? "").trim() && !showRealName && (
+              <button
+                type="button"
+                disabled={!hasDraft}
+                onClick={() => doShare(draftReportWithName)}
+                className="rounded-full border border-rose-300 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-100 disabled:pointer-events-none disabled:opacity-50"
+              >
+                ↗ Share with real name
+              </button>
+            )}
             {emergency.smsSupported && (
               <a
                 href={hasDraft ? smsReportHref(smsNumber, draftReport) : undefined}
