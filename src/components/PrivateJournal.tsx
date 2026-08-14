@@ -483,28 +483,28 @@ export function PrivateJournal() {
             Turn what you wrote above into a report you can save as a file, share with police,
             an advocate or a lawyer, or text to emergency services.
           </p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-3 flex flex-wrap items-center gap-2">
             <button
               type="button"
               disabled={!hasDraft}
               onClick={() => downloadReport(draftReport)}
-              className="btn-ghost text-xs disabled:opacity-50"
+              className="rounded-full border border-ink-300 px-3 py-1.5 text-xs text-ink-700 hover:bg-cream-100 disabled:pointer-events-none disabled:opacity-50"
             >
-              Download .txt
+              📄 Download report
             </button>
             <button
               type="button"
               disabled={!hasDraft}
               onClick={() => doShare(draftReport)}
-              className="btn-ghost text-xs disabled:opacity-50"
+              className="rounded-full border border-ink-300 px-3 py-1.5 text-xs text-ink-700 hover:bg-cream-100 disabled:pointer-events-none disabled:opacity-50"
             >
-              Share report
+              ↗ Share report
             </button>
             {emergency.smsSupported && (
               <a
                 href={hasDraft ? smsReportHref(smsNumber, draftReport) : undefined}
                 aria-disabled={!hasDraft}
-                className={`inline-flex items-center justify-center gap-1.5 rounded-full bg-red-600 px-4 py-2 text-xs font-extrabold uppercase tracking-widest text-white hover:bg-red-700 ${
+                className={`rounded-full bg-red-600 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-white hover:bg-red-700 ${
                   hasDraft ? "" : "pointer-events-none opacity-50"
                 }`}
               >
