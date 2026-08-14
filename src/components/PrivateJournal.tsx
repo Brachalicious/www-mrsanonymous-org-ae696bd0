@@ -16,6 +16,8 @@ import {
   deleteJournalEntry,
   listJournalEntries,
 } from "@/lib/journal.functions";
+import { listMyMessages } from "@/lib/contact.functions";
+import type { ReportConversation } from "@/lib/incident-report";
 
 type Field = {
   key: string;
@@ -66,6 +68,7 @@ type Entry = {
 };
 
 const MAX_FILE_BYTES = 25 * 1024 * 1024;
+const CHAT_FIELD = { key: "chatLog", label: "Saved conversations" };
 
 function emptyFor(fields: Field[]) {
   return fields.reduce<Record<string, string>>((a, f) => ({ ...a, [f.key]: "" }), {});
@@ -89,6 +92,8 @@ export function PrivateJournal() {
   const [status, setStatus] = useState("");
   const [saving, setSaving] = useState(false);
   const [showEntries, setShowEntries] = useState(false);
+  const [chats, setChats] = useState<ReportConversation[]>([]);
+  const [selectedChats, setSelectedChats] = useState<string[]>([]);
 
   const recorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -115,8 +120,54 @@ export function PrivateJournal() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
+  useEffect(() => {
+    if (!user) {
+      setChats([]);
+      return;
+    }
+    (async () => {
+      try {
+        const rows = (await listMyMessages()) as unknown as {
+          id: string;
+          message: string;
+          created_at: string;
+          replies?: { id: string; body: string; created_at: string; fromMe: boolean }[];
+        }[];
+        setChats(
+          rows.map((m) => ({
+            title: `Support conversation ${m.id.slice(0, 8)}`,
+            createdAt: m.created_at,
+            messages: [
+              { from: "You", body: m.message, at: m.created_at },
+              ...(m.replies ?? []).map((r) => ({
+                from: r.fromMe ? "You" : "Support",
+                body: r.body,
+                at: r.created_at,
+              })),
+            ],
+          })),
+        );
+      } catch {
+        /* ignore */
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
+
   function update(key: string, value: string) {
     setForm((f) => ({ ...f, [key]: value }));
+  }
+
+  const includedChats = chats.filter((c) => selectedChats.includes(c.title));
+
+  function chatTranscript(list: ReportConversation[]) {
+    return list
+      .map(
+        (c) =>
+          `${c.title}${c.createdAt ? ` (${new Date(c.createdAt).toLocaleString()})` : ""}\n` +
+          c.messages.map((m) => `${m.from}: ${m.body}`).join("\n"),
+      )
+      .join("\n\n");
   }
 
   const draftReport = buildReportText({
@@ -124,13 +175,16 @@ export function PrivateJournal() {
     fieldDefs: fields,
     attachments: pendingFiles.map((f) => ({ name: f.name })),
     hasAudio: !!audioBlob,
+    conversations: includedChats,
   });
-  const hasDraft = fields.some((f) => (form[f.key] ?? "").trim().length > 0);
+  const hasDraft =
+    fields.some((f) => (form[f.key] ?? "").trim().length > 0) || includedChats.length > 0;
 
   function entryReport(e: Entry) {
+    const defs = e.audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS;
     return buildReportText({
       fields: e.fields ?? {},
-      fieldDefs: e.audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS,
+      fieldDefs: [...defs, CHAT_FIELD],
       createdAt: e.created_at,
       attachments: e.attachments ?? [],
       hasAudio: !!e.audio_path,
@@ -192,7 +246,11 @@ export function PrivateJournal() {
 
   async function save() {
     if (!user) return;
-    const hasContent = Object.values(form).some((v) => v.trim()) || pendingFiles.length > 0 || audioBlob;
+    const hasContent =
+      Object.values(form).some((v) => v.trim()) ||
+      pendingFiles.length > 0 ||
+      audioBlob ||
+      includedChats.length > 0;
     if (!hasContent) {
       setStatus("Write something first — even one line counts.");
       return;
@@ -209,11 +267,19 @@ export function PrivateJournal() {
       if (audioBlob) audioPath = await uploadOne(audioBlob, "recording.webm", "audio/webm");
 
       await createJournalEntry({
-        data: { audience, fields: form, attachments, audioPath },
+        data: {
+          audience,
+          fields: includedChats.length
+            ? { ...form, chatLog: chatTranscript(includedChats).slice(0, 8000) }
+            : form,
+          attachments,
+          audioPath,
+        },
       });
 
       setForm(emptyFor(fields));
       setPendingFiles([]);
+      setSelectedChats([]);
       setAudioBlob(null);
       setAudioUrl(null);
       setStatus("Saved to your private journal.");
@@ -453,7 +519,7 @@ export function PrivateJournal() {
                 )}
               </div>
               <dl className="space-y-2 text-sm">
-                {(e.audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS).map((f) => {
+                {[...(e.audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS), CHAT_FIELD].map((f) => {
                   const v = (e.fields?.[f.key] ?? "").trim();
                   if (!v) return null;
                   return (
