@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/contexts/AuthContext";
 import { listJournalEntries } from "@/lib/journal.functions";
-import { buildReportText, downloadReport, shareReport } from "@/lib/incident-report";
+import { buildReportText, downloadReport, shareReport, printReport } from "@/lib/incident-report";
+import { IncidentMedia } from "@/components/IncidentMedia";
+import { applyNameVisibility } from "@/lib/redact";
 
 type Attachment = { path: string; name: string; type: string; size: number };
 type Entry = {
@@ -15,6 +17,7 @@ type Entry = {
 };
 
 const LABELS: Record<string, string> = {
+  realName: "Real name",
   incidentType: "Type of incident",
   day: "Day",
   date: "Date",
@@ -30,10 +33,10 @@ const LABELS: Record<string, string> = {
   chatLog: "Saved conversations",
 };
 
-function toText(entry: Entry) {
+function toText(entry: Entry, showName: boolean) {
   const fieldDefs = Object.keys(entry.fields ?? {}).map((k) => ({ key: k, label: LABELS[k] ?? k }));
   return buildReportText({
-    fields: entry.fields ?? {},
+    fields: applyNameVisibility(entry.fields ?? {}, showName),
     fieldDefs,
     createdAt: entry.created_at,
     attachments: entry.attachments ?? [],
@@ -46,6 +49,7 @@ export function IncidentReportsList() {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [openId, setOpenId] = useState<string | null>(null);
   const [status, setStatus] = useState("");
+  const [showName, setShowName] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -84,7 +88,7 @@ export function IncidentReportsList() {
           {entries.map((e) => {
             const open = openId === e.id;
             const preview = Object.values(e.fields ?? {}).find((v) => v?.trim()) ?? "Report";
-            const text = toText(e);
+            const text = toText(e, showName);
             return (
               <li key={e.id} className="note-card overflow-hidden">
                 <button
@@ -118,6 +122,22 @@ export function IncidentReportsList() {
                       >
                         ↗ Share report
                       </button>
+                      <button
+                        type="button"
+                        onClick={() => setStatus(printReport(text))}
+                        className="rounded-full border border-ink-300 px-4 py-2 text-sm font-semibold text-ink-800 hover:bg-cream-100"
+                      >
+                        🖨️ Print
+                      </button>
+                      {(e.fields?.realName ?? "").trim() && (
+                        <button
+                          type="button"
+                          onClick={() => setShowName((s) => !s)}
+                          className="rounded-full border border-ink-300 px-4 py-2 text-sm font-semibold text-ink-800 hover:bg-cream-100"
+                        >
+                          {showName ? "🙈 Hide real name" : "👁️ Show real name"}
+                        </button>
+                      )}
                       <Link
                         to="/journal"
                         className="rounded-full border border-ink-300 px-4 py-2 text-sm font-semibold text-ink-800 hover:bg-cream-100"
@@ -126,6 +146,7 @@ export function IncidentReportsList() {
                       </Link>
                     </div>
                     {status && <p className="mt-2 text-xs text-ink-500">{status}</p>}
+                    <IncidentMedia attachments={e.attachments ?? []} audioPath={e.audio_path} />
                   </div>
                 )}
               </li>

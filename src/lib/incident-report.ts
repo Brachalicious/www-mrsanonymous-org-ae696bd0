@@ -96,6 +96,19 @@ export async function shareReport(text: string, createdAt?: string): Promise<str
 }
 
 /** SMS bodies must stay short; trim to a safe length for emergency texting. */
+export function printReport(text: string) {
+  const w = window.open("", "_blank", "noopener,width=800,height=900");
+  if (!w) return "Pop-ups are blocked, so the report couldn't be printed.";
+  const esc = text.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c] as string);
+  w.document.write(
+    `<html><head><title>Incident report</title></head><body style="font:14px/1.5 system-ui;padding:32px"><pre style="white-space:pre-wrap;font:inherit">${esc}</pre></body></html>`,
+  );
+  w.document.close();
+  w.focus();
+  w.print();
+  return "";
+}
+
 export function smsReportHref(number: string, text: string, limit = 900) {
   const body = text.length > limit ? `${text.slice(0, limit - 3)}...` : text;
   return `sms:${number}?&body=${encodeURIComponent(body)}`;

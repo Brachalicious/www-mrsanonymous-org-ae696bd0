@@ -10,7 +10,10 @@ import {
   downloadReport,
   shareReport,
   smsReportHref,
+  printReport,
 } from "@/lib/incident-report";
+import { IncidentMedia } from "@/components/IncidentMedia";
+import { applyNameVisibility } from "@/lib/redact";
 import {
   createJournalEntry,
   deleteJournalEntry,
@@ -28,6 +31,7 @@ type Field = {
 };
 
 const GIRLS_FIELDS: Field[] = [
+  { key: "realName", label: "Your real name (optional — hidden on screen)", type: "text", placeholder: "Only needed for official reports" },
   { key: "day", label: "Day (if you remember)", type: "text", placeholder: "e.g. Tuesday" },
   { key: "date", label: "Date (if you remember)", type: "date" },
   { key: "time", label: "Time (if you remember)", type: "time" },
@@ -39,6 +43,7 @@ const GIRLS_FIELDS: Field[] = [
 ];
 
 const WOMEN_FIELDS: Field[] = [
+  { key: "realName", label: "Your real name (optional — hidden on screen)", type: "text", placeholder: "Only needed for official reports" },
   {
     key: "incidentType",
     label: "Type of incident",
@@ -95,6 +100,7 @@ export function PrivateJournal() {
   const [openEntryId, setOpenEntryId] = useState<string | null>(null);
   const [chats, setChats] = useState<ReportConversation[]>([]);
   const [selectedChats, setSelectedChats] = useState<string[]>([]);
+  const [showRealName, setShowRealName] = useState(false);
 
   const recorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -172,7 +178,7 @@ export function PrivateJournal() {
   }
 
   const draftReport = buildReportText({
-    fields: form,
+    fields: applyNameVisibility(form, showRealName),
     fieldDefs: fields,
     attachments: pendingFiles.map((f) => ({ name: f.name })),
     hasAudio: !!audioBlob,
@@ -184,7 +190,7 @@ export function PrivateJournal() {
   function entryReport(e: Entry) {
     const defs = e.audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS;
     return buildReportText({
-      fields: e.fields ?? {},
+      fields: applyNameVisibility(e.fields ?? {}, showRealName),
       fieldDefs: [...defs, CHAT_FIELD],
       createdAt: e.created_at,
       attachments: e.attachments ?? [],
@@ -299,15 +305,6 @@ export function PrivateJournal() {
     } finally {
       setSaving(false);
     }
-  }
-
-  async function openAttachment(path: string) {
-    const { data, error } = await supabase.storage.from("evidence").createSignedUrl(path, 300);
-    if (error || !data) {
-      setStatus("Could not open that file.");
-      return;
-    }
-    window.location.assign(data.signedUrl);
   }
 
   async function remove(id: string) {
@@ -564,6 +561,22 @@ export function PrivateJournal() {
                       >
                         ↗ Share
                       </button>
+                      <button
+                        type="button"
+                        onClick={() => setStatus(printReport(entryReport(e)) || "")}
+                        className="rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
+                      >
+                        🖨️ Print
+                      </button>
+                      {(e.fields?.realName ?? "").trim() && (
+                        <button
+                          type="button"
+                          onClick={() => setShowRealName((s) => !s)}
+                          className="rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
+                        >
+                          {showRealName ? "🙈 Hide real name" : "👁️ Show real name"}
+                        </button>
+                      )}
                       {emergency.smsSupported && (
                         <a
                           href={smsReportHref(smsNumber, entryReport(e))}
@@ -582,7 +595,7 @@ export function PrivateJournal() {
                     </div>
                     <dl className="space-y-2 text-sm">
                       {[...(e.audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS), CHAT_FIELD].map((f) => {
-                        const v = (e.fields?.[f.key] ?? "").trim();
+                        const v = (applyNameVisibility(e.fields ?? {}, showRealName)[f.key] ?? "").trim();
                         if (!v) return null;
                         return (
                           <div key={f.key}>
@@ -592,29 +605,7 @@ export function PrivateJournal() {
                         );
                       })}
                     </dl>
-                    {(e.attachments ?? []).length > 0 && (
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {(e.attachments ?? []).map((a) => (
-                          <button
-                            key={a.path}
-                            type="button"
-                            onClick={() => openAttachment(a.path)}
-                            className="rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
-                          >
-                            📎 {a.name}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                    {e.audio_path && (
-                      <button
-                        type="button"
-                        onClick={() => openAttachment(e.audio_path!)}
-                        className="mt-3 rounded-full border border-ink-300 px-3 py-1 text-xs text-ink-700 hover:bg-cream-100"
-                      >
-                        🎙️ Play voice note
-                      </button>
-                    )}
+                    <IncidentMedia attachments={e.attachments ?? []} audioPath={e.audio_path} />
                   </div>
                 )}
               </article>
