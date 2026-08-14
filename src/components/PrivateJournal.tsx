@@ -573,6 +573,24 @@ export function PrivateJournal() {
                       >
                         ↗ Share
                       </button>
+                      {(e.fields?.realName ?? "").trim() && !showRealName && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => doShare(entryReportWithName(e), e.created_at)}
+                            className="rounded-full border border-rose-300 bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700 hover:bg-rose-100"
+                          >
+                            ↗ Share with real name
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => downloadReport(entryReportWithName(e), e.created_at)}
+                            className="rounded-full border border-rose-300 bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700 hover:bg-rose-100"
+                          >
+                            📄 Download with real name
+                          </button>
+                        </>
+                      )}
                       <button
                         type="button"
                         onClick={() => setStatus(printReport(entryReport(e)) || "")}
