@@ -198,6 +198,18 @@ export function PrivateJournal() {
     });
   }
 
+  /** Same report but with the real name unmasked — for police, lawyers, advocates. */
+  function entryReportWithName(e: Entry) {
+    const defs = e.audience === "girls" ? GIRLS_FIELDS : WOMEN_FIELDS;
+    return buildReportText({
+      fields: e.fields ?? {},
+      fieldDefs: [...defs, CHAT_FIELD],
+      createdAt: e.created_at,
+      attachments: e.attachments ?? [],
+      hasAudio: !!e.audio_path,
+    });
+  }
+
   async function doShare(text: string, createdAt?: string) {
     const msg = await shareReport(text, createdAt);
     if (msg) setStatus(msg);
