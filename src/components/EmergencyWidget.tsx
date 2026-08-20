@@ -248,10 +248,19 @@ export function EmergencyWidget() {
               <p className="mt-1 text-[10px] text-rose-600">{locError}</p>
             )}
             {loc && (
-              <p className="mt-1 break-words text-[10px] text-ink-700">
-                {loc.address ? loc.address + " · " : ""}
-                {loc.lat.toFixed(5)}, {loc.lon.toFixed(5)} (±{Math.round(loc.accuracy)}m)
-              </p>
+              <div className="mt-1 space-y-0.5 break-words text-[10px] text-ink-700">
+                <p>
+                  {loc.lat.toFixed(6)}, {loc.lon.toFixed(6)} (±{Math.round(loc.accuracy)}m)
+                </p>
+                {loc.address && (
+                  <p className="text-ink-500">Approx address (unverified): {loc.address}</p>
+                )}
+                {loc.accuracy > ADDRESS_ACCURACY_LIMIT_M && (
+                  <p className="text-rose-600">
+                    Weak GPS fix — coordinates may be off. Tap refresh outdoors or near a window for a precise location.
+                  </p>
+                )}
+              </div>
             )}
             {!loc && !locError && (
               <p className="mt-1 text-[10px] text-ink-500">
