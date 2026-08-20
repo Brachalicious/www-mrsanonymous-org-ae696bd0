@@ -70,10 +70,26 @@ export function EmergencyWidget() {
     }
     setLocLoading(true);
     setLocError(null);
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        const { latitude, longitude, accuracy } = pos.coords;
-        const next: Loc = { lat: latitude, lon: longitude, accuracy };
+    setLoc(null);
+
+    // Sample repeatedly and keep the tightest fix — the first GPS reading is
+    // often a coarse wifi/cell estimate that can be miles off.
+    let best: GeolocationPosition | null = null;
+    let settled = false;
+
+    const finish = async () => {
+      if (settled) return;
+      settled = true;
+      navigator.geolocation.clearWatch(watchId);
+      clearTimeout(timer);
+      if (!best) {
+        setLocLoading(false);
+        setLocError("Could not get an accurate location. Move near a window and try again.");
+        return;
+      }
+      const { latitude, longitude, accuracy } = best.coords;
+      const next: Loc = { lat: latitude, lon: longitude, accuracy, at: Date.now() };
+      if (accuracy <= ADDRESS_ACCURACY_LIMIT_M) {
         try {
           const res = await fetch(
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18`,
@@ -84,15 +100,28 @@ export function EmergencyWidget() {
             if (data?.display_name) next.address = data.display_name;
           }
         } catch {}
-        setLoc(next);
-        setLocLoading(false);
+      }
+      setLoc(next);
+      setLocLoading(false);
+    };
+
+    const watchId = navigator.geolocation.watchPosition(
+      (pos) => {
+        if (!best || pos.coords.accuracy < best.coords.accuracy) best = pos;
+        if (pos.coords.accuracy <= GOOD_ACCURACY_M) void finish();
       },
       (err) => {
+        if (best) return; // keep whatever we already have
+        settled = true;
+        navigator.geolocation.clearWatch(watchId);
+        clearTimeout(timer);
         setLocError(err.message || "Could not get location.");
         setLocLoading(false);
       },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 },
     );
+
+    const timer = setTimeout(() => void finish(), 20000);
   }
 
   function buildSmsBody(englishMessage: string, original?: string) {
@@ -102,16 +131,20 @@ export function EmergencyWidget() {
       parts.push(`[Original (${langLabel}): ${original.trim()}]`);
     }
     if (loc) {
-      if (loc.address) parts.push(`Address: ${loc.address}`);
+      // GPS coordinates first: dispatch trusts these, not a guessed address.
       parts.push(
-        `Coordinates: ${loc.lat.toFixed(5)}, ${loc.lon.toFixed(5)} (±${Math.round(loc.accuracy)}m)`,
+        `GPS: ${loc.lat.toFixed(6)}, ${loc.lon.toFixed(6)} (accurate to ~${Math.round(loc.accuracy)}m)`,
       );
-      parts.push(
-        `Map: https://maps.google.com/?q=${loc.lat},${loc.lon}`,
-      );
+      parts.push(`Map: https://maps.google.com/?q=${loc.lat},${loc.lon}`);
+      if (loc.address) {
+        parts.push(`Approx address (unverified): ${loc.address}`);
+      }
+      const ageMin = Math.round((Date.now() - loc.at) / 60000);
+      if (ageMin >= 1) parts.push(`Location taken ${ageMin} min ago.`);
     }
     return parts.join("\n");
   }
+
 
   // Fallback (English) href so the link is valid even before translation runs.
   const smsNumber = emergency.sms ?? emergency.police;
