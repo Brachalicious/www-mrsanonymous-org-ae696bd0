@@ -15,7 +15,12 @@ type Loc = {
   lon: number;
   accuracy: number;
   address?: string;
+  at: number;
 };
+
+// Only trust a reverse-geocoded street address when the GPS fix is tight.
+const ADDRESS_ACCURACY_LIMIT_M = 75;
+const GOOD_ACCURACY_M = 25;
 
 export function EmergencyWidget() {
   const { t, lang: uiLang } = useLanguage();
