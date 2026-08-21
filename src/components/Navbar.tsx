@@ -356,13 +356,6 @@ export function Navbar() {
                 </Link>
               );
             })}
-            <button
-              data-testid="nav-quick-exit-mobile"
-              onClick={performQuickExit}
-              className="rounded-md bg-emergency px-3 py-2 text-center text-xs font-extrabold uppercase tracking-widest text-white"
-            >
-              ✕ {t("safety.quickExit").toUpperCase()}!
-            </button>
             {loggedIn ? (
               <button
                 data-testid="nav-logout-mobile"
