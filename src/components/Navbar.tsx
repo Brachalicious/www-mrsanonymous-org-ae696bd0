@@ -34,12 +34,6 @@ const BASE_TABS: NavItem[] = [
   { to: "https://childhelphotline.org/", label: "get help now! (girls)", testid: "nav-get-help-girls", kind: "dark", external: true },
 ];
 
-const MY_NOTEBOOKS_TAB: NavItem = {
-  to: "/tell-your-story",
-  label: "📓 My Notebooks",
-  testid: "nav-my-notebooks",
-  kind: "rose",
-};
 
 const INBOX_TAB: NavItem = {
   to: "/inbox",
@@ -52,7 +46,6 @@ const TAB_LABEL_KEYS: Record<string, string> = {
   "nav-women": "nav.women",
   "nav-girls": "nav.girls",
   "nav-tell-story": "nav.tellStory",
-  "nav-my-notebooks": "nav.notebooks",
   "nav-board": "nav.board",
   "nav-tools": "nav.tools",
   "nav-resources": "nav.resources",
@@ -66,7 +59,6 @@ function getTabs(loggedIn: boolean): NavItem[] {
     BASE_TABS[1],
     BASE_TABS[2],
     BASE_TABS[3],
-    MY_NOTEBOOKS_TAB,
     INBOX_TAB,
     BASE_TABS[4],
     BASE_TABS[5],
