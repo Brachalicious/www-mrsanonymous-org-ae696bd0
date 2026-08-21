@@ -334,9 +334,7 @@ export function Navbar() {
           <div className="flex flex-col gap-2 px-5 py-4">
             {tabs.map((tab) => {
               const labelKey = TAB_LABEL_KEYS[tab.testid];
-              const label = labelKey
-                ? (tab.testid === "nav-my-notebooks" ? "📓 " : "") + t(labelKey)
-                : tab.label;
+              const label = labelKey ? t(labelKey) : tab.label;
               if (tab.external) {
                 return (
                   <a
@@ -350,21 +348,6 @@ export function Navbar() {
                   >
                     {label}
                   </a>
-                );
-              }
-
-              if (tab.to === "/tell-your-story" && tab.kind === "rose") {
-                return (
-                  <Link
-                    key={tab.testid}
-                    to="/tell-your-story"
-                    search={{ tab: "mine" }}
-                    data-testid={`${tab.testid}-mobile`}
-                    onClick={() => setOpen(false)}
-                    className="rounded-md bg-rose-500 px-3 py-2 text-center text-xs font-bold uppercase tracking-widest text-white"
-                  >
-                    {label}
-                  </Link>
                 );
               }
 
