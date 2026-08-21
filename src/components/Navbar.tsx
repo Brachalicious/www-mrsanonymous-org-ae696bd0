@@ -34,12 +34,6 @@ const BASE_TABS: NavItem[] = [
   { to: "https://childhelphotline.org/", label: "get help now! (girls)", testid: "nav-get-help-girls", kind: "dark", external: true },
 ];
 
-const MY_NOTEBOOKS_TAB: NavItem = {
-  to: "/tell-your-story",
-  label: "📓 My Notebooks",
-  testid: "nav-my-notebooks",
-  kind: "rose",
-};
 
 const INBOX_TAB: NavItem = {
   to: "/inbox",
@@ -52,7 +46,6 @@ const TAB_LABEL_KEYS: Record<string, string> = {
   "nav-women": "nav.women",
   "nav-girls": "nav.girls",
   "nav-tell-story": "nav.tellStory",
-  "nav-my-notebooks": "nav.notebooks",
   "nav-board": "nav.board",
   "nav-tools": "nav.tools",
   "nav-resources": "nav.resources",
@@ -66,7 +59,6 @@ function getTabs(loggedIn: boolean): NavItem[] {
     BASE_TABS[1],
     BASE_TABS[2],
     BASE_TABS[3],
-    MY_NOTEBOOKS_TAB,
     INBOX_TAB,
     BASE_TABS[4],
     BASE_TABS[5],
@@ -222,14 +214,6 @@ export function Navbar() {
                   </span>
                 )}
               </Link>
-              <Link
-                to="/tell-your-story"
-                search={{ tab: "mine" }}
-                data-testid="nav-my-notebooks-top"
-                className="inline-flex items-center gap-1.5 rounded-full bg-rose-500 px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-white shadow hover:bg-rose-600"
-              >
-                📓 My Notebooks
-              </Link>
               <button
                 data-testid="nav-logout"
                 onClick={handleLogout}
@@ -299,9 +283,7 @@ export function Navbar() {
           {tabs.map((tab) => {
             const className = tabClassName(tab.kind);
             const labelKey = TAB_LABEL_KEYS[tab.testid];
-            const label = labelKey
-              ? (tab.testid === "nav-my-notebooks" ? "📓 " : "") + t(labelKey)
-              : tab.label;
+            const label = labelKey ? t(labelKey) : tab.label;
             if (tab.external) {
               return (
                 <li key={tab.testid}>
@@ -318,36 +300,19 @@ export function Navbar() {
               );
             }
 
-              if (tab.to === "/tell-your-story" && tab.kind === "rose") {
-                return (
-                  <li key={tab.testid}>
-                    <Link
-                      to="/tell-your-story"
-                      search={{ tab: "mine" }}
-                      data-testid={tab.testid}
-                      className={className}
-                      activeProps={{ className: `${className} text-rose-500 font-semibold` }}
-                      activeOptions={{ exact: false }}
-                    >
-                      {label}
-                    </Link>
-                  </li>
-                );
-              }
-
-              return (
-                <li key={tab.testid}>
-                  <Link
-                    to={tab.to as any}
-                    data-testid={tab.testid}
-                    className={className}
-                    activeProps={{ className: `${className} text-rose-500 font-semibold` }}
-                    activeOptions={{ exact: false }}
-                  >
-                    {label}
-                  </Link>
-                </li>
-              );
+            return (
+              <li key={tab.testid}>
+                <Link
+                  to={tab.to as any}
+                  data-testid={tab.testid}
+                  className={className}
+                  activeProps={{ className: `${className} text-rose-500 font-semibold` }}
+                  activeOptions={{ exact: false }}
+                >
+                  {label}
+                </Link>
+              </li>
+            );
           })}
           <li className="ml-auto">
             <button
@@ -369,9 +334,7 @@ export function Navbar() {
           <div className="flex flex-col gap-2 px-5 py-4">
             {tabs.map((tab) => {
               const labelKey = TAB_LABEL_KEYS[tab.testid];
-              const label = labelKey
-                ? (tab.testid === "nav-my-notebooks" ? "📓 " : "") + t(labelKey)
-                : tab.label;
+              const label = labelKey ? t(labelKey) : tab.label;
               if (tab.external) {
                 return (
                   <a
@@ -385,21 +348,6 @@ export function Navbar() {
                   >
                     {label}
                   </a>
-                );
-              }
-
-              if (tab.to === "/tell-your-story" && tab.kind === "rose") {
-                return (
-                  <Link
-                    key={tab.testid}
-                    to="/tell-your-story"
-                    search={{ tab: "mine" }}
-                    data-testid={`${tab.testid}-mobile`}
-                    onClick={() => setOpen(false)}
-                    className="rounded-md bg-rose-500 px-3 py-2 text-center text-xs font-bold uppercase tracking-widest text-white"
-                  >
-                    {label}
-                  </Link>
                 );
               }
 
