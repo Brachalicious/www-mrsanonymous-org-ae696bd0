@@ -571,15 +571,6 @@ const COUNTRIES: Country[] = [
     ],
   },
   {
-    code: "PL",
-    name: "Poland (extra)",
-    items: [
-      { name: "Niebieska Linia", phone: "800 12 00 02", tel: "800120002", note: "24/7 national helpline for victims of family violence." },
-      { name: "Centrum Praw Kobiet", href: "https://cpk.org.pl/", note: "Legal & psychological help for women." },
-      { name: "Emergency", phone: "112", tel: "112", note: "Immediate danger." },
-    ],
-  },
-  {
     code: "GR",
     name: "Greece",
     items: [
@@ -619,7 +610,7 @@ const COUNTRIES: Country[] = [
     code: "HR",
     name: "Croatia",
     items: [
-      { name: "Women's helpline (Autonomna ženska kuća)", phone: "0800 55 44", tel: "080055 44", note: "Support for women survivors of violence." },
+      { name: "Women's helpline (Autonomna ženska kuća)", phone: "0800 55 44", tel: "080055444", note: "Support for women survivors of violence." },
       { name: "Emergency", phone: "112", tel: "112", note: "Immediate danger." },
     ],
   },
