@@ -314,17 +314,6 @@ export function Navbar() {
               </li>
             );
           })}
-          <li className="ml-auto">
-            <button
-              data-testid="nav-quick-exit"
-              onClick={performQuickExit}
-              title="Switches this tab to Google. Press ESC anytime."
-              className="inline-flex items-center gap-1.5 rounded-md bg-emergency px-4 py-2 text-[11px] font-extrabold uppercase tracking-widest text-white shadow-md ring-2 ring-emergency/30 hover:bg-emergency-dark"
-            >
-              <span aria-hidden>✕</span>
-              {t("safety.quickExit").toUpperCase()}!
-            </button>
-          </li>
         </ul>
       </nav>
 
@@ -367,13 +356,6 @@ export function Navbar() {
                 </Link>
               );
             })}
-            <button
-              data-testid="nav-quick-exit-mobile"
-              onClick={performQuickExit}
-              className="rounded-md bg-emergency px-3 py-2 text-center text-xs font-extrabold uppercase tracking-widest text-white"
-            >
-              ✕ {t("safety.quickExit").toUpperCase()}!
-            </button>
             {loggedIn ? (
               <button
                 data-testid="nav-logout-mobile"
