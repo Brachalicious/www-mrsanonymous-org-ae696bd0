@@ -1000,7 +1000,7 @@ function LocationFinder() {
         >
           <option value="">Choose your country…</option>
           <option value="US">United States</option>
-          {COUNTRIES.map((c) => (
+          {[...COUNTRIES].sort((a, b) => a.name.localeCompare(b.name)).map((c) => (
             <option key={c.code} value={c.code}>
               {c.name}
             </option>
