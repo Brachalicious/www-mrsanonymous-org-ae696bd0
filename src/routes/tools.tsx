@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { performQuickExit } from "@/components/QuickExit";
-import { AlertTriangle, EyeOff, FileText, Hand, HeartPulse, MousePointer2, MoveDown } from "lucide-react";
+import { AlertTriangle, BookOpen, EyeOff, FileText, Hand, HeartPulse, MousePointer2, MoveDown } from "lucide-react";
 
 export const Route = createFileRoute("/tools")({
 
@@ -113,6 +113,27 @@ function ToolsPage() {
             </Link>
             <p className="text-xs text-ink-500">
               Nothing here is shared to the public board. Use it to build a record if you ever choose to report.
+            </p>
+          </div>
+        </ToolCard>
+
+        <ToolCard
+          icon={<BookOpen className="h-6 w-6 text-rose-600" />}
+          title="My Notebooks"
+          color="bg-rose-100"
+          summary="Your private stories, saved drafts, and incident reports — all in one place."
+        >
+          <div className="flex flex-col gap-2">
+            <Link
+              to="/tell-your-story"
+              search={{ tab: "mine" }}
+              data-testid="tools-my-notebooks"
+              className="btn-rose w-full"
+            >
+              Open My Notebooks
+            </Link>
+            <p className="text-xs text-ink-500">
+              Only you can see these. Share to the public board only when you choose to.
             </p>
           </div>
         </ToolCard>
