@@ -509,7 +509,343 @@ const COUNTRIES: Country[] = [
       { name: "Emergency", phone: "112", tel: "112", note: "Immediate danger." },
     ],
   },
+  {
+    code: "CO",
+    name: "Colombia",
+    items: [
+      { name: "Línea 155 (violencia contra la mujer)", phone: "155", tel: "155", note: "Orientación gratuita 24/7 para mujeres víctimas de violencia." },
+      { name: "Línea 122 (Fiscalía)", phone: "122", tel: "122", note: "Denuncias penales." },
+      { name: "ICBF (niñez)", phone: "141", tel: "141", note: "Protección de niños, niñas y adolescentes." },
+      { name: "Emergencias", phone: "123", tel: "123", note: "Peligro inmediato." },
+    ],
+  },
+  {
+    code: "PE",
+    name: "Peru",
+    items: [
+      { name: "Línea 100 (MIMP)", phone: "100", tel: "100", note: "Atención gratuita 24/7 en violencia familiar y sexual." },
+      { name: "Centro Emergencia Mujer", href: "https://www.gob.pe/mimp", note: "Servicios gratuitos: legal, psicológico y social." },
+      { name: "Emergencias / Policía", phone: "105", tel: "105", note: "Peligro inmediato." },
+    ],
+  },
+  {
+    code: "EC",
+    name: "Ecuador",
+    items: [
+      { name: "Emergencias ECU 911", phone: "911", tel: "911", note: "Peligro inmediato, atención 24/7." },
+      { name: "Ministerio de la Mujer y Derechos Humanos", href: "https://www.derechoshumanos.gob.ec/", note: "Servicios de protección y rutas de denuncia." },
+    ],
+  },
+  {
+    code: "UY",
+    name: "Uruguay",
+    items: [
+      { name: "Línea Mujer (InMujeres)", phone: "0800 7272", tel: "08007272", note: "Servicio nacional gratuito de orientación en violencia de género." },
+      { name: "Emergencias / Policía", phone: "911", tel: "911", note: "Peligro inmediato." },
+    ],
+  },
+  {
+    code: "CR",
+    name: "Costa Rica",
+    items: [
+      { name: "INAMU – Línea 800-300-3000", phone: "800 300 3000", tel: "8003003000", note: "Orientación en violencia contra las mujeres." },
+      { name: "Emergencias", phone: "911", tel: "911", note: "Peligro inmediato." },
+    ],
+  },
+  {
+    code: "RU",
+    name: "Russia",
+    items: [
+      { name: "ANNA Centre helpline", phone: "8 800 7000 600", tel: "88007000600", note: "All-Russian hotline for women survivors of violence." },
+      { name: "Nasiliu.net", href: "https://nasiliu.net/", note: "Legal & psychological support centre." },
+      { name: "Emergency", phone: "112", tel: "112", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "UA",
+    name: "Ukraine",
+    items: [
+      { name: "National hotline on domestic violence (La Strada)", phone: "0 800 500 335 / 116 123", tel: "0800500335", note: "Free, confidential support for survivors." },
+      { name: "Government hotline 1547", phone: "1547", tel: "1547", note: "State hotline on domestic and gender-based violence." },
+      { name: "Emergency", phone: "112", tel: "112", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "PL",
+    name: "Poland (extra)",
+    items: [
+      { name: "Niebieska Linia", phone: "800 12 00 02", tel: "800120002", note: "24/7 national helpline for victims of family violence." },
+      { name: "Centrum Praw Kobiet", href: "https://cpk.org.pl/", note: "Legal & psychological help for women." },
+      { name: "Emergency", phone: "112", tel: "112", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "GR",
+    name: "Greece",
+    items: [
+      { name: "SOS 15900", phone: "15900", tel: "15900", note: "24/7 national helpline for women survivors of violence." },
+      { name: "General Secretariat for Demography & Family Policy and Gender Equality", href: "https://isotita.gr/", note: "Counselling centres & shelters." },
+      { name: "Emergency", phone: "112", tel: "112", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "RO",
+    name: "Romania",
+    items: [
+      { name: "Helpline 0800 500 333", phone: "0800 500 333", tel: "0800500333", note: "Free 24/7 line for victims of domestic violence, trafficking & discrimination." },
+      { name: "ANES", href: "https://anes.gov.ro/", note: "National agency for equal opportunities — shelters & services." },
+      { name: "Emergency", phone: "112", tel: "112", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "CZ",
+    name: "Czechia",
+    items: [
+      { name: "Bílý kruh bezpečí (victim support)", phone: "116 006", tel: "116006", note: "Free 24/7 helpline for victims of crime and domestic violence." },
+      { name: "ROSA centrum", href: "https://www.rosacentrum.cz/", note: "Support for women survivors of domestic violence." },
+      { name: "Emergency", phone: "112", tel: "112", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "HU",
+    name: "Hungary",
+    items: [
+      { name: "OKIT crisis line", phone: "06 80 20 55 20", tel: "0680205520", note: "Free 24/7 national crisis line for victims of abuse." },
+      { name: "NANE Association", href: "https://nane.hu/", note: "Women's rights association helpline & information." },
+      { name: "Emergency", phone: "112", tel: "112", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "HR",
+    name: "Croatia",
+    items: [
+      { name: "Women's helpline (Autonomna ženska kuća)", phone: "0800 55 44", tel: "080055 44", note: "Support for women survivors of violence." },
+      { name: "Emergency", phone: "112", tel: "112", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "RS",
+    name: "Serbia",
+    items: [
+      { name: "SOS helpline for women", phone: "0800 100 007", tel: "0800100007", note: "Free national SOS line for women survivors of violence." },
+      { name: "Autonomous Women's Center", href: "https://www.womenngo.org.rs/en/", note: "Legal & psychological support." },
+      { name: "Emergency", phone: "112", tel: "112", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "BG",
+    name: "Bulgaria",
+    items: [
+      { name: "National helpline for victims of violence", phone: "0800 18 676", tel: "080018676", note: "Free 24/7 helpline (Animus Association)." },
+      { name: "Emergency", phone: "112", tel: "112", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "CN",
+    name: "China",
+    items: [
+      { name: "All-China Women's Federation hotline", phone: "12338", tel: "12338", note: "Women's rights & protection hotline." },
+      { name: "Public security / police", phone: "110", tel: "110", note: "Immediate danger. Ask for a written warning (告诫书)." },
+      { name: "Medical emergency", phone: "120", tel: "120", note: "Ambulance." },
+    ],
+  },
+  {
+    code: "TW",
+    name: "Taiwan",
+    items: [
+      { name: "Protection hotline 113", phone: "113", tel: "113", note: "24/7 line for domestic violence, sexual assault & child protection." },
+      { name: "Emergency", phone: "110", tel: "110", note: "Police, immediate danger." },
+    ],
+  },
+  {
+    code: "HK",
+    name: "Hong Kong",
+    items: [
+      { name: "Social Welfare Department hotline", phone: "2343 2255", tel: "23432255", note: "24-hour hotline including family violence support." },
+      { name: "Harmony House", href: "https://www.harmonyhousehk.org/", note: "Shelter & counselling for women and children." },
+      { name: "Emergency", phone: "999", tel: "999", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "TH",
+    name: "Thailand",
+    items: [
+      { name: "Social Assistance Center 1300", phone: "1300", tel: "1300", note: "24/7 Ministry of Social Development helpline (abuse, shelter, referral)." },
+      { name: "Emergency / police", phone: "191", tel: "191", note: "Immediate danger." },
+      { name: "Tourist Police", phone: "1155", tel: "1155", note: "English-speaking assistance." },
+    ],
+  },
+  {
+    code: "MY",
+    name: "Malaysia",
+    items: [
+      { name: "Talian Kasih", phone: "15999", tel: "15999", note: "24/7 government helpline for abuse & family crisis (WhatsApp 019-261 5999)." },
+      { name: "Women's Aid Organisation (WAO)", phone: "03-3000 8858", tel: "0330008858", note: "Hotline & TINA SMS/WhatsApp 018-988 8058." },
+      { name: "Emergency", phone: "999", tel: "999", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "ID",
+    name: "Indonesia",
+    items: [
+      { name: "SAPA 129 (KemenPPPA)", phone: "129", tel: "129", note: "National hotline for women & children survivors (WhatsApp 08111-129-129)." },
+      { name: "Komnas Perempuan", href: "https://komnasperempuan.go.id/", note: "National Commission on Violence Against Women." },
+      { name: "Emergency", phone: "112", tel: "112", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "VN",
+    name: "Vietnam",
+    items: [
+      { name: "Peace House / CSAGA support", href: "https://csaga.org.vn/", note: "Counselling & shelter for women and girls survivors." },
+      { name: "Child protection hotline", phone: "111", tel: "111", note: "24/7 national child protection line." },
+      { name: "Emergency / police", phone: "113", tel: "113", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "PK",
+    name: "Pakistan",
+    items: [
+      { name: "Ministry of Human Rights helpline", phone: "1099", tel: "1099", note: "Free legal advice & referral, including gender-based violence." },
+      { name: "Madadgaar National Helpline", phone: "1098", tel: "1098", note: "Support for women and children in crisis." },
+      { name: "Emergency / police", phone: "15", tel: "15", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "BD",
+    name: "Bangladesh",
+    items: [
+      { name: "National helpline 109", phone: "109", tel: "109", note: "Government helpline for violence against women & child marriage." },
+      { name: "Multi-Sectoral Programme 10921", phone: "10921", tel: "10921", note: "Support centre: doctors, counsellors, lawyers, police referral." },
+      { name: "Emergency", phone: "999", tel: "999", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "LK",
+    name: "Sri Lanka",
+    items: [
+      { name: "Women's helpline 1938", phone: "1938", tel: "1938", note: "National helpline for women in distress." },
+      { name: "Child protection 1929", phone: "1929", tel: "1929", note: "National Child Protection Authority." },
+      { name: "Emergency / police", phone: "119", tel: "119", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "NP",
+    name: "Nepal",
+    items: [
+      { name: "Women & children helpline 1145", phone: "1145", tel: "1145", note: "Government helpline for gender-based violence." },
+      { name: "Emergency / police", phone: "100", tel: "100", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "EG",
+    name: "Egypt",
+    items: [
+      { name: "National Council for Women complaints office", phone: "15115", tel: "15115", note: "Support & complaints line for women." },
+      { name: "Emergency / police", phone: "122", tel: "122", note: "Immediate danger." },
+      { name: "Ambulance", phone: "123", tel: "123", note: "Medical emergency." },
+    ],
+  },
+  {
+    code: "MA",
+    name: "Morocco",
+    items: [
+      { name: "Green line for women survivors", phone: "8350", tel: "8350", note: "National line for women victims of violence." },
+      { name: "Emergency / police", phone: "19", tel: "19", note: "Immediate danger (190 from mobile)." },
+    ],
+  },
+  {
+    code: "GH",
+    name: "Ghana",
+    items: [
+      { name: "DOVVSU (Domestic Violence & Victim Support Unit)", phone: "0800 111 222", tel: "0800111222", note: "Ghana Police Service unit for domestic violence cases." },
+      { name: "Domestic Violence Secretariat", href: "https://mogcsp.gov.gh/", note: "Ministry of Gender, Children & Social Protection services." },
+      { name: "Emergency / police", phone: "191", tel: "191", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "TZ",
+    name: "Tanzania",
+    items: [
+      { name: "Child & GBV helpline 116", phone: "116", tel: "116", note: "Free national helpline for violence against women & children." },
+      { name: "Emergency / police", phone: "112", tel: "112", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "UG",
+    name: "Uganda",
+    items: [
+      { name: "Sauti 116 helpline", phone: "116", tel: "116", note: "Free national GBV & child protection helpline." },
+      { name: "Police GBV desk", phone: "999 / 112", tel: "112", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "ET",
+    name: "Ethiopia",
+    items: [
+      { name: "Ethiopian Women Lawyers Association", href: "https://ewla-et.org/", note: "Free legal aid for women survivors." },
+      { name: "Emergency / police", phone: "991", tel: "991", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "SA",
+    name: "Saudi Arabia",
+    items: [
+      { name: "National Family Safety Program 1919", phone: "1919", tel: "1919", note: "Reports of domestic violence & abuse." },
+      { name: "Emergency / police", phone: "999", tel: "999", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "QA",
+    name: "Qatar",
+    items: [
+      { name: "Aman Center (Protection & Social Rehabilitation)", phone: "919", tel: "919", note: "Support for women & children survivors of violence." },
+      { name: "Emergency", phone: "999", tel: "999", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "KW",
+    name: "Kuwait",
+    items: [
+      { name: "Ministry of Social Affairs family support", href: "https://www.msal.gov.kw/", note: "Shelter and family protection services." },
+      { name: "Emergency", phone: "112", tel: "112", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "JO",
+    name: "Jordan",
+    items: [
+      { name: "Family Protection Department", phone: "911", tel: "911", note: "Ask for the Family Protection Department (FPD)." },
+      { name: "Jordanian Women's Union hotline", phone: "+962 6 5675729", tel: "+96265675729", note: "Counselling, legal aid & shelter." },
+    ],
+  },
+  {
+    code: "LB",
+    name: "Lebanon",
+    items: [
+      { name: "KAFA helpline", phone: "03 018 019", tel: "03018019", note: "24/7 support for women survivors of violence." },
+      { name: "ABAAD", href: "https://www.abaadmena.org/", note: "Midway shelters & support for women and girls." },
+      { name: "Emergency / police", phone: "112", tel: "112", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "KZ",
+    name: "Kazakhstan",
+    items: [
+      { name: "National helpline 111", phone: "111", tel: "111", note: "Support line for children & families in crisis." },
+      { name: "Emergency", phone: "112", tel: "112", note: "Immediate danger." },
+    ],
+  },
+  {
+    code: "GE",
+    name: "Georgia",
+    items: [
+      { name: "State hotline 116 006", phone: "116 006", tel: "116006", note: "Free 24/7 hotline for victims of domestic violence." },
+      { name: "Emergency", phone: "112", tel: "112", note: "Immediate danger." },
+    ],
+  },
 ];
+
 
 const SECTIONS: { id: string; title: string; items: ResourceItem[] }[] = [
   {
