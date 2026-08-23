@@ -206,7 +206,7 @@ export function EmergencyWidget() {
             >
               <Phone className="h-3.5 w-3.5" /> {t("safety.callEmergency")} {emergency.policeLabel}
             </a>
-            {emergency.medical && (
+            {emergency.medical && emergency.medical !== emergency.police && (
               <a
                 href={`tel:${emergency.medical}`}
                 data-testid="emergency-call-medical"
@@ -215,7 +215,7 @@ export function EmergencyWidget() {
                 <Phone className="h-3.5 w-3.5" /> {t("safety.callEmergency")} {emergency.medicalLabel ?? emergency.medical}
               </a>
             )}
-            {emergency.fire && (
+            {emergency.fire && emergency.fire !== emergency.police && emergency.fire !== emergency.medical && (
               <a
                 href={`tel:${emergency.fire}`}
                 data-testid="emergency-call-fire"
@@ -224,6 +224,7 @@ export function EmergencyWidget() {
                 <Phone className="h-3.5 w-3.5" /> {t("safety.callEmergency")} {emergency.fireLabel ?? emergency.fire}
               </a>
             )}
+
             {emergency.smsSupported && (
               <a
                 href={fallbackHref}
