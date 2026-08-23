@@ -102,6 +102,7 @@ function InboxPage() {
         ))}
       </div>
     </div>
+    </CodeWordGate>
   );
 }
 
