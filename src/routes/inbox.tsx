@@ -76,8 +76,12 @@ function InboxPage() {
           <div key={m.id} className="note-card p-6">
             <div className="flex items-center justify-between text-xs uppercase tracking-widest text-ink-500">
               <span>{new Date(m.created_at).toLocaleString()}</span>
-              <span className={m.status === "replied" ? "text-green-700" : "text-rose-500"}>
-                {m.status === "replied" ? "Replied" : "Awaiting reply"}
+              <span
+                className={
+                  m.status === "replied" || m.status === "read" ? "text-green-700" : "text-rose-500"
+                }
+              >
+                {m.status === "replied" || m.status === "read" ? "Replied" : "Awaiting reply"}
               </span>
             </div>
             <p className="mt-3 whitespace-pre-wrap text-ink-900">{m.message}</p>
