@@ -24,11 +24,24 @@ function InboxPage() {
   const { user, loading } = useAuth();
 
   const fetchFn = useServerFn(listMyMessages);
+  const markRead = useServerFn(markInboxRead);
+  const queryClient = useQueryClient();
   const q = useQuery({
     queryKey: ["my-messages", user?.id],
     queryFn: () => fetchFn(),
     enabled: !!user,
   });
+
+  // Clear the mail badge as soon as the inbox is open.
+  useEffect(() => {
+    if (!user) return;
+    markRead()
+      .then(() => {
+        queryClient.setQueryData(["unread-count", user.id], 0);
+        queryClient.invalidateQueries({ queryKey: ["unread-count"] });
+      })
+      .catch(() => {});
+  }, [user?.id]);
 
   if (loading) return <div className="mx-auto max-w-3xl px-5 py-16 text-ink-500">Loading…</div>;
   if (!user) {
