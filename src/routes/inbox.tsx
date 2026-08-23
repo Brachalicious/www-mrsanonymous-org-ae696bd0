@@ -59,6 +59,7 @@ function InboxPage() {
 
   const messages = (q.data as any[]) ?? [];
   return (
+    <CodeWordGate>
     <div className="mx-auto max-w-3xl px-5 py-12">
       <h1 className="font-serif text-4xl text-ink-900">Your Inbox</h1>
       <p className="mt-2 text-ink-700">Messages you sent us and any replies from support.</p>
