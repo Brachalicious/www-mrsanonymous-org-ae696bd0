@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { sendContactMessage } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
+import { PrivateLetter } from "@/components/PrivateLetter";
 import signalForHelp from "@/assets/signal-for-help.png.asset.json";
 import appHandSignal from "@/assets/mrsanonymous-app-hand-signal.png.asset.json";
 
@@ -68,29 +69,9 @@ function Index() {
             </div>
           </div>
 
-          {/* Envelope card */}
+          {/* Private Letter card */}
           <div className="lg:col-span-5">
-            <div className="envelope-shadow relative mx-auto max-w-md rotate-1 rounded-3xl border-2 border-ink-900 bg-white p-8 sm:p-10">
-              <div className="absolute -top-4 left-8 rounded-full bg-rose-500 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white">
-                Private Letter
-              </div>
-              <div className="font-hand text-2xl text-rose-500">to whoever needs this —</div>
-              <p className="mt-4 font-serif text-2xl leading-snug text-ink-900">
-                "Whether you are here to tell your story, read others, or simply feel less alone — this space is for you."
-              </p>
-              <p className="mt-6 text-sm leading-relaxed text-ink-500">
-                You choose what to share, how to share, and when to share.
-              </p>
-              <div className="mt-8 flex items-center justify-between text-xs text-ink-300">
-                <span>— Mrs. Anonymous</span>
-                <span className="font-hand text-lg text-rose-400">xx</span>
-              </div>
-            </div>
-            <div className="mt-6 text-center text-sm text-ink-500">
-              <Link to="/about" data-testid="home-cta-about" className="link-soft underline-offset-4 hover:underline">
-                Read about who we are →
-              </Link>
-            </div>
+            <PrivateLetter />
           </div>
         </div>
       </section>
