@@ -4,6 +4,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { listMyMessages, replyAsUser } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
+import { CodeWordGate } from "@/components/CodeWordGate";
+
 
 export const Route = createFileRoute("/inbox")({
   head: () => ({
