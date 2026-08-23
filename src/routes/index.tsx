@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
+import { HeartPulse } from "lucide-react";
 import { sendContactMessage } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
 import signalForHelp from "@/assets/signal-for-help.png.asset.json";
@@ -112,6 +113,22 @@ function Index() {
               📱
             </span>
           </div>
+
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent("mrsanon:open-emergency"))}
+            data-testid="home-emergency-heart"
+            aria-label="Open emergency help options"
+            className="group flex flex-col items-center gap-2"
+          >
+            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-rose-500 text-white shadow-lg transition group-hover:scale-110 group-hover:bg-rose-600">
+              <HeartPulse className="h-8 w-8" />
+            </span>
+            <span className="text-xs font-bold uppercase tracking-widest text-rose-600">
+              Click for immediate help
+            </span>
+          </button>
+
           <div>
             <h2 className="font-serif text-3xl text-ink-900 sm:text-4xl">Download the App Here</h2>
             <p className="mx-auto mt-3 max-w-xl text-lg text-ink-700">

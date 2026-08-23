@@ -36,6 +36,12 @@ export function EmergencyWidget() {
   const [preparing, setPreparing] = useState(false);
 
   useEffect(() => {
+    const onOpen = () => setOpen(true);
+    window.addEventListener("mrsanon:open-emergency", onOpen);
+    return () => window.removeEventListener("mrsanon:open-emergency", onOpen);
+  }, []);
+
+  useEffect(() => {
     try {
       const stored = localStorage.getItem(MSG_KEY);
       if (stored) setMessage(stored);
