@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 const HASH_KEY = "mrsanon:inbox-codeword";
-const UNLOCK_KEY = "mrsanon:inbox-unlocked";
 
 async function hash(value: string) {
   const data = new TextEncoder().encode(value.trim().toLowerCase());
@@ -22,7 +21,6 @@ export function CodeWordGate({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setStored(localStorage.getItem(HASH_KEY));
-    setUnlocked(sessionStorage.getItem(UNLOCK_KEY) === "1");
     setReady(true);
   }, []);
 
@@ -46,7 +44,6 @@ export function CodeWordGate({ children }: { children: React.ReactNode }) {
       }
       const h = await hash(word);
       localStorage.setItem(HASH_KEY, h);
-      sessionStorage.setItem(UNLOCK_KEY, "1");
       setStored(h);
       setUnlocked(true);
       return;
@@ -57,9 +54,9 @@ export function CodeWordGate({ children }: { children: React.ReactNode }) {
       setValue("");
       return;
     }
-    sessionStorage.setItem(UNLOCK_KEY, "1");
     setUnlocked(true);
   }
+
 
   return (
     <div className="mx-auto max-w-md px-5 py-16">
