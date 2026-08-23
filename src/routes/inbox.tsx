@@ -4,6 +4,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { listMyMessages, replyAsUser } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
+import { CodeWordGate } from "@/components/CodeWordGate";
+
 
 export const Route = createFileRoute("/inbox")({
   head: () => ({
@@ -16,11 +18,23 @@ export const Route = createFileRoute("/inbox")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: InboxPage,
+  component: InboxRoute,
 });
+
+function InboxRoute() {
+  const { user, loading } = useAuth();
+  if (loading) return <div className="mx-auto max-w-3xl px-5 py-16 text-ink-500">Loading…</div>;
+  if (!user) return <InboxPage />;
+  return (
+    <CodeWordGate>
+      <InboxPage />
+    </CodeWordGate>
+  );
+}
 
 function InboxPage() {
   const { user, loading } = useAuth();
+
   const fetchFn = useServerFn(listMyMessages);
   const q = useQuery({
     queryKey: ["my-messages", user?.id],
