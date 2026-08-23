@@ -18,6 +18,7 @@ export function CodeWordGate({ children }: { children: React.ReactNode }) {
   const [value, setValue] = useState("");
   const [confirmValue, setConfirmValue] = useState("");
   const [error, setError] = useState("");
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     setStored(localStorage.getItem(HASH_KEY));
@@ -72,19 +73,29 @@ export function CodeWordGate({ children }: { children: React.ReactNode }) {
             : "Your inbox is protected. Enter the code word you chose."}
         </p>
         <form className="mt-5 space-y-3" onSubmit={onSubmit}>
-          <input
-            type="password"
-            autoFocus
-            autoComplete="off"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder="Code word"
-            className="input-soft"
-            data-testid="inbox-codeword"
-          />
+          <div className="relative">
+            <input
+              type={show ? "text" : "password"}
+              autoFocus
+              autoComplete="off"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder="Code word"
+              className="input-soft w-full pr-14"
+              data-testid="inbox-codeword"
+            />
+            <button
+              type="button"
+              onClick={() => setShow((v) => !v)}
+              aria-label={show ? "Hide code word" : "Show code word"}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-ink-500 hover:text-ink-900"
+            >
+              {show ? "Hide" : "Show"}
+            </button>
+          </div>
           {isSetup && (
             <input
-              type="password"
+              type={show ? "text" : "password"}
               autoComplete="off"
               value={confirmValue}
               onChange={(e) => setConfirmValue(e.target.value)}
