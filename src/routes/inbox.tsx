@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { listMyMessages, replyAsUser } from "@/lib/contact.functions";
+import { listMyMessages, replyAsUser, markInboxRead } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
+import { CodeWordGate } from "@/components/CodeWordGate";
 
 export const Route = createFileRoute("/inbox")({
   head: () => ({
