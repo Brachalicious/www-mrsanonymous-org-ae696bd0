@@ -114,6 +114,10 @@ export function EmergencyWidget() {
     const watchId = navigator.geolocation.watchPosition(
       (pos) => {
         if (!best || pos.coords.accuracy < best.coords.accuracy) best = pos;
+        // Show coordinates instantly — refine in the background.
+        const { latitude, longitude, accuracy } = (best as GeolocationPosition).coords;
+        setLoc((prev) => ({ ...(prev ?? {}), lat: latitude, lon: longitude, accuracy, at: Date.now() }));
+        setLocLoading(false);
         if (pos.coords.accuracy <= GOOD_ACCURACY_M) void finish();
       },
       (err) => {
@@ -124,10 +128,11 @@ export function EmergencyWidget() {
         setLocError(err.message || "Could not get location.");
         setLocLoading(false);
       },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 },
+      { enableHighAccuracy: true, timeout: 7000, maximumAge: 15000 },
     );
 
-    const timer = setTimeout(() => void finish(), 20000);
+    const timer = setTimeout(() => void finish(), 6000);
+
   }
 
   function buildSmsBody(englishMessage: string, original?: string) {
