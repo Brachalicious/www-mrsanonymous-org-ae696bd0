@@ -55,6 +55,20 @@ export const getUnreadMessageCount = createServerFn({ method: "GET" })
     return count ?? 0;
   });
 
+export const markInboxRead = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { userId } = context;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("contact_messages")
+      .update({ status: "read" })
+      .eq("sender_user_id", userId)
+      .eq("status", "replied");
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
 export const listMyMessages = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {

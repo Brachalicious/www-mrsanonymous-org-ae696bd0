@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { listMyMessages, replyAsUser } from "@/lib/contact.functions";
+import { listMyMessages, replyAsUser, markInboxRead } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
+import { CodeWordGate } from "@/components/CodeWordGate";
 
 export const Route = createFileRoute("/inbox")({
   head: () => ({
@@ -23,11 +24,24 @@ function InboxPage() {
   const { user, loading } = useAuth();
 
   const fetchFn = useServerFn(listMyMessages);
+  const markRead = useServerFn(markInboxRead);
+  const queryClient = useQueryClient();
   const q = useQuery({
     queryKey: ["my-messages", user?.id],
     queryFn: () => fetchFn(),
     enabled: !!user,
   });
+
+  // Clear the mail badge as soon as the inbox is open.
+  useEffect(() => {
+    if (!user) return;
+    markRead()
+      .then(() => {
+        queryClient.setQueryData(["unread-count", user.id], 0);
+        queryClient.invalidateQueries({ queryKey: ["unread-count"] });
+      })
+      .catch(() => {});
+  }, [user?.id]);
 
   if (loading) return <div className="mx-auto max-w-3xl px-5 py-16 text-ink-500">Loading…</div>;
   if (!user) {
@@ -45,6 +59,7 @@ function InboxPage() {
 
   const messages = (q.data as any[]) ?? [];
   return (
+    <CodeWordGate>
     <div className="mx-auto max-w-3xl px-5 py-12">
       <h1 className="font-serif text-4xl text-ink-900">Your Inbox</h1>
       <p className="mt-2 text-ink-700">Messages you sent us and any replies from support.</p>
@@ -61,8 +76,12 @@ function InboxPage() {
           <div key={m.id} className="note-card p-6">
             <div className="flex items-center justify-between text-xs uppercase tracking-widest text-ink-500">
               <span>{new Date(m.created_at).toLocaleString()}</span>
-              <span className={m.status === "replied" ? "text-green-700" : "text-rose-500"}>
-                {m.status === "replied" ? "Replied" : "Awaiting reply"}
+              <span
+                className={
+                  m.status === "replied" || m.status === "read" ? "text-green-700" : "text-rose-500"
+                }
+              >
+                {m.status === "replied" || m.status === "read" ? "Replied" : "Awaiting reply"}
               </span>
             </div>
             <p className="mt-3 whitespace-pre-wrap text-ink-900">{m.message}</p>
@@ -87,6 +106,7 @@ function InboxPage() {
         ))}
       </div>
     </div>
+    </CodeWordGate>
   );
 }
 
