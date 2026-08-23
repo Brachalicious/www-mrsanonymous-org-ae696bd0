@@ -59,7 +59,6 @@ function getTabs(loggedIn: boolean): NavItem[] {
     BASE_TABS[1],
     BASE_TABS[2],
     BASE_TABS[3],
-    INBOX_TAB,
     BASE_TABS[4],
     BASE_TABS[5],
     BASE_TABS[6],
