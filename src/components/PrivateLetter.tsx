@@ -5,13 +5,13 @@ export function PrivateLetter() {
     <div className="mx-auto w-full max-w-[330px]">
       {/* Pinned note */}
       <div className="relative rounded-xl border-2 border-ink-900 bg-white p-6 shadow-[4px_4px_0px_rgba(0,0,0,0.18)]">
-        {/* Real red push pin, larger and angled */}
-        <div className="absolute -top-10 left-1/2 z-10 -translate-x-1/2">
+        {/* Real red push pin piercing through the top of the note */}
+        <div className="absolute -top-11 left-1/2 z-10 -translate-x-1/2">
           <img
             src={pushpinAsset.url}
             alt=""
             aria-hidden="true"
-            className="pointer-events-none h-24 w-auto rotate-45 drop-shadow-md"
+            className="pointer-events-none h-20 w-auto -rotate-45 drop-shadow-lg"
           />
         </div>
 
