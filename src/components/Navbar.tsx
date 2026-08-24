@@ -44,8 +44,6 @@ const TAB_LABEL_KEYS: Record<string, string> = {
   "nav-about": "nav.about",
   "nav-women": "nav.women",
   "nav-girls": "nav.girls",
-  "nav-tell-story": "nav.tellStory",
-  "nav-board": "nav.board",
   "nav-tools": "nav.tools",
   "nav-resources": "nav.resources",
   "nav-get-help-women": "nav.getHelpWomen",
