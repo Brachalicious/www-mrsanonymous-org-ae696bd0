@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 
-const HASH_KEY = "mrsanon:inbox-codeword";
+import { useAuth } from "@/contexts/AuthContext";
+
+const keyFor = (userId?: string | null) =>
+  userId ? `mrsanon:inbox-codeword:${userId}` : "mrsanon:inbox-codeword:anon";
 
 async function hash(value: string) {
   const data = new TextEncoder().encode(value.trim().toLowerCase());
