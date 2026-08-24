@@ -3,6 +3,7 @@ import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { listAllMessages, replyToMessage } from "@/lib/contact.functions";
+import { listInboxLocks, setInboxLockStatus } from "@/lib/inbox-lock.functions";
 import { useAuth } from "@/contexts/AuthContext";
 
 export const Route = createFileRoute("/admin/messages")({
@@ -60,6 +61,8 @@ function AdminMessages() {
           📬 My Inbox
         </Link>
       </div>
+      <LockPanel enabled={isClient && !!user && !!session && isAdmin} />
+
       <p className="mt-2 text-ink-700">Reply to visitor messages. Replies appear in the visitor's Inbox — no email is sent or required.</p>
 
       {q.isLoading && <p className="mt-6 text-ink-500">Loading…</p>}
@@ -84,6 +87,40 @@ function AdminMessages() {
           />
         ))}
       </div>
+    </div>
+  );
+}
+
+function LockPanel({ enabled }: { enabled: boolean }) {
+  const load = useServerFn(listInboxLocks);
+  const setStatus = useServerFn(setInboxLockStatus);
+  const qc = useQueryClient();
+  const q = useQuery({ queryKey: ["inbox-locks"], queryFn: () => load(), enabled, retry: false });
+  const locks = ((q.data as any[]) ?? []).filter((l) => l.status === "pending");
+  if (!locks.length) return null;
+  return (
+    <div className="note-card mt-6 space-y-3 p-5">
+      <h2 className="font-serif text-2xl text-ink-900">Accounts awaiting verification</h2>
+      <p className="text-sm text-ink-700">
+        These people got into their inbox with a recovery answer. Their messages stay blurred until you verify them.
+      </p>
+      {locks.map((l) => (
+        <div key={l.user_id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-ink-300/40 bg-cream-100 px-4 py-3 text-sm">
+          <span className="text-ink-800">
+            <strong>{l.nickname ?? "friend"}</strong> — via {l.method} · {new Date(l.created_at).toLocaleString()}
+          </span>
+          <button
+            type="button"
+            className="btn-rose px-4 py-1.5 text-xs"
+            onClick={async () => {
+              await setStatus({ data: { userId: l.user_id, status: "verified" } });
+              qc.invalidateQueries({ queryKey: ["inbox-locks"] });
+            }}
+          >
+            Verify & unlock messages
+          </button>
+        </div>
+      ))}
     </div>
   );
 }
