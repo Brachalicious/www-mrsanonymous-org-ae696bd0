@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Phone, X, MapPin, MessageSquare, Settings, ArrowDown, Home, Plus, Trash2 } from "lucide-react";
+import { Phone, X, MapPin, MessageSquare, Settings, Home, Plus, Trash2 } from "lucide-react";
 import {
   loadAddresses,
   saveAddresses,
@@ -12,7 +12,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES, translateToEnglish, type LangCode } from "@/lib/translations";
 import { getEmergency } from "@/lib/emergency-numbers";
 import { useRegion } from "@/hooks/use-region";
-import immediateHelp from "@/assets/immediate-help-clean.png";
+import helpSignalButton from "@/assets/help-signal-button.png.asset.json";
 
 const MSG_KEY = "mrsanon:panic-message";
 const MSG_LANG_KEY = "mrsanon:panic-msg-lang";
@@ -473,20 +473,17 @@ export function EmergencyWidget() {
           </p>
         </div>
       )}
-      <div className="flex flex-col items-end gap-2">
-        <span className="inline-flex items-center gap-1 rounded-full bg-rose-600 px-4 py-2 text-sm font-extrabold uppercase tracking-wider text-white shadow-lg animate-bounce">
-          <ArrowDown className="h-5 w-5" /> Click for emergency options
-        </span>
+      <div className="flex flex-col items-end">
         <button
           onClick={() => setOpen((v) => !v)}
           data-testid="emergency-widget-toggle"
           aria-label="Open emergency help options"
-          className="group flex h-72 w-72 items-center justify-center overflow-hidden rounded-full bg-white text-white shadow-[0_0_50px_rgba(244,63,94,0.6)] transition hover:scale-105"
+          className="group focus:outline-none"
         >
           <img
-            src={immediateHelp}
+            src={helpSignalButton.url}
             alt="Emergency help"
-            className="h-full w-full object-cover transition group-hover:scale-110"
+            className="h-72 w-72 transition-transform duration-300 group-hover:scale-105"
           />
         </button>
       </div>
