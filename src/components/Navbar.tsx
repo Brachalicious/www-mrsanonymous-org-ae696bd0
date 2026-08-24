@@ -215,6 +215,17 @@ export function Navbar() {
                   </span>
                 )}
               </Link>
+              {isAdmin && (
+                <Link
+                  to="/admin/messages"
+                  search={{ thread: undefined }}
+                  data-testid="nav-admin-messages"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-rose-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-600"
+                  title="Support Inbox (admin)"
+                >
+                  🛡️ Support Inbox
+                </Link>
+              )}
               <button
                 data-testid="nav-logout"
                 onClick={handleLogout}
@@ -403,6 +414,16 @@ export function Navbar() {
                     </span>
                   )}
                 </Link>
+                {isAdmin && (
+                  <Link
+                    to="/admin/messages"
+                    search={{ thread: undefined }}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center justify-center gap-2 rounded-lg bg-rose-500 px-3 py-2 text-center text-sm font-semibold text-white"
+                  >
+                    🛡️ Support Inbox
+                  </Link>
+                )}
               </>
             )}
             {!loggedIn && (
