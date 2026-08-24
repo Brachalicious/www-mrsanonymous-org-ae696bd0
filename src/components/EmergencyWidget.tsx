@@ -335,9 +335,13 @@ export function EmergencyWidget() {
         onClick={() => setOpen((v) => !v)}
         data-testid="emergency-widget-toggle"
         aria-label="Open emergency help options"
-        className="group flex h-14 w-14 items-center justify-center rounded-full bg-rose-500 text-white shadow-lg transition hover:scale-105 hover:bg-rose-600"
+        className="group flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-rose-500 text-white shadow-lg transition hover:scale-105 hover:bg-rose-600"
       >
-        <HeartPulse className="h-6 w-6 transition group-hover:scale-110" />
+        <img
+          src={emergencyHeartIcon.url}
+          alt="Emergency help"
+          className="h-full w-full object-cover transition group-hover:scale-110"
+        />
       </button>
     </div>
   );
