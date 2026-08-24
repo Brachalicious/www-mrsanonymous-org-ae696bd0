@@ -338,45 +338,6 @@ export function EmergencyWidget() {
             )}
           </div>
 
-
-          <div className="mt-3 rounded-lg border border-ink-300/60 bg-cream-100 p-2">
-            <div className="flex items-center justify-between">
-              <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-widest text-ink-700">
-                <MapPin className="h-3 w-3" /> {t("emg.location")}
-              </span>
-              <button
-                onClick={getLocation}
-                disabled={locLoading}
-                className="rounded border border-ink-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-ink-900 hover:bg-cream-200 disabled:opacity-50"
-              >
-                {locLoading ? t("emg.locating") : loc ? t("emg.refresh") : t("emg.getLocation")}
-              </button>
-            </div>
-            {locError && (
-              <p className="mt-1 text-[10px] text-rose-600">{locError}</p>
-            )}
-            {loc && (
-              <div className="mt-1 space-y-0.5 break-words text-[10px] text-ink-700">
-                <p>
-                  {loc.lat.toFixed(6)}, {loc.lon.toFixed(6)} (±{Math.round(loc.accuracy)}m)
-                </p>
-                {loc.address && (
-                  <p className="text-ink-500">Approx address (unverified): {loc.address}</p>
-                )}
-                {loc.accuracy > ADDRESS_ACCURACY_LIMIT_M && (
-                  <p className="text-rose-600">
-                    Weak GPS fix — coordinates may be off. Tap refresh outdoors or near a window for a precise location.
-                  </p>
-                )}
-              </div>
-            )}
-            {!loc && !locError && (
-              <p className="mt-1 text-[10px] text-ink-500">
-                {t("emg.attachLoc")}
-              </p>
-            )}
-          </div>
-
           <div className="mt-3 rounded-lg border border-ink-300/60 bg-cream-100 p-2">
             <div className="flex items-center justify-between">
               <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-widest text-ink-700">
