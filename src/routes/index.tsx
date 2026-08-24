@@ -5,7 +5,7 @@ import { sendContactMessage } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
 import { PrivateLetter } from "@/components/PrivateLetter";
 import signalForHelp from "@/assets/signal-for-help.png.asset.json";
-import appHandSignal from "@/assets/mrsanonymous-app-hand-signal.png.asset.json";
+import immediateHelp from "@/assets/mrsanonymous-immediate-help.png.asset.json";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -103,15 +103,12 @@ function Index() {
             className="group flex flex-col items-center gap-2"
           >
             <img
-              src={appHandSignal.url}
+              src={immediateHelp.url}
               alt="Signal for Help — tap for immediate emergency options"
-              width={120}
-              height={120}
-              className="rounded-3xl shadow-lg transition group-hover:scale-110 group-hover:shadow-xl"
+              width={240}
+              height={240}
+              className="transition group-hover:scale-105"
             />
-            <span className="text-xs font-bold uppercase tracking-widest text-rose-600">
-              Click for immediate help
-            </span>
           </button>
 
           <div>
