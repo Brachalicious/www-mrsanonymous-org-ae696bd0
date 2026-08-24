@@ -81,9 +81,10 @@ function ToolsPage() {
             <img
               src={handSignalAsset.url}
               alt=""
-              className="h-6 w-6 object-contain"
+              className="h-16 w-16 rounded-full object-cover"
             />
           }
+          iconClassName="h-20 w-20"
           title="Silent Panic"
           color="bg-rose-100"
           summary="A silent way to signal distress. Tap the help hand signal button in the bottom-right corner of any page."
@@ -96,7 +97,7 @@ function ToolsPage() {
             <button
               type="button"
               aria-label="Open immediate help options"
-              className="group flex h-14 w-14 items-center justify-center rounded-full bg-rose-500 text-white shadow-lg transition hover:scale-105 hover:bg-rose-600"
+              className="group flex h-24 w-24 items-center justify-center rounded-full bg-rose-500 text-white shadow-lg transition hover:scale-105 hover:bg-rose-600"
               onClick={() => {
                 document
                   .querySelector<HTMLButtonElement>('[data-testid="emergency-widget-toggle"]')
@@ -106,7 +107,7 @@ function ToolsPage() {
               <img
                 src={handSignalAsset.url}
                 alt=""
-                className="h-6 w-6 object-contain transition group-hover:scale-110"
+                className="h-20 w-20 rounded-full object-cover transition group-hover:scale-110"
               />
             </button>
             <p className="mt-1 text-[11px] text-ink-500">
@@ -241,18 +242,20 @@ function ToolCard({
   title,
   color,
   summary,
+  iconClassName,
   children,
 }: {
   icon: React.ReactNode;
   title: string;
   color: string;
   summary: string;
+  iconClassName?: string;
   children: React.ReactNode;
 }) {
   return (
     <details className="note-card group overflow-hidden p-0">
       <summary className="flex cursor-pointer list-none items-center gap-4 p-5">
-        <span className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${color}`}>{icon}</span>
+        <span className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${color} ${iconClassName ?? ""}`}>{icon}</span>
         <span className="flex-1">
           <span className="block font-serif text-lg text-ink-900">{title}</span>
           <span className="mt-1 block text-sm text-ink-600">{summary}</span>
