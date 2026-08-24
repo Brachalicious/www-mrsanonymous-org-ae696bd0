@@ -77,7 +77,13 @@ function ToolsPage() {
         </ToolCard>
 
         <ToolCard
-          icon={<Hand className="h-6 w-6 text-rose-600" />}
+          icon={
+            <img
+              src={handSignalAsset.url}
+              alt=""
+              className="h-6 w-6 object-contain"
+            />
+          }
           title="Silent Panic"
           color="bg-rose-100"
           summary="A silent way to signal distress. Tap the help hand signal button in the bottom-right corner of any page."
@@ -97,7 +103,11 @@ function ToolsPage() {
                   ?.click();
               }}
             >
-              <Hand className="h-6 w-6 transition group-hover:scale-110" />
+              <img
+                src={handSignalAsset.url}
+                alt=""
+                className="h-6 w-6 object-contain transition group-hover:scale-110"
+              />
             </button>
             <p className="mt-1 text-[11px] text-ink-500">
               Same hand signal button lives in the bottom-right corner of every page.
