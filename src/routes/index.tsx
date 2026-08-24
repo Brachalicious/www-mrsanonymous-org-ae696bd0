@@ -96,21 +96,27 @@ function Index() {
             </span>
           </div>
 
-          <button
-            type="button"
-            onClick={() => window.dispatchEvent(new CustomEvent("mrsanon:open-emergency"))}
-            data-testid="home-emergency-heart"
-            aria-label="Open emergency help options"
-            className="group flex flex-col items-center gap-2"
-          >
-            <img
-              src={immediateHelp.url}
-              alt="Signal for Help — tap for immediate emergency options"
-              width={240}
-              height={240}
-              className="transition group-hover:scale-105"
-            />
-          </button>
+          <div className="flex flex-col items-center">
+            <div className="inline-flex items-center gap-2 rounded-full bg-rose-500 px-4 py-2 text-sm font-bold uppercase tracking-wider text-white shadow-lg animate-bounce">
+              <ArrowDown className="h-4 w-4" />
+              Click for emergency options
+            </div>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent("mrsanon:open-emergency"))}
+              data-testid="home-emergency-heart"
+              aria-label="Open emergency help options"
+              className="group mt-3 flex flex-col items-center"
+            >
+              <img
+                src={immediateHelp.url}
+                alt="Signal for Help — tap for immediate emergency options"
+                width={320}
+                height={320}
+                className="max-w-[min(320px,80vw)] transition group-hover:scale-105"
+              />
+            </button>
+          </div>
 
           <div>
             <h2 className="font-serif text-3xl text-ink-900 sm:text-4xl">Download the App Here</h2>
