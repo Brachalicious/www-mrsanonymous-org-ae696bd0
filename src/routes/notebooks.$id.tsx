@@ -12,7 +12,7 @@ import {
 } from "@/lib/notebooks.functions";
 import { useAuth } from "@/contexts/AuthContext";
 import { EntryEditor } from "@/components/EntryEditor";
-import { ArrowLeft, Lock, Globe, Share2, BookOpen, Palette, Check, X } from "lucide-react";
+import { ArrowLeft, Lock, Globe, Share2, BookOpen, Palette, Check, X, MessageCircle, MessageSquare, Mail, Copy } from "lucide-react";
 import { getCoverStyle, decodeTheme, isTheme, themePageStyle } from "@/lib/notebook-covers";
 import { CoverDesigner } from "@/components/CoverDesigner";
 import { CoverImage } from "@/components/CoverImage";
@@ -285,8 +285,10 @@ function NotebookDetailPage() {
                       Private
                     </span>
                   )}
-                  <button
-                    onClick={() =>
+                  <RipOutMenu
+                    text={entry.content}
+                    shared={!!entry.shared}
+                    onToggleBoard={() =>
                       shareEntryMutation.mutate({
                         data: {
                           id: entry.id,
@@ -296,12 +298,8 @@ function NotebookDetailPage() {
                         },
                       })
                     }
-                    className="inline-flex items-center gap-1 rounded-full border border-ink-300 bg-white px-2.5 py-1 text-xs hover:bg-cream-100"
-                    title={entry.shared ? "Make private" : "Rip out and share to board"}
-                  >
-                    <Share2 className="h-3 w-3" />
-                    {entry.shared ? "Unshare" : "Rip out"}
-                  </button>
+                  />
+
                 </div>
               </div>
               <p className="mt-3 whitespace-pre-line text-ink-800 leading-relaxed">{entry.content}</p>
@@ -312,6 +310,113 @@ function NotebookDetailPage() {
     </div>
   );
 }
+
+function RipOutMenu({
+  text,
+  shared,
+  onToggleBoard,
+}: {
+  text: string;
+  shared: boolean;
+  onToggleBoard: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const body = text.slice(0, 1500);
+  const encoded = encodeURIComponent(body);
+
+  const close = () => setOpen(false);
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="inline-flex items-center gap-1 rounded-full border border-ink-300 bg-white px-2.5 py-1 text-xs hover:bg-cream-100"
+        title="Rip out this page and share it"
+      >
+        <Share2 className="h-3 w-3" />
+        Rip out
+      </button>
+
+      {open && (
+        <>
+          <button
+            aria-label="Close share menu"
+            onClick={close}
+            className="fixed inset-0 z-40 cursor-default"
+          />
+          <div className="absolute right-0 z-50 mt-2 w-64 rounded-xl border border-ink-300 bg-white p-2 shadow-lg">
+            <p className="px-2 py-1 text-[11px] font-semibold uppercase tracking-widest text-ink-500">
+              Share to board
+            </p>
+            <button
+              onClick={() => {
+                onToggleBoard();
+                close();
+              }}
+              className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm hover:bg-cream-100"
+            >
+              <Globe className="h-4 w-4 text-rose-600" />
+              {shared ? "Remove from public board" : "Post anonymously to board"}
+            </button>
+
+            <p className="mt-2 border-t border-ink-200 px-2 pt-2 text-[11px] font-semibold uppercase tracking-widest text-ink-500">
+              Share with someone
+            </p>
+            <a
+              href={`https://wa.me/?text=${encoded}`}
+              target="_self"
+              rel="noopener noreferrer"
+              onClick={close}
+              className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm hover:bg-cream-100"
+            >
+              <MessageCircle className="h-4 w-4 text-emerald-600" />
+              WhatsApp
+            </a>
+            <a
+              href={`sms:?&body=${encoded}`}
+              onClick={close}
+              className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm hover:bg-cream-100"
+            >
+              <MessageSquare className="h-4 w-4 text-sky-600" />
+              Text message
+            </a>
+            <a
+              href={`mailto:?subject=${encodeURIComponent("A page from my notebook")}&body=${encoded}`}
+              onClick={close}
+              className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm hover:bg-cream-100"
+            >
+              <Mail className="h-4 w-4 text-ink-700" />
+              Email
+            </a>
+            <button
+              onClick={async () => {
+                try {
+                  if (navigator.share) {
+                    await navigator.share({ text: body });
+                    close();
+                    return;
+                  }
+                  await navigator.clipboard.writeText(body);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 1500);
+                } catch {
+                  /* cancelled */
+                }
+              }}
+              className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm hover:bg-cream-100"
+            >
+              <Copy className="h-4 w-4 text-ink-700" />
+              {copied ? "Copied" : "More / Copy text"}
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 
 function SharePanel({
   notebook,
