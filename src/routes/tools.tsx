@@ -1,7 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { performQuickExit } from "@/components/QuickExit";
-import { AlertTriangle, ChevronDown, BookOpen, EyeOff, FileText, Hand, MousePointer2, MoveDown, Pencil, Users } from "lucide-react";
+import {
+  AlertTriangle,
+  ChevronDown,
+  BookOpen,
+  EyeOff,
+  FileText,
+  MousePointer2,
+  MoveDown,
+  Pencil,
+  Users,
+} from "lucide-react";
+import handSignalAsset from "@/assets/help-signal-button.png.asset.json";
 
 export const Route = createFileRoute("/tools")({
 
