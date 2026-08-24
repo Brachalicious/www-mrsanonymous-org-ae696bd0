@@ -473,20 +473,17 @@ export function EmergencyWidget() {
           </p>
         </div>
       )}
-      <div className="flex flex-col items-end gap-2">
-        <span className="inline-flex items-center gap-1 rounded-full bg-rose-600 px-4 py-2 text-sm font-extrabold uppercase tracking-wider text-white shadow-lg animate-bounce">
-          <ArrowDown className="h-5 w-5" /> Click for emergency options
-        </span>
+      <div className="flex flex-col items-end">
         <button
           onClick={() => setOpen((v) => !v)}
           data-testid="emergency-widget-toggle"
           aria-label="Open emergency help options"
-          className="group flex h-72 w-72 items-center justify-center overflow-hidden rounded-full bg-white text-white shadow-[0_0_50px_rgba(244,63,94,0.6)] transition hover:scale-105"
+          className="group focus:outline-none"
         >
           <img
-            src={immediateHelp}
+            src={helpSignalButton.url}
             alt="Emergency help"
-            className="h-full w-full object-cover transition group-hover:scale-110"
+            className="h-72 w-72 transition-transform duration-300 group-hover:scale-105"
           />
         </button>
       </div>

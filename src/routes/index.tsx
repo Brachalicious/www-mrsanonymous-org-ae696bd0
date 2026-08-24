@@ -79,9 +79,9 @@ function Index() {
       {/* The Hand Signal */}
       <HandSignalSection />
 
-      {/* Standalone emergency button — no box, just the image */}
-      <section className="bg-white py-10">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-center px-5 lg:px-10">
+      {/* Standalone emergency button — only the image */}
+      <section className="py-6">
+        <div className="mx-auto flex max-w-7xl justify-center px-5 lg:px-10">
           <button
             type="button"
             onClick={() => window.dispatchEvent(new CustomEvent("mrsanon:open-emergency"))}
@@ -90,17 +90,12 @@ function Index() {
             className="group focus:outline-none"
           >
             <img
-              src={immediateHelp}
+              src={helpSignalButton.url}
               alt="Signal for Help — tap for immediate emergency options"
               className="max-w-[92vw] transition-transform duration-300 group-hover:scale-105 sm:max-w-[80vw] md:max-w-[65vw] lg:max-w-[55vw]"
               style={{ imageRendering: "auto" }}
             />
           </button>
-          <div className="mt-4 flex items-center gap-2 text-rose-500 animate-bounce">
-            <ArrowDown className="h-6 w-6" />
-            <span className="text-sm font-extrabold uppercase tracking-wider">Click for emergency options</span>
-            <ArrowDown className="h-6 w-6" />
-          </div>
         </div>
       </section>
 
