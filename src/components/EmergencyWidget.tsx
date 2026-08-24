@@ -332,14 +332,14 @@ export function EmergencyWidget() {
         </div>
       )}
       <div className="flex flex-col items-end gap-2">
-        <span className="inline-flex items-center gap-1 rounded-full bg-rose-500 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-md animate-bounce">
-          <ArrowDown className="h-3 w-3" /> Click for emergency options
+        <span className="inline-flex items-center gap-1 rounded-full bg-rose-600 px-3 py-1.5 text-xs font-extrabold uppercase tracking-wider text-white shadow-lg animate-bounce">
+          <ArrowDown className="h-3.5 w-3.5" /> Click for emergency options
         </span>
         <button
           onClick={() => setOpen((v) => !v)}
           data-testid="emergency-widget-toggle"
           aria-label="Open emergency help options"
-          className="group flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-white text-white shadow-xl transition hover:scale-105"
+          className="group flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-white text-white shadow-[0_0_30px_rgba(244,63,94,0.5)] transition hover:scale-105"
         >
           <img
             src={immediateHelp.url}

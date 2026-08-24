@@ -97,8 +97,8 @@ function Index() {
           </div>
 
           <div className="flex flex-col items-center">
-            <div className="inline-flex items-center gap-2 rounded-full bg-rose-500 px-4 py-2 text-sm font-bold uppercase tracking-wider text-white shadow-lg animate-bounce">
-              <ArrowDown className="h-4 w-4" />
+            <div className="inline-flex items-center gap-2 rounded-full bg-rose-600 px-5 py-2.5 text-base font-extrabold uppercase tracking-wider text-white shadow-xl animate-bounce">
+              <ArrowDown className="h-5 w-5" />
               Click for emergency options
             </div>
             <button
@@ -106,14 +106,15 @@ function Index() {
               onClick={() => window.dispatchEvent(new CustomEvent("mrsanon:open-emergency"))}
               data-testid="home-emergency-heart"
               aria-label="Open emergency help options"
-              className="group mt-3 flex flex-col items-center"
+              className="group mt-4 flex flex-col items-center"
             >
               <img
                 src={immediateHelp.url}
                 alt="Signal for Help — tap for immediate emergency options"
-                width={320}
-                height={320}
-                className="max-w-[min(320px,80vw)] transition group-hover:scale-105"
+                width={420}
+                height={420}
+                className="max-w-[min(420px,85vw)] rounded-3xl border-4 border-rose-500 shadow-[0_0_40px_rgba(244,63,94,0.45)] transition group-hover:scale-105"
+                style={{ imageRendering: "auto" }}
               />
             </button>
           </div>
