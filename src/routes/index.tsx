@@ -266,6 +266,10 @@ function PathCard({
 }
 
 function HandSignalSection() {
+  const { lang } = useLanguage();
+  const { country } = useRegion();
+  const emergency = getEmergency(lang, country);
+
   return (
     <section data-testid="hand-signal-section" className="border-y-2 border-ink-900 bg-white">
       <div className="mx-auto grid max-w-6xl gap-12 px-5 py-20 lg:grid-cols-2 lg:px-10">
