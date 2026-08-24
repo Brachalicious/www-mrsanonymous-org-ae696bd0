@@ -1,6 +1,12 @@
 import { Link } from "@tanstack/react-router";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useRegion } from "@/hooks/use-region";
+import { getEmergency } from "@/lib/emergency-numbers";
 
 export function Footer() {
+  const { lang } = useLanguage();
+  const { country } = useRegion();
+  const emergency = getEmergency(lang, country);
   return (
     <footer className="border-t border-ink-300 bg-white">
       <div className="mx-auto max-w-7xl px-5 py-10 lg:px-10">
@@ -31,9 +37,17 @@ export function Footer() {
 
         <p className="mx-auto mt-8 max-w-3xl text-center text-xs text-ink-400">
           This site is not a substitute for professional help or emergency services. If you are in danger,
-          please call 911 or a trusted crisis line. All shared stories are anonymous and no identifying
+          please call {emergency.policeLabel} or a trusted crisis line. All shared stories are anonymous and no identifying
           information is stored.
         </p>
+        <div className="mt-3 text-center">
+          <a
+            href={`tel:${emergency.police}`}
+            className="btn-rose !px-4 !py-2 !text-xs"
+          >
+            Call {emergency.policeLabel}
+          </a>
+        </div>
       </div>
     </footer>
   );

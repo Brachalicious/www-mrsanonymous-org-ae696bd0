@@ -13,6 +13,9 @@ import {
   Users,
 } from "lucide-react";
 import handSignalAsset from "@/assets/help-signal-button.png.asset.json";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useRegion } from "@/hooks/use-region";
+import { getEmergency } from "@/lib/emergency-numbers";
 
 export const Route = createFileRoute("/tools")({
 
@@ -29,6 +32,9 @@ export const Route = createFileRoute("/tools")({
 
 function ToolsPage() {
   const [sofy, setSofy] = useState(false);
+  const { lang } = useLanguage();
+  const { country } = useRegion();
+  const emergency = getEmergency(lang, country);
 
   return (
     <div className="mx-auto max-w-5xl px-5 py-12 lg:px-10">
@@ -115,7 +121,13 @@ function ToolsPage() {
             </p>
           </div>
           <div className="mt-3 rounded-lg border border-rose-200 bg-rose-50 p-2 text-xs text-rose-700">
-            If you are in immediate danger, call local emergency services.
+            <p>If you are in immediate danger, call local emergency services.</p>
+            <a
+              href={`tel:${emergency.police}`}
+              className="btn-rose mt-2 w-full py-1.5 text-center text-xs"
+            >
+              Call {emergency.policeLabel}
+            </a>
           </div>
         </ToolCard>
 

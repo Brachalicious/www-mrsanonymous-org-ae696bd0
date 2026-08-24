@@ -539,8 +539,14 @@ export function PrivateJournal() {
             )}
           </div>
           <p className="mt-2 text-[11px] text-ink-400">
-            Texting emergency services isn’t available everywhere. If you’re in danger, call{" "}
-            {emergency.policeLabel}.
+            Texting emergency services isn’t available everywhere. If you’re in danger,{" "}
+            <a
+              href={`tel:${emergency.police}`}
+              className="btn-rose inline-flex !px-2 !py-0.5 !text-[10px]"
+            >
+              call {emergency.policeLabel}
+            </a>
+            .
           </p>
         </div>
       </div>

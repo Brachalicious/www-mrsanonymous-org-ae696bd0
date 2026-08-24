@@ -1,4 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useRegion } from "@/hooks/use-region";
+import { getEmergency } from "@/lib/emergency-numbers";
 
 export const Route = createFileRoute("/terms")({
   head: () => ({
@@ -15,6 +18,10 @@ export const Route = createFileRoute("/terms")({
 });
 
 function TermsPage() {
+  const { lang } = useLanguage();
+  const { country } = useRegion();
+  const emergency = getEmergency(lang, country);
+
   return (
     <article className="mx-auto max-w-3xl px-5 py-12 lg:px-10">
       <h1 className="font-serif text-4xl text-ink-900">Terms of Use</h1>
@@ -23,8 +30,16 @@ function TermsPage() {
       </p>
 
       <Section title="Not an emergency service">
-        MrsANONymous does not provide emergency response, medical care, legal advice, or counseling. In
-        danger, contact your local emergency number immediately.
+        <p>
+          MrsANONymous does not provide emergency response, medical care, legal advice, or counseling. In
+          danger, contact your local emergency number immediately.
+        </p>
+        <a
+          href={`tel:${emergency.police}`}
+          className="btn-rose inline-flex !px-4 !py-2 !text-xs"
+        >
+          Call {emergency.policeLabel}
+        </a>
       </Section>
 
       <Section title="Zero tolerance for objectionable content">
