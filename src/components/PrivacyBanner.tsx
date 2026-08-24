@@ -49,9 +49,9 @@ export function PrivacyBanner() {
   useEffect(() => {
     function onClick(e: MouseEvent) {
       const anchor = (e.target as HTMLElement | null)?.closest?.("a");
-      if (!anchor) return;
+      if (!anchor || anchor.hasAttribute("download") || anchor.getAttribute("data-bypass-go")) return;
       const href = anchor.getAttribute("href");
-      if (!href || anchor.hasAttribute("download")) return;
+      if (!href) return;
 
       const destination = new URL(href, window.location.href);
       if (destination.protocol !== "http:" && destination.protocol !== "https:") return;

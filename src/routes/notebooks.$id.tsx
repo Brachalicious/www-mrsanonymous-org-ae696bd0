@@ -366,8 +366,9 @@ function RipOutMenu({
             </p>
             <a
               href={`https://wa.me/?text=${encoded}`}
-              target="_self"
+              target="_blank"
               rel="noopener noreferrer"
+              data-bypass-go="true"
               onClick={close}
               className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm hover:bg-cream-100"
             >
@@ -376,6 +377,8 @@ function RipOutMenu({
             </a>
             <a
               href={`sms:?&body=${encoded}`}
+              target="_self"
+              data-bypass-go="true"
               onClick={close}
               className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm hover:bg-cream-100"
             >
@@ -384,6 +387,8 @@ function RipOutMenu({
             </a>
             <a
               href={`mailto:?subject=${encodeURIComponent("A page from my notebook")}&body=${encoded}`}
+              target="_self"
+              data-bypass-go="true"
               onClick={close}
               className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm hover:bg-cream-100"
             >
