@@ -264,6 +264,23 @@ export function Navbar() {
             </Link>
           )}
           <button
+            data-testid="hide-history-indicator-mobile"
+            onClick={() => {
+              setHideHistoryEnabled(!hideHistory);
+              reopenPrivacyBanner();
+            }}
+            className={`inline-flex items-center gap-1 rounded-sm border px-2 py-1.5 text-[10px] font-semibold uppercase tracking-wider ${
+              hideHistory
+                ? "border-emerald-300/60 bg-emerald-500/20 text-emerald-600"
+                : "border-ink-900/30 bg-ink-900/5 text-ink-700"
+            }`}
+            title="Hide this site from your browser's back button"
+            aria-label={hideHistory ? "History hidden" : "Hide history"}
+          >
+            <ShieldIcon className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">{hideHistory ? "Hidden" : "Hide"}</span>
+          </button>
+          <button
             data-testid="nav-mobile-toggle"
             onClick={() => setOpen((v) => !v)}
             className="rounded-lg border border-ink-300/40 p-2"
