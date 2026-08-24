@@ -330,9 +330,26 @@ export function EmergencyWidget() {
                     ))}
                   </select>
                 )}
+                <div className="mt-1.5 flex items-center justify-between gap-2 border-t border-red-200 pt-1.5">
+                  <span className="inline-flex items-center gap-1 text-[10px] text-ink-600">
+                    <MapPin className="h-3 w-3" />
+                    {locLoading
+                      ? t("emg.locating")
+                      : loc
+                        ? `GPS attached (±${Math.round(loc.accuracy)}m)`
+                        : "GPS not attached"}
+                  </span>
+                  <button
+                    onClick={getLocation}
+                    disabled={locLoading}
+                    className="rounded border border-ink-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-ink-900 hover:bg-cream-200 disabled:opacity-50"
+                  >
+                    {loc ? t("emg.refresh") : t("emg.getLocation")}
+                  </button>
+                </div>
+                {locError && <p className="mt-1 text-[10px] text-rose-600">{locError}</p>}
                 <p className="mt-1 text-[10px] text-ink-500">
-                  Your live GPS is also attached when available. Change the address any time
-                  before sending.
+                  Change the address any time before sending.
                 </p>
               </div>
             )}
