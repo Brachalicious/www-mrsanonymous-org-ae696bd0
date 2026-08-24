@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PrivateJournal } from "@/components/PrivateJournal";
+import { BodyCam } from "@/components/BodyCam";
 
 export const Route = createFileRoute("/journal")({
   head: () => ({
@@ -25,6 +26,9 @@ function JournalPage() {
           A safe place to document what happened — dates, details, injuries, witnesses, photos and voice
           notes. Nothing here is ever shared to the board. Only your account can open it.
         </p>
+      </div>
+      <div className="mb-8">
+        <BodyCam onSaved={() => window.location.reload()} />
       </div>
       <PrivateJournal />
     </div>
