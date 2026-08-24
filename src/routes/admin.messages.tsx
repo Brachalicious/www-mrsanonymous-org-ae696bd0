@@ -24,10 +24,12 @@ function AdminMessages() {
   const { thread } = Route.useSearch();
   const list = useServerFn(listAllMessages);
   const qc = useQueryClient();
+  const isClient = typeof window !== "undefined";
   const q = useQuery({
     queryKey: ["admin-messages"],
     queryFn: () => list(),
-    enabled: !!user && isAdmin,
+    enabled: isClient && !!user && isAdmin,
+    retry: false,
   });
 
   if (loading) return <div className="mx-auto max-w-4xl px-5 py-16 text-ink-500">Loading…</div>;
