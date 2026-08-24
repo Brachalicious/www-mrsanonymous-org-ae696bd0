@@ -393,7 +393,7 @@ export function EmergencyWidget() {
                           </span>
                         )}
                         <br />
-                        {a.address}
+                        {revealAddrs || editAddrs ? a.address : "•••• hidden ••••"}
                       </span>
                     </label>
                     {editAddrs && (
