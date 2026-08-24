@@ -73,7 +73,7 @@ function ToolsPage() {
         >
           <div className="flex flex-col items-center gap-2 py-2">
             <p className="text-sm font-semibold text-ink-900">
-              Click button for immediate help options
+              Tap the help hand signal button for immediate help options
             </p>
             <MoveDown className="h-6 w-6 animate-bounce text-rose-600" />
             <button
@@ -86,10 +86,10 @@ function ToolsPage() {
                   ?.click();
               }}
             >
-              <HeartPulse className="h-6 w-6 transition group-hover:scale-110" />
+              <Hand className="h-6 w-6 transition group-hover:scale-110" />
             </button>
             <p className="mt-1 text-[11px] text-ink-500">
-              Same button lives in the bottom-right corner of every page.
+              Same hand signal button lives in the bottom-right corner of every page.
             </p>
           </div>
           <div className="mt-3 rounded-lg border border-rose-200 bg-rose-50 p-2 text-xs text-rose-700">
