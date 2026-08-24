@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import type { User } from "@supabase/supabase-js";
+import type { User, Session } from "@supabase/supabase-js";
 import { registerAnonymousUser } from "@/lib/auth.functions";
 
 export interface Profile {
@@ -16,6 +16,7 @@ export interface Profile {
 
 interface AuthContextValue {
   user: User | null;
+  session: Session | null;
   profile: Profile | null;
   isAdmin: boolean;
   loading: boolean;
@@ -34,6 +35,7 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue>({
   user: null,
+  session: null,
   profile: null,
   isAdmin: false,
   loading: true,
