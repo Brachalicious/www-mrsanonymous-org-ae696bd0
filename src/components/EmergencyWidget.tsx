@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Phone, X, MapPin, MessageSquare, Settings, ArrowDown, Home, Plus, Trash2 } from "lucide-react";
+import { Phone, X, MapPin, MessageSquare, Settings, Home, Plus, Trash2 } from "lucide-react";
 import {
   loadAddresses,
   saveAddresses,
@@ -12,7 +12,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES, translateToEnglish, type LangCode } from "@/lib/translations";
 import { getEmergency } from "@/lib/emergency-numbers";
 import { useRegion } from "@/hooks/use-region";
-import immediateHelp from "@/assets/immediate-help-clean.png";
+import helpSignalButton from "@/assets/help-signal-button.png.asset.json";
 
 const MSG_KEY = "mrsanon:panic-message";
 const MSG_LANG_KEY = "mrsanon:panic-msg-lang";

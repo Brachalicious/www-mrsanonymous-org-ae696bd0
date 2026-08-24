@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowDown } from "lucide-react";
 import { sendContactMessage } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
 import { PrivateLetter } from "@/components/PrivateLetter";
 import signalForHelp from "@/assets/signal-for-help.png.asset.json";
-import immediateHelp from "@/assets/immediate-help-clean.png";
+import helpSignalButton from "@/assets/help-signal-button.png.asset.json";
 
 export const Route = createFileRoute("/")({
   component: Index,
