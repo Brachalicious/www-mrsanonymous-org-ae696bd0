@@ -3,6 +3,21 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { createEntry } from "@/lib/notebooks.functions";
 import { PenLine } from "lucide-react";
+const MOODS: { emoji: string; label: string }[] = [
+  { emoji: "😌", label: "Calm" },
+  { emoji: "🙂", label: "Okay" },
+  { emoji: "😔", label: "Sad" },
+  { emoji: "😢", label: "Hurting" },
+  { emoji: "😠", label: "Angry" },
+  { emoji: "😨", label: "Scared" },
+  { emoji: "😰", label: "Anxious" },
+  { emoji: "😴", label: "Exhausted" },
+  { emoji: "💪", label: "Strong" },
+  { emoji: "🌱", label: "Hopeful" },
+  { emoji: "❤️‍🩹", label: "Healing" },
+  { emoji: "😶", label: "Numb" },
+];
+
 
 interface EntryEditorProps {
   notebookId: string;
