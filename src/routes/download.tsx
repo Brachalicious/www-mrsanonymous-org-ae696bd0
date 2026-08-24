@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { isDisguiseEnabled, setDisguiseEnabled } from "@/components/CalcGate";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useRegion } from "@/hooks/use-region";
+import { getEmergency } from "@/lib/emergency-numbers";
 
 export const Route = createFileRoute("/download")({
   component: DownloadPage,
@@ -254,7 +257,17 @@ function DownloadPage() {
             Required disclosures for Apple App Store and Google Play distribution:
           </p>
           <ul className="mt-3 space-y-2 text-sm text-ink-700">
-            <li><strong>Not an emergency service.</strong> In danger, call your local emergency number.</li>
+            <li>
+              <strong>Not an emergency service.</strong> In danger, call your local emergency number.
+            </li>
+            <li>
+              <a
+                href={`tel:${emergency.police}`}
+                className="btn-rose inline-flex !px-3 !py-1.5 !text-xs"
+              >
+                Call {emergency.policeLabel}
+              </a>
+            </li>
             <li><strong>Age rating:</strong> 12+ / Teen — includes sensitive discussion of abuse.</li>
             <li><strong>Accounts:</strong> nickname only, no email or phone number required.</li>
             <li><strong>Delete your account and all data</strong> at any time from <a href="/settings" className="text-rose-600 underline">Settings</a>.</li>
