@@ -81,7 +81,7 @@ function ToolsPage() {
             <img
               src={handSignalAsset.url}
               alt=""
-              className="h-6 w-6 object-contain"
+              className="h-11 w-11 rounded-full object-cover"
             />
           }
           title="Silent Panic"
@@ -96,7 +96,7 @@ function ToolsPage() {
             <button
               type="button"
               aria-label="Open immediate help options"
-              className="group flex h-14 w-14 items-center justify-center rounded-full bg-rose-500 text-white shadow-lg transition hover:scale-105 hover:bg-rose-600"
+              className="group flex h-24 w-24 items-center justify-center rounded-full bg-rose-500 text-white shadow-lg transition hover:scale-105 hover:bg-rose-600"
               onClick={() => {
                 document
                   .querySelector<HTMLButtonElement>('[data-testid="emergency-widget-toggle"]')
@@ -106,7 +106,7 @@ function ToolsPage() {
               <img
                 src={handSignalAsset.url}
                 alt=""
-                className="h-6 w-6 object-contain transition group-hover:scale-110"
+                className="h-20 w-20 rounded-full object-cover transition group-hover:scale-110"
               />
             </button>
             <p className="mt-1 text-[11px] text-ink-500">
