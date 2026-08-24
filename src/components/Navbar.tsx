@@ -78,12 +78,14 @@ export function Navbar() {
   const { country: region } = useRegion();
   const emergency = getEmergency(lang, region);
   const fetchUnread = useServerFn(getUnreadMessageCount);
+  const isClient = typeof window !== "undefined";
 
   const { data: unreadCount } = useQuery({
     queryKey: ["unread-count", user?.id],
     queryFn: () => fetchUnread(),
-    enabled: !!user,
+    enabled: isClient && !!user,
     refetchInterval: 30_000,
+    retry: false,
   });
 
   useEffect(() => {
