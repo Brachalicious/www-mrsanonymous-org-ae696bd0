@@ -478,12 +478,12 @@ export function EmergencyWidget() {
           onClick={() => setOpen((v) => !v)}
           data-testid="emergency-widget-toggle"
           aria-label="Open emergency help options"
-          className="group focus:outline-none"
+          className="group h-36 w-36 overflow-hidden rounded-full transition-transform duration-300 hover:scale-105 focus:outline-none"
         >
           <img
             src={helpSignalButton.url}
             alt="Emergency help"
-            className="h-72 w-72 transition-transform duration-300 group-hover:scale-105"
+            className="h-full w-full object-cover"
           />
         </button>
       </div>
