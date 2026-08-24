@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
+import { ArrowDown } from "lucide-react";
+
 import { sendContactMessage } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
 import { PrivateLetter } from "@/components/PrivateLetter";
@@ -81,7 +83,13 @@ function Index() {
 
       {/* Standalone emergency button — only the image */}
       <section className="py-6">
-        <div className="mx-auto flex max-w-7xl justify-center px-5 lg:px-10">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-center px-5 lg:px-10">
+          <div className="mb-2 flex flex-col items-center gap-1 text-center">
+            <span className="text-sm font-extrabold uppercase tracking-widest text-rose-500">
+              Click for emergency options
+            </span>
+            <ArrowDown className="h-6 w-6 animate-bounce text-rose-500" strokeWidth={3} />
+          </div>
           <button
             type="button"
             onClick={() => window.dispatchEvent(new CustomEvent("mrsanon:open-emergency"))}
