@@ -1,17 +1,17 @@
-import pushpinAsset from "@/assets/red-pushpin.png.asset.json";
+import pushpinAsset from "@/assets/red-pushpin-transparent.png.asset.json";
 
 export function PrivateLetter() {
   return (
     <div className="mx-auto w-full max-w-[180px]">
       {/* Pinned note */}
       <div className="relative -rotate-3 rounded-xl border-2 border-ink-900 bg-white p-3 shadow-[4px_4px_0px_rgba(0,0,0,0.18)]">
-        {/* Real red push pin */}
-        <div className="absolute -top-5 left-1/2 z-10 -translate-x-1/2">
+        {/* Real red push pin, larger and angled */}
+        <div className="absolute -top-6 left-1/2 z-10 -translate-x-1/2">
           <img
             src={pushpinAsset.url}
             alt=""
             aria-hidden="true"
-            className="pointer-events-none h-10 w-auto drop-shadow-md"
+            className="pointer-events-none h-14 w-auto rotate-45 drop-shadow-md"
           />
         </div>
 
