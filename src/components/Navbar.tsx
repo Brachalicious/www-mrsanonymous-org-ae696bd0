@@ -26,8 +26,6 @@ const BASE_TABS: NavItem[] = [
   { to: "/about", label: "About us", testid: "nav-about" },
   { to: "/women", label: "Women", testid: "nav-women" },
   { to: "/girls", label: "Girls", testid: "nav-girls" },
-  { to: "/tell-your-story", label: "Tell Your Story!", testid: "nav-tell-story" },
-  { to: "/board", label: "The Board", testid: "nav-board" },
   { to: "/tools", label: "Tools", testid: "nav-tools" },
   { to: "/resources", label: "Resources", testid: "nav-resources" },
   { to: "/download", label: "📱 Download App", testid: "nav-download" },
@@ -46,8 +44,6 @@ const TAB_LABEL_KEYS: Record<string, string> = {
   "nav-about": "nav.about",
   "nav-women": "nav.women",
   "nav-girls": "nav.girls",
-  "nav-tell-story": "nav.tellStory",
-  "nav-board": "nav.board",
   "nav-tools": "nav.tools",
   "nav-resources": "nav.resources",
   "nav-get-help-women": "nav.getHelpWomen",
@@ -64,8 +60,6 @@ function getTabs(loggedIn: boolean): NavItem[] {
     BASE_TABS[5],
     BASE_TABS[6],
     BASE_TABS[7],
-    BASE_TABS[8],
-    BASE_TABS[9],
   ];
 }
 

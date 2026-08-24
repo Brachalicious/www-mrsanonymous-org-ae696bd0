@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { performQuickExit } from "@/components/QuickExit";
-import { AlertTriangle, BookOpen, EyeOff, FileText, Hand, HeartPulse, MousePointer2, MoveDown } from "lucide-react";
+import { AlertTriangle, BookOpen, EyeOff, FileText, Hand, HeartPulse, MousePointer2, MoveDown, Pencil, Users } from "lucide-react";
 
 export const Route = createFileRoute("/tools")({
 
@@ -161,6 +161,46 @@ function ToolsPage() {
             >
               Childhelp Hotline (girls)
             </a>
+          </div>
+        </ToolCard>
+
+        <ToolCard
+          icon={<Pencil className="h-6 w-6 text-rose-600" />}
+          title="Tell Your Story"
+          color="bg-rose-100"
+          summary="Write privately in your own notebook, or share anonymously to the community board."
+        >
+          <div className="flex flex-col gap-2">
+            <Link
+              to="/tell-your-story"
+              data-testid="tools-tell-story"
+              className="btn-rose w-full"
+            >
+              Open Tell Your Story
+            </Link>
+            <p className="text-xs text-ink-500">
+              Your nickname, your choice. Nothing is shared unless you decide to share it.
+            </p>
+          </div>
+        </ToolCard>
+
+        <ToolCard
+          icon={<Users className="h-6 w-6 text-ink-900" />}
+          title="The Board"
+          color="bg-cream-200"
+          summary="Read anonymous, blurred stories from women and girls. Tap to reveal when you feel ready."
+        >
+          <div className="flex flex-col gap-2">
+            <Link
+              to="/board"
+              data-testid="tools-board"
+              className="btn-dark w-full"
+            >
+              Go to The Board
+            </Link>
+            <p className="text-xs text-ink-500">
+              Names and identifying details are removed. React only if it feels safe.
+            </p>
           </div>
         </ToolCard>
       </div>
