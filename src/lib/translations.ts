@@ -35,12 +35,13 @@ export const LANGUAGES: { code: LangCode; label: string; native: string; dir?: "
 type Dict = Record<string, string>;
 
 const en: Dict = {
-  "safety.needLeave": "Need to leave fast?",
+  "safety.needLeave": "Leave fast",
   "safety.pressEsc": "Press",
   "safety.or": "or",
-  "safety.clickQuickExit": "click",
-  "safety.switchGoogle": "to switch this tab to Google.",
-  "safety.quickExit": "Quick Exit",
+  "safety.clickQuickExit": "Quick Exit",
+  "safety.switchGoogle": "",
+  "safety.quickExit": "Exit",
+
   "safety.call911": "Call 911",
   "safety.callEmergency": "Call",
   "safety.language": "Language",
