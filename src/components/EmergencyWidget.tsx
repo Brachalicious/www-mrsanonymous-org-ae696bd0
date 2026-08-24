@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Phone, X, MapPin, MessageSquare, Settings } from "lucide-react";
+import { Phone, X, MapPin, MessageSquare, Settings, ArrowDown } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES, translateToEnglish, type LangCode } from "@/lib/translations";
 import { getEmergency } from "@/lib/emergency-numbers";
