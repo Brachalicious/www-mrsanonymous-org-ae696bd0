@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Phone, X, HeartPulse, MapPin, MessageSquare, Settings } from "lucide-react";
+import { Phone, X, MapPin, MessageSquare, Settings } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES, translateToEnglish, type LangCode } from "@/lib/translations";
 import { getEmergency } from "@/lib/emergency-numbers";
 import { useRegion } from "@/hooks/use-region";
+import emergencyHeartIcon from "@/assets/emergency-heart-icon.png.asset.json";
 
 const MSG_KEY = "mrsanon:panic-message";
 const MSG_LANG_KEY = "mrsanon:panic-msg-lang";
