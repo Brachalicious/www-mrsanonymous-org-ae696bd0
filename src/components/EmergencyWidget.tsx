@@ -44,6 +44,7 @@ export function EmergencyWidget() {
   const [msgLang, setMsgLang] = useState<LangCode>("en");
   const [preparing, setPreparing] = useState(false);
   const [addresses, setAddresses] = useState<SavedAddress[]>([]);
+  const [revealAddrs, setRevealAddrs] = useState(false);
   const [selectedAddrId, setSelectedAddrId] = useState<string | null>(null);
   const [editAddrs, setEditAddrs] = useState(false);
   const [newLabel, setNewLabel] = useState("");
@@ -341,17 +342,32 @@ export function EmergencyWidget() {
               <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-widest text-ink-700">
                 <Home className="h-3 w-3" /> Saved addresses
               </span>
-              <button
-                onClick={() => setEditAddrs((v) => !v)}
-                data-testid="saved-address-toggle"
-                className="rounded border border-ink-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-ink-900 hover:bg-cream-200"
-              >
-                {editAddrs ? "Done" : "Add / edit"}
-              </button>
+              <div className="flex items-center gap-1">
+                {addresses.length > 0 && (
+                  <button
+                    onClick={() => setRevealAddrs((v) => !v)}
+                    data-testid="saved-address-reveal"
+                    className="rounded border border-ink-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-ink-900 hover:bg-cream-200"
+                  >
+                    {revealAddrs ? "Hide" : "Show"}
+                  </button>
+                )}
+                <button
+                  onClick={() => setEditAddrs((v) => !v)}
+                  data-testid="saved-address-toggle"
+                  className="rounded border border-ink-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-ink-900 hover:bg-cream-200"
+                >
+                  {editAddrs ? "Done" : "Add / edit"}
+                </button>
+              </div>
             </div>
             <p className="mt-1 text-[10px] text-ink-500">
               Add an address in case GPS fails or the internet is down. The one you pick is
               sent automatically when you text emergency services.
+            </p>
+            <p className="mt-1 text-[10px] font-semibold text-ink-700">
+              Private to you. Addresses stay on this device only — MrsANONymous never
+              receives or stores them, and they are hidden on screen until you tap Show.
             </p>
 
             {addresses.length > 0 && (
@@ -377,7 +393,7 @@ export function EmergencyWidget() {
                           </span>
                         )}
                         <br />
-                        {a.address}
+                        {revealAddrs || editAddrs ? a.address : "•••• hidden ••••"}
                       </span>
                     </label>
                     {editAddrs && (
