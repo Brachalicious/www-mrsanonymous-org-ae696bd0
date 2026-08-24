@@ -86,7 +86,7 @@ function Index() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-center px-5 lg:px-10">
           <div className="mb-3 flex flex-col items-center gap-2 text-center">
             <span className="text-base font-extrabold uppercase tracking-widest text-rose-600 sm:text-lg">
-              Click for emergency options
+              CLICK FOR EMERGENCY OPTIONS
             </span>
             <ArrowDown className="h-10 w-10 animate-bounce text-rose-600 sm:h-12 sm:w-12" strokeWidth={3} />
           </div>
