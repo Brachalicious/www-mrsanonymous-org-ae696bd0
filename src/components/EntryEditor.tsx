@@ -46,14 +46,42 @@ export function EntryEditor({ notebookId, onAdded }: EntryEditorProps) {
         maxLength={20000}
         required
       />
+      <div className="mt-4">
+        <span className="text-xs font-semibold uppercase tracking-widest text-ink-500">
+          How are you feeling?
+        </span>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {MOODS.map((m) => {
+            const active = mood === `${m.emoji} ${m.label}`;
+            return (
+              <button
+                key={m.label}
+                type="button"
+                onClick={() => setMood(active ? "" : `${m.emoji} ${m.label}`)}
+                aria-pressed={active}
+                title={m.label}
+                className={`rounded-full border px-3 py-1.5 text-sm transition focus-ring-warm ${
+                  active
+                    ? "border-rose-500 bg-rose-50 text-ink-900"
+                    : "border-ink-300 bg-white text-ink-700 hover:bg-ink-100"
+                }`}
+              >
+                <span className="mr-1 text-base">{m.emoji}</span>
+                {m.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <input
           value={mood}
           onChange={(e) => setMood(e.target.value)}
-          className="input-soft w-40"
+          className="input-soft w-56"
           placeholder="Mood (optional)"
           maxLength={32}
         />
+
         <button type="submit" disabled={mutation.isPending} className="btn-rose">
           {mutation.isPending ? "Saving…" : "Save to notebook"}
         </button>
