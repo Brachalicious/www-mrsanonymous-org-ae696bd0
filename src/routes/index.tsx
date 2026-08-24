@@ -87,12 +87,12 @@ function Index() {
             onClick={() => window.dispatchEvent(new CustomEvent("mrsanon:open-emergency"))}
             data-testid="home-emergency-hand"
             aria-label="Click for emergency options"
-            className="group focus:outline-none"
+            className="group h-[46vw] w-[46vw] max-h-[360px] max-w-[360px] overflow-hidden rounded-full transition-transform duration-300 hover:scale-105 focus:outline-none"
           >
             <img
               src={helpSignalButton.url}
               alt="Signal for Help — tap for immediate emergency options"
-              className="max-w-[92vw] transition-transform duration-300 group-hover:scale-105 sm:max-w-[80vw] md:max-w-[65vw] lg:max-w-[55vw]"
+              className="h-full w-full object-cover"
               style={{ imageRendering: "auto" }}
             />
           </button>
