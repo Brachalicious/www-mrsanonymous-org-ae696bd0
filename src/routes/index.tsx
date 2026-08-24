@@ -28,9 +28,6 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const { user, profile } = useAuth();
-  const { lang } = useLanguage();
-  const { country } = useRegion();
-  const emergency = getEmergency(lang, country);
 
   return (
     <div className="paper-bg">
