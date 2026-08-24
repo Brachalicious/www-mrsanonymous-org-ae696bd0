@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "@tanstack/react-router";
+import { Shield, ShieldCheck, X, ChevronDown, ChevronUp, Info } from "lucide-react";
 import { stashGoUrl } from "@/lib/go-link";
 
 const STORAGE_KEY = "mrsanon:hide-history";
@@ -107,55 +108,80 @@ export function PrivacyBanner() {
 
   return (
     <div className="border-b border-ink-900/10 bg-ink-900 text-white">
-      <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2 text-sm">
-        <p className="flex-1 min-w-[240px]">
-          <span className="font-semibold">For added privacy:</span>{" "}
-          {enabled
-            ? "History hiding is on — pages you open here won't stack up in your browser history."
-            : "Hide your history."}
+      <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-2 text-sm">
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/10">
+          {enabled ? (
+            <ShieldCheck className="h-4 w-4 text-emerald-400" />
+          ) : (
+            <Shield className="h-4 w-4 text-white/70" />
+          )}
+        </span>
+
+        <p className="flex-1 leading-snug">
+          <span className="font-semibold">{enabled ? "Privacy mode is on" : "Hide your history"}</span>
+          <span className="ml-1 hidden text-white/70 sm:inline">
+            {enabled
+              ? "— pages you open here won't be added to your browser history."
+              : "— pages you open here won't be added to your browser history."}
+          </span>
         </p>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1">
           {enabled ? (
-            <button onClick={disable} className="rounded-full border border-white/40 px-3 py-1 hover:bg-white/10">
+            <button
+              onClick={disable}
+              className="inline-flex items-center gap-1 rounded-full border border-white/30 px-3 py-1 text-xs font-medium hover:bg-white/10"
+            >
+              <X className="h-3 w-3" />
               Turn off
             </button>
           ) : (
-            <button onClick={enable} className="rounded-full bg-rose-500 px-3 py-1 font-semibold text-white hover:bg-rose-600">
+            <button
+              onClick={enable}
+              className="inline-flex items-center gap-1 rounded-full bg-rose-500 px-3 py-1 text-xs font-semibold text-white hover:bg-rose-600"
+            >
+              <ShieldCheck className="h-3 w-3" />
               Enable
             </button>
           )}
-          <button onClick={dismiss} className="rounded-full border border-white/40 px-3 py-1 hover:bg-white/10">
+          <button
+            onClick={dismiss}
+            className="rounded-full px-3 py-1 text-xs font-medium text-white/80 hover:bg-white/10"
+          >
             Dismiss
           </button>
           <button
             onClick={() => setShowLearnMore((v) => !v)}
-            className="rounded-full px-3 py-1 underline underline-offset-4 hover:bg-white/10"
+            className="inline-flex items-center gap-0.5 rounded-full px-2 py-1 text-xs font-medium text-white/70 hover:text-white"
+            aria-expanded={showLearnMore}
           >
-            Learn More
+            <Info className="h-3 w-3" />
+            <span className="hidden sm:inline">Learn more</span>
+            {showLearnMore ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
           </button>
         </div>
       </div>
 
       {showLearnMore && (
-        <div className="mx-auto max-w-5xl px-4 pb-4 text-sm leading-relaxed text-white/90">
-
-          <p className="mb-2">
-            Enabling this keeps MrsANONymous from adding new entries to your browser's back button
-            while you browse. Pressing <strong>X</strong> or <strong>Esc</strong> instantly leaves for
-            Google and removes this site from the current history entry.
-          </p>
-          <p className="mb-2 font-semibold">To fully clear traces on this device:</p>
-          <ul className="list-disc space-y-1 pl-5">
-            <li><strong>Chrome / Edge:</strong> Ctrl+Shift+Del (Cmd+Shift+Del on Mac) → clear browsing history.</li>
-            <li><strong>Safari (Mac):</strong> History → Clear History. <strong>iPhone:</strong> Settings → Safari → Clear History and Website Data.</li>
-            <li><strong>Firefox:</strong> Ctrl+Shift+Del → Browsing &amp; Download History.</li>
-            <li><strong>Safest:</strong> use a private/incognito window, or a device your abuser can't access (library, friend, advocate).</li>
-          </ul>
-          <p className="mt-2">
-            Note: clearing all history can look suspicious if your browsing is monitored. Deleting only
-            this site's entries may be safer.
-          </p>
+        <div className="border-t border-white/10 bg-ink-800/50">
+          <div className="mx-auto max-w-7xl px-4 py-3 text-sm leading-relaxed text-white/85">
+            <p className="mb-2">
+              Enabling this keeps MrsANONymous from adding new entries to your browser's back button
+              while you browse. Pressing <strong>X</strong> or <strong>Esc</strong> instantly leaves for
+              Google and removes this site from the current history entry.
+            </p>
+            <p className="mb-1 font-semibold text-white">To fully clear traces on this device:</p>
+            <ul className="grid list-disc gap-1 pl-5 sm:grid-cols-2">
+              <li><strong>Chrome / Edge:</strong> Ctrl+Shift+Del → clear browsing history.</li>
+              <li><strong>Safari (Mac):</strong> History → Clear History.</li>
+              <li><strong>Safari (iPhone):</strong> Settings → Safari → Clear History and Website Data.</li>
+              <li><strong>Firefox:</strong> Ctrl+Shift+Del → Browsing &amp; Download History.</li>
+            </ul>
+            <p className="mt-2 text-xs text-white/60">
+              Safest: use a private/incognito window, or a device your abuser can't access. Clearing all history
+              can look suspicious if your browsing is monitored — deleting only this site's entries may be safer.
+            </p>
+          </div>
         </div>
       )}
     </div>

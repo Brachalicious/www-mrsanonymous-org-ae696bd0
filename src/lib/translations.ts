@@ -35,12 +35,13 @@ export const LANGUAGES: { code: LangCode; label: string; native: string; dir?: "
 type Dict = Record<string, string>;
 
 const en: Dict = {
-  "safety.needLeave": "Need to leave fast?",
+  "safety.needLeave": "Leave fast",
   "safety.pressEsc": "Press",
   "safety.or": "or",
-  "safety.clickQuickExit": "click",
-  "safety.switchGoogle": "to switch this tab to Google.",
-  "safety.quickExit": "Quick Exit",
+  "safety.clickQuickExit": "Quick Exit",
+  "safety.switchGoogle": "",
+  "safety.quickExit": "Exit",
+
   "safety.call911": "Call 911",
   "safety.callEmergency": "Call",
   "safety.language": "Language",
@@ -82,12 +83,13 @@ const en: Dict = {
 
 // Only the highest-visibility strings are translated; missing keys fall back to English.
 const es: Dict = {
-  "safety.needLeave": "¿Necesitas salir rápido?",
+  "safety.needLeave": "Salir rápido",
   "safety.pressEsc": "Presiona",
   "safety.or": "o",
-  "safety.clickQuickExit": "haz clic en",
-  "safety.switchGoogle": "para cambiar esta pestaña a Google.",
-  "safety.quickExit": "Salida rápida",
+  "safety.clickQuickExit": "Salida rápida",
+  "safety.switchGoogle": "",
+  "safety.quickExit": "Salir",
+
   "safety.call911": "Llamar al 911",
   "safety.callEmergency": "Llamar",
   "safety.language": "Idioma",

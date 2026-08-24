@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Shield } from "lucide-react";
+import { Shield, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { performQuickExit } from "./QuickExit";
@@ -113,54 +113,60 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b border-ink-300 bg-white/95 backdrop-blur-xl">
       {/* Safety strip */}
       <div className="bg-ink-900 text-white">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2 px-5 py-2 text-[11px] uppercase tracking-widest lg:px-10">
-          <div className="flex items-center gap-2">
-            <span className="inline-block h-2 w-2 animate-soft-pulse rounded-full bg-rose-500" />
-            <span className="text-white/80">{t("safety.needLeave")}</span>
-            <span className="text-white">
-              {t("safety.pressEsc")} <kbd className="rounded border border-white/40 bg-black px-1.5 py-0.5 text-[10px] font-bold">ESC</kbd>
-              <span className="px-1 text-white/40">{t("safety.or")}</span>
-              {t("safety.clickQuickExit")} <span className="font-bold text-rose-400">✕ {t("safety.quickExit").toUpperCase()}</span>
-              <span className="px-1 text-white/40">{t("safety.switchGoogle")}</span>
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2 lg:px-10">
+          <div className="flex min-w-0 flex-1 items-center gap-2">
+            <span className="inline-block h-2 w-2 shrink-0 animate-soft-pulse rounded-full bg-rose-500" />
+            <span className="shrink-0 text-[11px] font-semibold uppercase tracking-wider text-white/90">
+              {t("safety.needLeave")}
             </span>
-          </div>
-          <label className="inline-flex items-center gap-1 rounded-sm border border-white/30 bg-white/5 px-2 py-1 text-[10px] font-semibold normal-case tracking-normal text-white">
-            <span aria-hidden>🌐</span>
-            <span className="sr-only">{t("safety.language")}</span>
-            <select
-              data-testid="safety-strip-language"
-              value={lang}
-              onChange={(e) => setLang(e.target.value as LangCode)}
-              className="bg-transparent text-white outline-none [&>option]:bg-ink-900 [&>option]:text-white"
-              aria-label={t("safety.language")}
+            <span className="hidden items-center gap-1 text-[11px] text-white/60 sm:flex">
+              {t("safety.pressEsc")}
+              <kbd className="rounded border border-white/30 bg-white/10 px-1.5 py-0.5 text-[10px] font-bold text-white">ESC</kbd>
+              <span className="text-white/40">{t("safety.or")}</span>
+            </span>
+            <button
+              data-testid="safety-strip-quick-exit"
+              onClick={performQuickExit}
+              className="inline-flex shrink-0 items-center gap-1 rounded-sm border border-rose-400 bg-rose-500 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider text-white hover:bg-rose-600"
             >
-              {LANGUAGES.map((l) => (
-                <option key={l.code} value={l.code}>
-                  {l.native}
-                </option>
-              ))}
-            </select>
-          </label>
-          <button
-            data-testid="safety-strip-quick-exit"
-            onClick={performQuickExit}
-            className="rounded-sm border border-rose-400 bg-rose-500 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white hover:bg-rose-600"
-          >
-            ✕ {t("safety.quickExit")}
-          </button>
-          <a
-            data-testid="safety-strip-call-911"
-            href={`tel:${emergency.police}`}
-            className="inline-flex items-center gap-2 rounded-full border-2 border-black bg-red-600 px-4 py-2 text-xs font-extrabold uppercase tracking-widest text-white shadow hover:bg-red-700"
-            title={`Immediate danger? Tap to call ${emergency.policeLabel}.`}
-          >
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-black">
-              <Shield className="h-4 w-4 fill-black" />
-            </span>
-            <span className="leading-none">POLICE</span>
-          </a>
+              <X className="h-3 w-3" />
+              {t("safety.quickExit")}
+            </button>
+          </div>
+
+          <div className="flex shrink-0 items-center gap-2">
+            <label className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/5 px-2 py-1 text-[10px] font-medium normal-case tracking-normal text-white/90">
+              <span aria-hidden>🌐</span>
+              <span className="sr-only">{t("safety.language")}</span>
+              <select
+                data-testid="safety-strip-language"
+                value={lang}
+                onChange={(e) => setLang(e.target.value as LangCode)}
+                className="bg-transparent text-white outline-none [&>option]:bg-ink-900 [&>option]:text-white"
+                aria-label={t("safety.language")}
+              >
+                {LANGUAGES.map((l) => (
+                  <option key={l.code} value={l.code}>
+                    {l.native}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <a
+              data-testid="safety-strip-call-911"
+              href={`tel:${emergency.police}`}
+              className="inline-flex items-center gap-1.5 rounded-full border-2 border-black bg-red-600 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-white shadow hover:bg-red-700"
+              title={`Immediate danger? Tap to call ${emergency.policeLabel}.`}
+            >
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-black">
+                <Shield className="h-3 w-3 fill-black" />
+              </span>
+              <span className="hidden sm:inline">{emergency.policeLabel || "Police"}</span>
+            </a>
+          </div>
         </div>
       </div>
+
 
       {/* Brand + auth */}
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 pt-4 lg:px-10">
