@@ -154,22 +154,6 @@ export function Navbar() {
           >
             ✕ {t("safety.quickExit")}
           </button>
-          <button
-            data-testid="hide-history-indicator"
-            onClick={() => {
-              setHideHistoryEnabled(!hideHistory);
-              reopenPrivacyBanner();
-            }}
-            className={`inline-flex items-center gap-1 rounded-sm border px-2 py-1 text-[10px] font-semibold uppercase tracking-wider ${
-              hideHistory
-                ? "border-emerald-300/60 bg-emerald-500/20 text-emerald-300"
-                : "border-white/30 bg-white/5 text-white/80 hover:bg-white/15"
-            }`}
-            title="Hide this site from your browser's back button"
-          >
-            <ShieldIcon className="h-3 w-3" />
-            {hideHistory ? "History hidden" : "Hide history"}
-          </button>
           <a
             data-testid="safety-strip-call-911"
             href={`tel:${emergency.police}`}
@@ -195,6 +179,22 @@ export function Navbar() {
         </Link>
 
         <div className="hidden items-center gap-3 lg:flex">
+          <button
+            data-testid="hide-history-indicator"
+            onClick={() => {
+              setHideHistoryEnabled(!hideHistory);
+              reopenPrivacyBanner();
+            }}
+            className={`inline-flex items-center gap-1 rounded-sm border px-2 py-1 text-[10px] font-semibold uppercase tracking-wider ${
+              hideHistory
+                ? "border-emerald-300/60 bg-emerald-500/20 text-emerald-600"
+                : "border-ink-900/30 bg-ink-900/5 text-ink-700 hover:bg-ink-900/10"
+            }`}
+            title="Hide this site from your browser's back button"
+          >
+            <ShieldIcon className="h-3 w-3" />
+            {hideHistory ? "History hidden" : "Hide history"}
+          </button>
           {loggedIn ? (
             <>
               <span className="text-xs text-ink-500">
