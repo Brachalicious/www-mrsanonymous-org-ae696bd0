@@ -43,6 +43,47 @@ export function EmergencyWidget() {
   const [message, setMessage] = useState(DEFAULT_MSG);
   const [msgLang, setMsgLang] = useState<LangCode>("en");
   const [preparing, setPreparing] = useState(false);
+  const [addresses, setAddresses] = useState<SavedAddress[]>([]);
+  const [selectedAddrId, setSelectedAddrId] = useState<string | null>(null);
+  const [editAddrs, setEditAddrs] = useState(false);
+  const [newLabel, setNewLabel] = useState("");
+  const [newAddr, setNewAddr] = useState("");
+
+  useEffect(() => {
+    const list = loadAddresses();
+    setAddresses(list);
+    const def = loadDefaultAddressId();
+    setSelectedAddrId(def && list.some((a) => a.id === def) ? def : (list[0]?.id ?? null));
+  }, []);
+
+  const selectedAddress = addresses.find((a) => a.id === selectedAddrId) ?? null;
+
+  function persist(list: SavedAddress[], defId: string | null) {
+    setAddresses(list);
+    saveAddresses(list);
+    setSelectedAddrId(defId);
+    saveDefaultAddressId(defId);
+  }
+
+  function addAddress() {
+    const address = newAddr.trim();
+    if (!address) return;
+    const entry: SavedAddress = {
+      id: newAddressId(),
+      label: newLabel.trim() || "Address",
+      address,
+    };
+    const list = [...addresses, entry];
+    persist(list, selectedAddrId ?? entry.id);
+    setNewLabel("");
+    setNewAddr("");
+  }
+
+  function removeAddress(id: string) {
+    const list = addresses.filter((a) => a.id !== id);
+    const nextId = selectedAddrId === id ? (list[0]?.id ?? null) : selectedAddrId;
+    persist(list, nextId);
+  }
 
   useEffect(() => {
     const onOpen = () => setOpen(true);
