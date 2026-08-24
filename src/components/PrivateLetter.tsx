@@ -1,16 +1,18 @@
+import pushpinAsset from "@/assets/red-pushpin.png.asset.json";
+
 export function PrivateLetter() {
   return (
     <div className="mx-auto w-full max-w-[180px]">
       {/* Pinned note */}
       <div className="relative -rotate-3 rounded-xl border-2 border-ink-900 bg-white p-3 shadow-[4px_4px_0px_rgba(0,0,0,0.18)]">
-        {/* 3D red push pin */}
-        <div className="absolute -top-3 left-1/2 z-10 -translate-x-1/2">
-          <span
-            aria-hidden
-            className="pointer-events-none block h-4 w-4 rounded-full border border-black/20 shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
-            style={{ background: "radial-gradient(circle at 32% 30%, #fca5a5, #dc2626 65%)" }}
+        {/* Real red push pin */}
+        <div className="absolute -top-5 left-1/2 z-10 -translate-x-1/2">
+          <img
+            src={pushpinAsset.url}
+            alt=""
+            aria-hidden="true"
+            className="pointer-events-none h-10 w-auto drop-shadow-md"
           />
-          <div className="mx-auto h-1.5 w-[2px] rounded-b bg-ink-900/60" />
         </div>
 
         <div className="mt-2 text-[8px] font-bold uppercase tracking-[0.2em] text-rose-500">
