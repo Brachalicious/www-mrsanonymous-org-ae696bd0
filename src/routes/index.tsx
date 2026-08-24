@@ -91,7 +91,7 @@ function Index() {
             className="group focus:outline-none"
           >
             <img
-              src={immediateHelp.url}
+              src={immediateHelp}
               alt="Signal for Help — tap for immediate emergency options"
               className="max-w-[92vw] transition-transform duration-300 group-hover:scale-105 sm:max-w-[80vw] md:max-w-[65vw] lg:max-w-[55vw]"
               style={{ imageRendering: "auto" }}
