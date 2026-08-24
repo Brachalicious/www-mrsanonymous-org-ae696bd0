@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { performQuickExit } from "./QuickExit";
@@ -170,14 +171,13 @@ export function Navbar() {
           <a
             data-testid="safety-strip-call-911"
             href={`tel:${emergency.police}`}
-            className="inline-flex items-center gap-2 rounded-sm border border-red-400 bg-red-600 px-4 py-2 text-xs font-extrabold uppercase tracking-widest text-white shadow ring-1 ring-red-300/60 hover:bg-red-700"
+            className="inline-flex items-center gap-2 rounded-full border-2 border-black bg-red-600 px-4 py-2 text-xs font-extrabold uppercase tracking-widest text-white shadow hover:bg-red-700"
             title={`Immediate danger? Tap to call ${emergency.policeLabel}.`}
           >
-
-            <span aria-hidden className="text-lg leading-none">🖐️➡️✊</span>
-            <span className="leading-none">
-              {t("safety.callEmergency")} {emergency.policeLabel}
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-black">
+              <Shield className="h-4 w-4 fill-black" />
             </span>
+            <span className="leading-none">POLICE</span>
           </a>
         </div>
       </div>
