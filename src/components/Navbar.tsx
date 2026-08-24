@@ -218,6 +218,7 @@ export function Navbar() {
               {isAdmin && (
                 <Link
                   to="/admin/messages"
+                  search={{ thread: undefined }}
                   data-testid="nav-admin-messages"
                   className="inline-flex items-center gap-1.5 rounded-full bg-rose-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-600"
                   title="Support Inbox (admin)"
