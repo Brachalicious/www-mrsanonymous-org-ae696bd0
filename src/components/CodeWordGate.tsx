@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useAuth } from "@/contexts/AuthContext";
 import { getMyQuestions, verifyMyAnswers } from "@/lib/security-questions.functions";
 import { sendContactMessage } from "@/lib/contact.functions";
+import { getMyInboxLock, raiseInboxLock } from "@/lib/inbox-lock.functions";
 
 const keyFor = (userId?: string | null) =>
   userId ? `mrsanon:inbox-codeword:${userId}` : "mrsanon:inbox-codeword:anon";
@@ -35,11 +36,14 @@ export function CodeWordGate({ children }: { children: React.ReactNode }) {
   const verifyAnswers = useServerFn(verifyMyAnswers);
   const loadQuestions = useServerFn(getMyQuestions);
   const notifyAdmin = useServerFn(sendContactMessage);
+  const fetchLock = useServerFn(getMyInboxLock);
+  const lockInbox = useServerFn(raiseInboxLock);
 
   const [ready, setReady] = useState(false);
   const [stored, setStored] = useState<string | null>(null);
   const [unlocked, setUnlocked] = useState(false);
   const [restricted, setRestricted] = useState(false);
+  const [adminLocked, setAdminLocked] = useState(false);
   const [value, setValue] = useState("");
   const [confirmValue, setConfirmValue] = useState("");
   const [mathValue, setMathValue] = useState("");
@@ -64,8 +68,12 @@ export function CodeWordGate({ children }: { children: React.ReactNode }) {
     setConfirmValue("");
     setStored(localStorage.getItem(HASH_KEY));
     setBioEnabled(!!localStorage.getItem(BIO_KEY));
-    setReady(true);
-  }, [HASH_KEY, BIO_KEY]);
+    setReady(false);
+    fetchLock({} as never)
+      .then((r: { locked: boolean }) => setAdminLocked(!!r.locked))
+      .catch(() => setAdminLocked(false))
+      .finally(() => setReady(true));
+  }, [HASH_KEY, BIO_KEY, fetchLock]);
 
   useEffect(() => {
     if (mode !== "recover" || questions) return;
@@ -80,11 +88,17 @@ export function CodeWordGate({ children }: { children: React.ReactNode }) {
 
   async function alertAdmin(method: string) {
     try {
+      await lockInbox({ data: { method } });
+      setAdminLocked(true);
+    } catch {
+      /* keep going */
+    }
+    try {
       await notifyAdmin({
         data: {
           message:
             `⚠️ Inbox recovery used. A user unlocked their inbox with ${method} after forgetting their code word. ` +
-            `Their messages are hidden until they set a new code word. Please review this account for safety.`,
+            `Their messages stay hidden until an admin verifies them in the support dashboard. Please review this account.`,
           audience: "women",
           userId: user?.id ?? null,
         },
@@ -112,7 +126,7 @@ export function CodeWordGate({ children }: { children: React.ReactNode }) {
       if (mathValue.trim()) localStorage.setItem(MATH_KEY, await hash(mathValue));
       setStored(h);
       setUnlocked(true);
-      setRestricted(false);
+      setRestricted(adminLocked);
       return;
     }
     const h = await hash(word);
@@ -122,7 +136,7 @@ export function CodeWordGate({ children }: { children: React.ReactNode }) {
       return;
     }
     setUnlocked(true);
-    setRestricted(false);
+    setRestricted(adminLocked);
   }
 
   async function tryMathRecovery(e: React.FormEvent) {
@@ -207,7 +221,7 @@ export function CodeWordGate({ children }: { children: React.ReactNode }) {
       });
       if (!assertion) throw new Error("cancelled");
       setUnlocked(true);
-      setRestricted(false);
+      setRestricted(adminLocked);
     } catch {
       setError("Face / fingerprint unlock didn't work. Use your code word.");
     }
@@ -216,7 +230,6 @@ export function CodeWordGate({ children }: { children: React.ReactNode }) {
   function resetCodeWord() {
     localStorage.removeItem(HASH_KEY);
     setStored(null);
-    setRestricted(false);
     setUnlocked(false);
     setMode("gate");
     setValue("");
@@ -230,8 +243,8 @@ export function CodeWordGate({ children }: { children: React.ReactNode }) {
         <div className="note-card space-y-4 p-6">
           <h1 className="font-serif text-3xl text-ink-900">Inbox unlocked in safe mode</h1>
           <p className="text-sm text-ink-700">
-            You got in with your recovery answer, so your past messages stay hidden for your privacy. Support has been
-            notified to check the account.
+            Your messages stay hidden until our support team verifies that this account is really yours. Setting a new
+            code word will not reveal them. Support has been notified and will unlock your inbox once you're verified.
           </p>
           <div className="relative overflow-hidden rounded-xl border border-ink-300/40 bg-cream-100 p-5">
             <div className="select-none space-y-3 blur-sm" aria-hidden>
@@ -244,8 +257,11 @@ export function CodeWordGate({ children }: { children: React.ReactNode }) {
               Messages hidden
             </p>
           </div>
-          <button type="button" className="btn-rose w-full" onClick={resetCodeWord}>
-            Set a new code word to see my messages
+          <p className="text-xs text-ink-500">
+            You can still send a new message to support from here — just reply to the support thread once verified.
+          </p>
+          <button type="button" className="btn-ghost w-full" onClick={resetCodeWord}>
+            Set a new code word (messages stay hidden until verified)
           </button>
         </div>
       </div>
