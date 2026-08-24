@@ -12,7 +12,7 @@ import {
 } from "@/lib/notebooks.functions";
 import { useAuth } from "@/contexts/AuthContext";
 import { EntryEditor } from "@/components/EntryEditor";
-import { ArrowLeft, Lock, Globe, Share2, BookOpen, Palette, Check, X } from "lucide-react";
+import { ArrowLeft, Lock, Globe, Share2, BookOpen, Palette, Check, X, MessageCircle, MessageSquare, Mail, Copy } from "lucide-react";
 import { getCoverStyle, decodeTheme, isTheme, themePageStyle } from "@/lib/notebook-covers";
 import { CoverDesigner } from "@/components/CoverDesigner";
 import { CoverImage } from "@/components/CoverImage";
