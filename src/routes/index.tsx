@@ -6,7 +6,7 @@ import { sendContactMessage } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
 import { PrivateLetter } from "@/components/PrivateLetter";
 import signalForHelp from "@/assets/signal-for-help.png.asset.json";
-import immediateHelp from "@/assets/mrsanonymous-immediate-help.png.asset.json";
+import immediateHelp from "@/assets/immediate-help-clean.png";
 
 export const Route = createFileRoute("/")({
   component: Index,

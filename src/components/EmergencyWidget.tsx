@@ -12,7 +12,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES, translateToEnglish, type LangCode } from "@/lib/translations";
 import { getEmergency } from "@/lib/emergency-numbers";
 import { useRegion } from "@/hooks/use-region";
-import immediateHelp from "@/assets/mrsanonymous-immediate-help.png.asset.json";
+import immediateHelp from "@/assets/immediate-help-clean.png";
 
 const MSG_KEY = "mrsanon:panic-message";
 const MSG_LANG_KEY = "mrsanon:panic-msg-lang";
