@@ -99,7 +99,7 @@ export const appendJournalAttachment = createServerFn({ method: "POST" })
     if (readError) throw new Error(readError.message);
 
     const existing = Array.isArray(row?.attachments) ? (row.attachments as unknown[]) : [];
-    const patch: Record<string, unknown> = {
+    const patch: { attachments: unknown; fields?: unknown } = {
       attachments: [...existing, data.attachment].slice(0, 500),
     };
     if (data.fields) {
@@ -108,7 +108,7 @@ export const appendJournalAttachment = createServerFn({ method: "POST" })
 
     const { error } = await supabase
       .from("journal_entries")
-      .update(patch)
+      .update(patch as never)
       .eq("id", data.id)
       .eq("owner_id", userId);
     if (error) throw new Error(error.message);
