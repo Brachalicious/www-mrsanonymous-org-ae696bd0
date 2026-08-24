@@ -285,8 +285,10 @@ function NotebookDetailPage() {
                       Private
                     </span>
                   )}
-                  <button
-                    onClick={() =>
+                  <RipOutMenu
+                    text={entry.content}
+                    shared={!!entry.shared}
+                    onToggleBoard={() =>
                       shareEntryMutation.mutate({
                         data: {
                           id: entry.id,
@@ -296,12 +298,8 @@ function NotebookDetailPage() {
                         },
                       })
                     }
-                    className="inline-flex items-center gap-1 rounded-full border border-ink-300 bg-white px-2.5 py-1 text-xs hover:bg-cream-100"
-                    title={entry.shared ? "Make private" : "Rip out and share to board"}
-                  >
-                    <Share2 className="h-3 w-3" />
-                    {entry.shared ? "Unshare" : "Rip out"}
-                  </button>
+                  />
+
                 </div>
               </div>
               <p className="mt-3 whitespace-pre-line text-ink-800 leading-relaxed">{entry.content}</p>
