@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowDown } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { sendContactMessage } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
@@ -81,14 +81,14 @@ function Index() {
       {/* The Hand Signal */}
       <HandSignalSection />
 
-      {/* Standalone emergency button — only the image */}
+      {/* Standalone emergency button — only the image, label on the left */}
       <section className="py-6">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-center px-5 lg:px-10">
-          <div className="mb-3 flex flex-col items-center gap-2 text-center">
-            <span className="text-base font-extrabold uppercase tracking-widest text-rose-600 sm:text-lg">
+        <div className="mx-auto flex max-w-7xl items-center justify-center gap-4 px-5 lg:px-10">
+          <div className="flex flex-col items-center text-center text-rose-600" aria-hidden="true">
+            <span className="max-w-[10rem] text-base font-extrabold uppercase leading-tight tracking-widest sm:text-lg sm:max-w-[12rem]">
               CLICK FOR EMERGENCY OPTIONS
             </span>
-            <ArrowDown className="h-10 w-10 animate-bounce text-rose-600 sm:h-12 sm:w-12" strokeWidth={3} />
+            <ArrowRight className="mt-1 h-10 w-10 animate-bounce sm:h-12 sm:w-12" strokeWidth={3} />
           </div>
           <button
             type="button"
