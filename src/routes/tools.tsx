@@ -69,7 +69,7 @@ function ToolsPage() {
           icon={<Hand className="h-6 w-6 text-rose-600" />}
           title="Silent Panic"
           color="bg-rose-100"
-          summary="A silent way to signal distress. Tap the heart button in the bottom-right corner of any page."
+          summary="A silent way to signal distress. Tap the help hand signal button in the bottom-right corner of any page."
         >
           <div className="flex flex-col items-center gap-2 py-2">
             <p className="text-sm font-semibold text-ink-900">
