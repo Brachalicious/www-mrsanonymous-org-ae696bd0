@@ -1,10 +1,6 @@
 import { Link } from "@tanstack/react-router";
 
-interface PrivateLetterProps {
-  showAboutLink?: boolean;
-}
-
-export function PrivateLetter({ showAboutLink = true }: PrivateLetterProps) {
+export function PrivateLetter() {
   return (
     <div className="mx-auto w-full max-w-md">
       <div className="relative rounded-[2rem] border-2 border-ink-900 bg-white p-8 shadow-[8px_8px_0px_rgba(196,139,129,0.22)] sm:p-10">
@@ -27,18 +23,6 @@ export function PrivateLetter({ showAboutLink = true }: PrivateLetterProps) {
           <span className="font-hand text-lg text-rose-400">xx</span>
         </div>
       </div>
-
-      {showAboutLink && (
-        <div className="mt-6 text-center">
-          <Link
-            to="/about"
-            data-testid="home-cta-about"
-            className="inline-flex items-center gap-1 text-sm font-semibold text-rose-500 underline underline-offset-4 transition hover:text-rose-600"
-          >
-            Read about who we are <span aria-hidden>→</span>
-          </Link>
-        </div>
-      )}
     </div>
   );
 }
