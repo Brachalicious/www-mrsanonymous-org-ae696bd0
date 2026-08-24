@@ -97,8 +97,8 @@ function Index() {
           </div>
 
           <div className="flex flex-col items-center">
-            <div className="inline-flex items-center gap-2 rounded-full bg-rose-600 px-5 py-2.5 text-base font-extrabold uppercase tracking-wider text-white shadow-xl animate-bounce">
-              <ArrowDown className="h-5 w-5" />
+            <div className="inline-flex items-center gap-2 rounded-full bg-rose-600 px-6 py-3 text-lg font-extrabold uppercase tracking-wider text-white shadow-xl animate-bounce">
+              <ArrowDown className="h-6 w-6" />
               Click for emergency options
             </div>
             <button
@@ -111,13 +111,14 @@ function Index() {
               <img
                 src={immediateHelp.url}
                 alt="Signal for Help — tap for immediate emergency options"
-                width={420}
-                height={420}
-                className="max-w-[min(420px,85vw)] rounded-3xl border-4 border-rose-500 shadow-[0_0_40px_rgba(244,63,94,0.45)] transition group-hover:scale-105"
+                width={1260}
+                height={1260}
+                className="max-w-[min(1260px,95vw)] rounded-3xl border-4 border-rose-500 shadow-[0_0_60px_rgba(244,63,94,0.5)] transition group-hover:scale-105"
                 style={{ imageRendering: "auto" }}
               />
             </button>
           </div>
+
 
           <div>
             <h2 className="font-serif text-3xl text-ink-900 sm:text-4xl">Download the App Here</h2>
