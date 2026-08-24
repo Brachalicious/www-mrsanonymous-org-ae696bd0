@@ -14,6 +14,8 @@ async function hash(value: string) {
 }
 
 export function CodeWordGate({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
+  const HASH_KEY = keyFor(user?.id);
   const [ready, setReady] = useState(false);
   const [stored, setStored] = useState<string | null>(null);
   const [unlocked, setUnlocked] = useState(false);
