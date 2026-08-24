@@ -1,4 +1,5 @@
 {
+  "id": "/",
   "name": "MrsANONymous — Safety & Support",
   "short_name": "MrsANON",
   "description": "A safe, 100% anonymous support space for women and girls facing domestic violence.",
@@ -6,11 +7,20 @@
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
+  "lang": "en",
+  "dir": "ltr",
   "background_color": "#F9F6F0",
   "theme_color": "#DC2626",
   "categories": ["health", "lifestyle", "social"],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    { "name": "Emergency help", "short_name": "Help", "url": "/tools" },
+    { "name": "My notebooks", "short_name": "Notebooks", "url": "/journal" },
+    { "name": "Resources", "short_name": "Resources", "url": "/resources" }
+  ],
   "icons": [
-    { "src": "/app-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "/app-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "/app-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/app-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/app-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
