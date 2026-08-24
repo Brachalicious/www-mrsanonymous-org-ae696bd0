@@ -484,7 +484,7 @@ export function EmergencyWidget() {
           className="group flex h-72 w-72 items-center justify-center overflow-hidden rounded-full bg-white text-white shadow-[0_0_50px_rgba(244,63,94,0.6)] transition hover:scale-105"
         >
           <img
-            src={immediateHelp.url}
+            src={immediateHelp}
             alt="Emergency help"
             className="h-full w-full object-cover transition group-hover:scale-110"
           />
