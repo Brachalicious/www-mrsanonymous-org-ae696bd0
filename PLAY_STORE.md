@@ -34,8 +34,10 @@ the site. Keep the upload-key fingerprint in the list too if you test locally.
 - **Contact email:** mysticminded33@gmail.com
 - **Privacy policy URL:** https://mrsanonymous.org/privacy
 - **Account deletion URL:** https://mrsanonymous.org/delete-account
-- **Graphics needed:** 512×512 icon (have: `public/app-icon-512.png`), 1024×500 feature graphic,
-  2–8 phone screenshots (min 320px side), optional 7"/10" tablet screenshots.
+- **Graphics ready:** 512×512 icon (`public/app-icon-512.png`), 1024×500 feature graphic
+  (`play-feature-graphic.jpg` in project files), 6 phone screenshots 1080×1920
+  (`play-screenshots/1-home … 6-download.png`). Tablet screenshots optional.
+
 
 ## 4. Data safety form
 
