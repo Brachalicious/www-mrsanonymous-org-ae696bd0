@@ -5,6 +5,9 @@ import { ArrowRight } from "lucide-react";
 
 import { sendContactMessage } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useRegion } from "@/hooks/use-region";
+import { getEmergency } from "@/lib/emergency-numbers";
 import { PrivateLetter } from "@/components/PrivateLetter";
 import signalForHelp from "@/assets/signal-for-help.png.asset.json";
 import helpSignalButton from "@/assets/help-signal-button.png.asset.json";
@@ -25,6 +28,9 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const { user, profile } = useAuth();
+  const { lang } = useLanguage();
+  const { country } = useRegion();
+  const emergency = getEmergency(lang, country);
 
   return (
     <div className="paper-bg">
@@ -287,6 +293,12 @@ function HandSignalSection() {
             If you see someone make this signal, ask them in a safe, indirect way how you can
             help — or contact authorities for them.
           </p>
+          <a
+            href={`tel:${emergency.police}`}
+            className="btn-rose mt-4 inline-flex !px-4 !py-2 !text-xs"
+          >
+            Call {emergency.policeLabel}
+          </a>
         </div>
 
         <div className="flex items-center justify-center">

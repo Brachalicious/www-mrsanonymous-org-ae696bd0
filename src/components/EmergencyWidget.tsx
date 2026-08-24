@@ -250,6 +250,12 @@ export function EmergencyWidget() {
           <p className="mt-2 text-xs text-ink-500">
             {t("emg.disclaimer")}
           </p>
+          <a
+            href={`tel:${emergency.police}`}
+            className="btn-rose mt-2 w-full py-1.5 text-xs"
+          >
+            <Phone className="h-3.5 w-3.5" /> Call {emergency.policeLabel}
+          </a>
           <div className="mt-3 flex flex-col gap-2">
             {emergency.crisis && (
               <a
