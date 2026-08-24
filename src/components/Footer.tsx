@@ -40,12 +40,14 @@ export function Footer() {
           please call {emergency.policeLabel} or a trusted crisis line. All shared stories are anonymous and no identifying
           information is stored.
         </p>
-        <a
-          href={`tel:${emergency.police}`}
-          className="btn-rose mx-auto mt-3 inline-flex !px-4 !py-2 !text-xs"
-        >
-          Call {emergency.policeLabel}
-        </a>
+        <div className="mt-3 text-center">
+          <a
+            href={`tel:${emergency.police}`}
+            className="btn-rose !px-4 !py-2 !text-xs"
+          >
+            Call {emergency.policeLabel}
+          </a>
+        </div>
       </div>
     </footer>
   );
