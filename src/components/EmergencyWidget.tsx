@@ -331,18 +331,23 @@ export function EmergencyWidget() {
           </p>
         </div>
       )}
-      <button
-        onClick={() => setOpen((v) => !v)}
-        data-testid="emergency-widget-toggle"
-        aria-label="Open emergency help options"
-        className="group flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-white text-white shadow-lg transition hover:scale-105"
-      >
-        <img
-          src={immediateHelp.url}
-          alt="Emergency help"
-          className="h-full w-full object-cover transition group-hover:scale-110"
-        />
-      </button>
+      <div className="flex flex-col items-end gap-2">
+        <span className="inline-flex items-center gap-1 rounded-full bg-rose-500 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-md animate-bounce">
+          <ArrowDown className="h-3 w-3" /> Click for emergency options
+        </span>
+        <button
+          onClick={() => setOpen((v) => !v)}
+          data-testid="emergency-widget-toggle"
+          aria-label="Open emergency help options"
+          className="group flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-white text-white shadow-xl transition hover:scale-105"
+        >
+          <img
+            src={immediateHelp.url}
+            alt="Emergency help"
+            className="h-full w-full object-cover transition group-hover:scale-110"
+          />
+        </button>
+      </div>
     </div>
   );
 }
