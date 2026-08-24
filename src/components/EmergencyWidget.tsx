@@ -297,7 +297,47 @@ export function EmergencyWidget() {
                 {preparing ? t("emg.translating") : `${t("emg.text911").replace("911", emergency.sms ?? emergency.police)}`}
               </a>
             )}
+
+            {emergency.smsSupported && (
+              <div className="rounded-lg border border-red-300 bg-red-50 p-2">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-red-700">
+                  Text will include this address
+                </p>
+                <p className="mt-0.5 break-words text-[11px] font-semibold text-ink-900">
+                  {selectedAddress
+                    ? `${selectedAddress.label} — ${revealAddrs ? selectedAddress.address : "•••• hidden ••••"}`
+                    : addresses.length > 0
+                      ? "No address selected"
+                      : "No saved address yet — add one below"}
+                </p>
+                {addresses.length > 0 && (
+                  <select
+                    value={selectedAddrId ?? ""}
+                    data-testid="emergency-address-select"
+                    onChange={(e) => {
+                      const v = e.target.value || null;
+                      setSelectedAddrId(v);
+                      saveDefaultAddressId(v);
+                    }}
+                    className="mt-1.5 w-full rounded-md border border-ink-300 bg-white p-1 text-[11px] text-ink-900 focus:border-rose-500 focus:outline-none"
+                  >
+                    <option value="">Don't send a saved address</option>
+                    {addresses.map((a) => (
+                      <option key={a.id} value={a.id}>
+                        {a.label}
+                        {a.id === selectedAddrId ? " (default)" : ""}
+                      </option>
+                    ))}
+                  </select>
+                )}
+                <p className="mt-1 text-[10px] text-ink-500">
+                  Your live GPS is also attached when available. Change the address any time
+                  before sending.
+                </p>
+              </div>
+            )}
           </div>
+
 
           <div className="mt-3 rounded-lg border border-ink-300/60 bg-cream-100 p-2">
             <div className="flex items-center justify-between">
