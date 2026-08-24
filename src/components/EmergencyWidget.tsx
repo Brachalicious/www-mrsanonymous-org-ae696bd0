@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Phone, X, MapPin, MessageSquare, Settings, Home, Plus, Trash2 } from "lucide-react";
+import { ArrowDown, Phone, X, MapPin, MessageSquare, Settings, Home, Plus, Trash2 } from "lucide-react";
 import {
   loadAddresses,
   saveAddresses,
@@ -473,7 +473,13 @@ export function EmergencyWidget() {
           </p>
         </div>
       )}
-      <div className="flex flex-col items-end">
+      <div className="flex flex-col items-center">
+        <div className="mb-2 flex flex-col items-center text-center text-rose-600" aria-hidden="true">
+          <span className="max-w-40 text-sm font-extrabold uppercase leading-tight">
+            Click for emergency options
+          </span>
+          <ArrowDown className="mt-1 h-9 w-9 animate-bounce" strokeWidth={3.5} />
+        </div>
         <button
           onClick={() => setOpen((v) => !v)}
           data-testid="emergency-widget-toggle"
