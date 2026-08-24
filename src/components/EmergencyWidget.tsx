@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import { Phone, X, MapPin, MessageSquare, Settings, ArrowDown } from "lucide-react";
+import { Phone, X, MapPin, MessageSquare, Settings, ArrowDown, Home, Plus, Trash2 } from "lucide-react";
+import {
+  loadAddresses,
+  saveAddresses,
+  loadDefaultAddressId,
+  saveDefaultAddressId,
+  newAddressId,
+  type SavedAddress,
+} from "@/lib/saved-addresses";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES, translateToEnglish, type LangCode } from "@/lib/translations";
 import { getEmergency } from "@/lib/emergency-numbers";
@@ -35,6 +43,47 @@ export function EmergencyWidget() {
   const [message, setMessage] = useState(DEFAULT_MSG);
   const [msgLang, setMsgLang] = useState<LangCode>("en");
   const [preparing, setPreparing] = useState(false);
+  const [addresses, setAddresses] = useState<SavedAddress[]>([]);
+  const [selectedAddrId, setSelectedAddrId] = useState<string | null>(null);
+  const [editAddrs, setEditAddrs] = useState(false);
+  const [newLabel, setNewLabel] = useState("");
+  const [newAddr, setNewAddr] = useState("");
+
+  useEffect(() => {
+    const list = loadAddresses();
+    setAddresses(list);
+    const def = loadDefaultAddressId();
+    setSelectedAddrId(def && list.some((a) => a.id === def) ? def : (list[0]?.id ?? null));
+  }, []);
+
+  const selectedAddress = addresses.find((a) => a.id === selectedAddrId) ?? null;
+
+  function persist(list: SavedAddress[], defId: string | null) {
+    setAddresses(list);
+    saveAddresses(list);
+    setSelectedAddrId(defId);
+    saveDefaultAddressId(defId);
+  }
+
+  function addAddress() {
+    const address = newAddr.trim();
+    if (!address) return;
+    const entry: SavedAddress = {
+      id: newAddressId(),
+      label: newLabel.trim() || "Address",
+      address,
+    };
+    const list = [...addresses, entry];
+    persist(list, selectedAddrId ?? entry.id);
+    setNewLabel("");
+    setNewAddr("");
+  }
+
+  function removeAddress(id: string) {
+    const list = addresses.filter((a) => a.id !== id);
+    const nextId = selectedAddrId === id ? (list[0]?.id ?? null) : selectedAddrId;
+    persist(list, nextId);
+  }
 
   useEffect(() => {
     const onOpen = () => setOpen(true);
@@ -153,6 +202,11 @@ export function EmergencyWidget() {
       }
       const ageMin = Math.round((Date.now() - loc.at) / 60000);
       if (ageMin >= 1) parts.push(`Location taken ${ageMin} min ago.`);
+    }
+    if (selectedAddress) {
+      parts.push(
+        `${loc ? "Saved" : "Saved (no GPS)"} address — ${selectedAddress.label}: ${selectedAddress.address}`,
+      );
     }
     return parts.join("\n");
   }
@@ -279,6 +333,94 @@ export function EmergencyWidget() {
               <p className="mt-1 text-[10px] text-ink-500">
                 {t("emg.attachLoc")}
               </p>
+            )}
+          </div>
+
+          <div className="mt-3 rounded-lg border border-ink-300/60 bg-cream-100 p-2">
+            <div className="flex items-center justify-between">
+              <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-widest text-ink-700">
+                <Home className="h-3 w-3" /> Saved addresses
+              </span>
+              <button
+                onClick={() => setEditAddrs((v) => !v)}
+                data-testid="saved-address-toggle"
+                className="rounded border border-ink-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-ink-900 hover:bg-cream-200"
+              >
+                {editAddrs ? "Done" : "Add / edit"}
+              </button>
+            </div>
+            <p className="mt-1 text-[10px] text-ink-500">
+              Add an address in case GPS fails or the internet is down. The one you pick is
+              sent automatically when you text emergency services.
+            </p>
+
+            {addresses.length > 0 && (
+              <div className="mt-2 space-y-1">
+                {addresses.map((a) => (
+                  <div key={a.id} className="flex items-start gap-1.5">
+                    <label className="flex flex-1 cursor-pointer items-start gap-1.5 text-[10px] text-ink-700">
+                      <input
+                        type="radio"
+                        name="mrsanon-saved-address"
+                        checked={selectedAddrId === a.id}
+                        onChange={() => {
+                          setSelectedAddrId(a.id);
+                          saveDefaultAddressId(a.id);
+                        }}
+                        className="mt-0.5 accent-rose-600"
+                      />
+                      <span className="break-words">
+                        <span className="font-semibold text-ink-900">{a.label}</span>
+                        {selectedAddrId === a.id && (
+                          <span className="ml-1 rounded bg-rose-600 px-1 text-[9px] font-bold uppercase text-white">
+                            default
+                          </span>
+                        )}
+                        <br />
+                        {a.address}
+                      </span>
+                    </label>
+                    {editAddrs && (
+                      <button
+                        onClick={() => removeAddress(a.id)}
+                        aria-label={`Delete ${a.label}`}
+                        className="rounded p-0.5 text-ink-400 hover:text-rose-600"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {editAddrs && (
+              <div className="mt-2 space-y-1.5">
+                <input
+                  value={newLabel}
+                  onChange={(e) => setNewLabel(e.target.value)}
+                  placeholder="Label (Home, Work, Mom's house)"
+                  className="w-full rounded-md border border-ink-300 bg-white p-1.5 text-xs text-ink-900 focus:border-rose-500 focus:outline-none"
+                />
+                <textarea
+                  value={newAddr}
+                  onChange={(e) => setNewAddr(e.target.value)}
+                  rows={2}
+                  placeholder="Street address, apt, city, state, ZIP"
+                  data-testid="saved-address-input"
+                  className="w-full rounded-md border border-ink-300 bg-white p-1.5 text-xs text-ink-900 focus:border-rose-500 focus:outline-none"
+                />
+                <button
+                  onClick={addAddress}
+                  data-testid="saved-address-save"
+                  className="inline-flex items-center gap-1 rounded-full bg-ink-900 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white hover:bg-ink-700"
+                >
+                  <Plus className="h-3 w-3" /> Save address
+                </button>
+                <p className="text-[10px] text-ink-400">
+                  Stored only on this device, never uploaded.
+                </p>
+              </div>
             )}
           </div>
 
