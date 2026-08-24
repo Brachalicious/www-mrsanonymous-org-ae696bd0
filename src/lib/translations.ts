@@ -83,12 +83,13 @@ const en: Dict = {
 
 // Only the highest-visibility strings are translated; missing keys fall back to English.
 const es: Dict = {
-  "safety.needLeave": "¿Necesitas salir rápido?",
+  "safety.needLeave": "Salir rápido",
   "safety.pressEsc": "Presiona",
   "safety.or": "o",
-  "safety.clickQuickExit": "haz clic en",
-  "safety.switchGoogle": "para cambiar esta pestaña a Google.",
-  "safety.quickExit": "Salida rápida",
+  "safety.clickQuickExit": "Salida rápida",
+  "safety.switchGoogle": "",
+  "safety.quickExit": "Salir",
+
   "safety.call911": "Llamar al 911",
   "safety.callEmergency": "Llamar",
   "safety.language": "Idioma",
