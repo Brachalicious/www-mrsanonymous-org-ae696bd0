@@ -414,6 +414,16 @@ export function Navbar() {
                     </span>
                   )}
                 </Link>
+                {isAdmin && (
+                  <Link
+                    to="/admin/messages"
+                    search={{ thread: undefined }}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center justify-center gap-2 rounded-lg bg-rose-500 px-3 py-2 text-center text-sm font-semibold text-white"
+                  >
+                    🛡️ Support Inbox
+                  </Link>
+                )}
               </>
             )}
             {!loggedIn && (
