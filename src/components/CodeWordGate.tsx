@@ -25,9 +25,12 @@ export function CodeWordGate({ children }: { children: React.ReactNode }) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
+    setUnlocked(false);
+    setValue("");
+    setConfirmValue("");
     setStored(localStorage.getItem(HASH_KEY));
     setReady(true);
-  }, []);
+  }, [HASH_KEY]);
 
   if (!ready) return <div className="mx-auto max-w-3xl px-5 py-16 text-ink-500">Loading…</div>;
   if (unlocked) return <>{children}</>;
