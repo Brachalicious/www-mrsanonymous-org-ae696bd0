@@ -26,15 +26,17 @@ function InboxPage() {
   const fetchFn = useServerFn(listMyMessages);
   const markRead = useServerFn(markInboxRead);
   const queryClient = useQueryClient();
+  const isClient = typeof window !== "undefined";
   const q = useQuery({
     queryKey: ["my-messages", user?.id],
     queryFn: () => fetchFn(),
-    enabled: !!user,
+    enabled: isClient && !!user,
+    retry: false,
   });
 
-  // Clear the mail badge as soon as the inbox is open.
+  // Clear the mail badge as soon as the inbox is open (client only).
   useEffect(() => {
-    if (!user) return;
+    if (!user || !isClient) return;
     markRead()
       .then(() => {
         queryClient.setQueryData(["unread-count", user.id], 0);
