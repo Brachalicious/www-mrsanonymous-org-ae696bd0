@@ -273,7 +273,7 @@ function DownloadPage() {
             </li>
             <li><strong>Age rating:</strong> 12+ / Teen — includes sensitive discussion of abuse.</li>
             <li><strong>Accounts:</strong> nickname only, no email or phone number required.</li>
-            <li><strong>Delete your account and all data</strong> at any time from <a href="/settings" className="text-rose-600 underline">Settings</a>.</li>
+            <li><strong>Delete your account and all data</strong> at any time from <a href="/settings" className="text-rose-600 underline">Settings</a> — see <a href="/delete-account" className="text-rose-600 underline">how to delete your data</a>.</li>
             <li><strong>User-generated content:</strong> every shared story can be reported or its author blocked; reports are reviewed within 24 hours.</li>
             <li>
               <a href="/privacy" className="text-rose-600 underline">Privacy Policy</a> ·{" "}

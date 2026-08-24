@@ -25,6 +25,7 @@ import { Route as GoRouteImport } from './routes/go'
 import { Route as GirlsRouteImport } from './routes/girls'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as DownloadRouteImport } from './routes/download'
+import { Route as DeleteAccountRouteImport } from './routes/delete-account'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BoardRouteImport } from './routes/board'
 import { Route as AboutRouteImport } from './routes/about'
@@ -114,6 +115,11 @@ const DownloadRoute = DownloadRouteImport.update({
   path: '/download',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DeleteAccountRoute = DeleteAccountRouteImport.update({
+  id: '/delete-account',
+  path: '/delete-account',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -161,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/board': typeof BoardRoute
   '/contact': typeof ContactRoute
+  '/delete-account': typeof DeleteAccountRoute
   '/download': typeof DownloadRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/girls': typeof GirlsRoute
@@ -187,6 +194,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/board': typeof BoardRoute
   '/contact': typeof ContactRoute
+  '/delete-account': typeof DeleteAccountRoute
   '/download': typeof DownloadRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/girls': typeof GirlsRoute
@@ -214,6 +222,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/board': typeof BoardRoute
   '/contact': typeof ContactRoute
+  '/delete-account': typeof DeleteAccountRoute
   '/download': typeof DownloadRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/girls': typeof GirlsRoute
@@ -242,6 +251,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/board'
     | '/contact'
+    | '/delete-account'
     | '/download'
     | '/forgot-password'
     | '/girls'
@@ -268,6 +278,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/board'
     | '/contact'
+    | '/delete-account'
     | '/download'
     | '/forgot-password'
     | '/girls'
@@ -294,6 +305,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/board'
     | '/contact'
+    | '/delete-account'
     | '/download'
     | '/forgot-password'
     | '/girls'
@@ -321,6 +333,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   BoardRoute: typeof BoardRoute
   ContactRoute: typeof ContactRoute
+  DeleteAccountRoute: typeof DeleteAccountRoute
   DownloadRoute: typeof DownloadRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   GirlsRoute: typeof GirlsRoute
@@ -457,6 +470,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DownloadRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/delete-account': {
+      id: '/delete-account'
+      path: '/delete-account'
+      fullPath: '/delete-account'
+      preLoaderRoute: typeof DeleteAccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -521,6 +541,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   BoardRoute: BoardRoute,
   ContactRoute: ContactRoute,
+  DeleteAccountRoute: DeleteAccountRoute,
   DownloadRoute: DownloadRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   GirlsRoute: GirlsRoute,
