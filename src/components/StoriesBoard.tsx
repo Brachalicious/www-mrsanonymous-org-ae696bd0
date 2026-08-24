@@ -43,9 +43,14 @@ export function StoriesBoard() {
   }
 
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {stories.map((story) => (
-        <StoryCard key={story.id} story={story} onReact={(reaction) => mutation.mutate({ data: { notebookId: story.id, reaction } })} />
+    <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {stories.map((story, i) => (
+        <StoryCard
+          key={story.id}
+          story={story}
+          index={i}
+          onReact={(reaction) => mutation.mutate({ data: { notebookId: story.id, reaction } })}
+        />
       ))}
     </div>
   );
@@ -125,17 +130,41 @@ function StoryModeration({ notebookId }: { notebookId: string }) {
   );
 }
 
+const PIN_COLORS = [
+  { head: "#dc2626", shine: "#fca5a5" },
+  { head: "#111111", shine: "#6b7280" },
+  { head: "#ffffff", shine: "#e5e7eb" },
+];
+
+function PushPin({ index }: { index: number }) {
+  const c = PIN_COLORS[index % PIN_COLORS.length];
+  return (
+    <span
+      aria-hidden
+      className="pointer-events-none absolute -top-3 left-1/2 z-10 h-7 w-7 -translate-x-1/2 rounded-full border border-black/25 shadow-[0_4px_8px_rgba(0,0,0,0.45)]"
+      style={{ background: `radial-gradient(circle at 32% 30%, ${c.shine}, ${c.head} 65%)` }}
+    />
+  );
+}
+
 function StoryCard({
   story,
+  index,
   onReact,
 }: {
   story: Awaited<ReturnType<typeof listSharedStories>>[number];
+  index: number;
   onReact: (reaction: string) => void;
 }) {
   const [revealed, setRevealed] = useState(false);
+  const tilt = [-1.5, 1.2, -0.8, 1.8][index % 4];
 
   return (
-    <article className="note-card flex flex-col overflow-hidden">
+    <article
+      className="torn-page relative flex flex-col pt-4"
+      style={{ transform: `rotate(${tilt}deg)` }}
+    >
+      <PushPin index={index} />
       <div className="safety-callout flex items-start gap-3">
         <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-rose-600" />
         <p className="text-sm text-ink-700">
