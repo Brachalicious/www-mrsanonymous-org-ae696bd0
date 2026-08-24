@@ -81,9 +81,10 @@ function ToolsPage() {
             <img
               src={handSignalAsset.url}
               alt=""
-              className="h-11 w-11 rounded-full object-cover"
+              className="h-16 w-16 rounded-full object-cover"
             />
           }
+          iconClassName="h-20 w-20"
           title="Silent Panic"
           color="bg-rose-100"
           summary="A silent way to signal distress. Tap the help hand signal button in the bottom-right corner of any page."
