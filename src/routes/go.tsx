@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Copy, Maximize2, Minimize2 } from "lucide-react";
+import { ArrowLeft, Copy, ExternalLink, Maximize2, Minimize2, X } from "lucide-react";
 import { readGoUrl } from "@/lib/go-link";
 
 type Search = { url?: string; r?: string };
@@ -28,9 +28,11 @@ function GoPage() {
   const [url, setUrl] = useState<string | null>(null);
   const [resolved, setResolved] = useState(false);
   const [blocked, setBlocked] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const [copied, setCopied] = useState(false);
   const loaded = useRef(false);
+  const timer = useRef<number | null>(null);
 
   useEffect(() => {
     setUrl(search.url ?? readGoUrl(search.r));
@@ -39,10 +41,19 @@ function GoPage() {
 
   useEffect(() => {
     if (!url) return;
-    const t = window.setTimeout(() => {
-      if (!loaded.current) setBlocked(true);
-    }, 4000);
-    return () => window.clearTimeout(t);
+    loaded.current = false;
+    setBlocked(false);
+    setDismissed(false);
+    if (timer.current) window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => {
+      // Many crisis sites block framing for safety. If the iframe hasn't
+      // confirmed it is usable after a short wait, offer the fallback so
+      // the user is never stuck on a blank screen.
+      setBlocked(true);
+    }, 2500);
+    return () => {
+      if (timer.current) window.clearTimeout(timer.current);
+    };
   }, [url]);
 
   const backButton = (
@@ -89,6 +100,14 @@ function GoPage() {
     }
   }
 
+  function openSafely() {
+    if (!url) return;
+    // Open the resource in a new tab and replace this tab with a neutral
+    // search page so the crisis site never appears in this tab's history.
+    window.open(url, "_blank", "noopener,noreferrer");
+    window.location.replace("https://www.google.com/search?q=weather");
+  }
+
   return (
     <div
       className={
@@ -120,40 +139,67 @@ function GoPage() {
         </button>
       </div>
 
-      {blocked ? (
-        <div className="mx-auto max-w-xl px-5 py-16 text-center">
-          <h1 className="font-serif text-2xl text-ink-900">{host} can&apos;t be shown inside the app</h1>
-          <p className="mt-3 text-sm text-ink-600">
-            This organization blocks being displayed inside other sites. To keep you safe, MrsANONymous
-            stays open and your address bar keeps showing this site only.
-          </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-2">
-            <button type="button" onClick={copyLink} className="btn-ghost inline-flex items-center gap-2">
-              <Copy className="h-4 w-4" />
-              {copied ? "Link copied" : "Copy link"}
+      {blocked && !dismissed && (
+        <div className="absolute inset-x-0 top-11 z-40 mx-auto max-w-xl p-4">
+          <div className="relative rounded-2xl border border-rose-200 bg-white/98 p-6 text-center shadow-2xl backdrop-blur">
+            <button
+              type="button"
+              onClick={() => setDismissed(true)}
+              className="absolute right-3 top-3 rounded-full p-1 text-ink-400 hover:bg-rose-50 hover:text-ink-600"
+              aria-label="Hide notice"
+            >
+              <X className="h-4 w-4" />
             </button>
-            <button type="button" onClick={() => navigate({ to: "/resources" })} className="btn-rose">
-              Back to MrsANONymous
-            </button>
+            <h1 className="font-serif text-2xl text-ink-900">{host} can&apos;t be shown inside the app</h1>
+            <p className="mt-3 text-sm text-ink-600">
+              This organization blocks being displayed inside other sites. To keep you safe,
+              MrsANONymous stays open and your address bar keeps showing this site only.
+            </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-2">
+              <button
+                type="button"
+                onClick={openSafely}
+                className="btn-rose inline-flex items-center gap-2"
+              >
+                <ExternalLink className="h-4 w-4" />
+                Open in new tab
+              </button>
+              <button type="button" onClick={copyLink} className="btn-ghost inline-flex items-center gap-2">
+                <Copy className="h-4 w-4" />
+                {copied ? "Link copied" : "Copy link"}
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate({ to: "/resources" })}
+                className="btn-ghost inline-flex items-center gap-2"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back to MrsANONymous
+              </button>
+            </div>
+            <p className="mt-3 text-xs text-ink-500">
+              You can paste the copied link into a private/incognito window when it&apos;s safe.
+            </p>
           </div>
-          <p className="mt-3 text-xs text-ink-500">
-            You can paste the copied link into a private/incognito window when it&apos;s safe.
-          </p>
         </div>
-      ) : (
-        <iframe
-          src={url}
-          title={host}
-          onLoad={() => {
-            loaded.current = true;
-          }}
-          className="h-[calc(100%-2.75rem)] w-full border-0"
-          referrerPolicy="no-referrer"
-          sandbox="allow-scripts allow-forms"
-        />
       )}
+
+      <iframe
+        src={url}
+        title={host}
+        onLoad={() => {
+          loaded.current = true;
+          // We intentionally do NOT clear the blocked timer here. Many crisis
+          // sites send X-Frame-Options: deny, which triggers onLoad but leaves
+          // the iframe blank. The timer ensures the fallback still appears.
+        }}
+        className="h-[calc(100%-2.75rem)] w-full border-0"
+        referrerPolicy="no-referrer"
+        sandbox="allow-scripts allow-forms"
+      />
 
       {backButton}
     </div>
   );
 }
+
