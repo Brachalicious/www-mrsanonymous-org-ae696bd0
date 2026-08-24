@@ -142,3 +142,42 @@ export const resetPasswordWithAnswers = createServerFn({ method: "POST" })
 
     return { ok: true, email };
   });
+export const getMyQuestions = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data } = await (context.supabase as any)
+      .from("security_questions")
+      .select("question_1, question_2, question_3")
+      .eq("user_id", context.userId)
+      .maybeSingle();
+    if (!data) return { questions: null as string[] | null };
+    return {
+      questions: [data.question_1 as string, data.question_2 as string, data.question_3 as string],
+    };
+  });
+
+export const verifyMyAnswers = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) =>
+    z
+      .object({
+        answer_1: z.string().trim().min(1).max(200),
+        answer_2: z.string().trim().min(1).max(200),
+        answer_3: z.string().trim().min(1).max(200),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    const { data: sq } = await (context.supabase as any)
+      .from("security_questions")
+      .select("answer_1_hash, answer_2_hash, answer_3_hash, salt")
+      .eq("user_id", context.userId)
+      .maybeSingle();
+    if (!sq) throw new Error("Recovery is not set up for this account.");
+    const ok =
+      timingSafeEq(hashAnswer(data.answer_1, sq.salt), sq.answer_1_hash) &&
+      timingSafeEq(hashAnswer(data.answer_2, sq.salt), sq.answer_2_hash) &&
+      timingSafeEq(hashAnswer(data.answer_3, sq.salt), sq.answer_3_hash);
+    if (!ok) throw new Error("One or more answers were incorrect.");
+    return { ok: true };
+  });
