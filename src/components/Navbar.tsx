@@ -26,8 +26,6 @@ const BASE_TABS: NavItem[] = [
   { to: "/about", label: "About us", testid: "nav-about" },
   { to: "/women", label: "Women", testid: "nav-women" },
   { to: "/girls", label: "Girls", testid: "nav-girls" },
-  { to: "/tell-your-story", label: "Tell Your Story!", testid: "nav-tell-story" },
-  { to: "/board", label: "The Board", testid: "nav-board" },
   { to: "/tools", label: "Tools", testid: "nav-tools" },
   { to: "/resources", label: "Resources", testid: "nav-resources" },
   { to: "/download", label: "📱 Download App", testid: "nav-download" },
