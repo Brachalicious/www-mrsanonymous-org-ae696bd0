@@ -44,6 +44,7 @@ export function EmergencyWidget() {
   const [msgLang, setMsgLang] = useState<LangCode>("en");
   const [preparing, setPreparing] = useState(false);
   const [addresses, setAddresses] = useState<SavedAddress[]>([]);
+  const [revealAddrs, setRevealAddrs] = useState(false);
   const [selectedAddrId, setSelectedAddrId] = useState<string | null>(null);
   const [editAddrs, setEditAddrs] = useState(false);
   const [newLabel, setNewLabel] = useState("");
