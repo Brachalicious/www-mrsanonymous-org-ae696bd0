@@ -20,7 +20,7 @@ export const Route = createFileRoute("/admin/messages")({
 });
 
 function AdminMessages() {
-  const { user, isAdmin, loading } = useAuth();
+  const { user, isAdmin, loading, session } = useAuth();
   const { thread } = Route.useSearch();
   const list = useServerFn(listAllMessages);
   const qc = useQueryClient();
@@ -28,7 +28,7 @@ function AdminMessages() {
   const q = useQuery({
     queryKey: ["admin-messages"],
     queryFn: () => list(),
-    enabled: isClient && !!user && isAdmin,
+    enabled: isClient && !!user && !!session && isAdmin,
     retry: false,
   });
 

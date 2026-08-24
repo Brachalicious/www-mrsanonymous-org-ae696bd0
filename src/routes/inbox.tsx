@@ -21,7 +21,7 @@ export const Route = createFileRoute("/inbox")({
 });
 
 function InboxPage() {
-  const { user, loading } = useAuth();
+  const { user, loading, session } = useAuth();
 
   const fetchFn = useServerFn(listMyMessages);
   const markRead = useServerFn(markInboxRead);
@@ -30,7 +30,7 @@ function InboxPage() {
   const q = useQuery({
     queryKey: ["my-messages", user?.id],
     queryFn: () => fetchFn(),
-    enabled: isClient && !!user,
+    enabled: isClient && !!user && !!session,
     retry: false,
   });
 
