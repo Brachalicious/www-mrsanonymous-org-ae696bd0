@@ -3,6 +3,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
 import { sendContactMessage } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useRegion } from "@/hooks/use-region";
+import { getEmergency } from "@/lib/emergency-numbers";
 
 interface ContactFormProps {
   audience?: "women" | "girls";
@@ -13,6 +16,9 @@ export function ContactForm({ audience = "women" }: ContactFormProps) {
   const [status, setStatus] = useState("");
   const send = useServerFn(sendContactMessage);
   const { user } = useAuth();
+  const { lang } = useLanguage();
+  const { country } = useRegion();
+  const emergency = getEmergency(lang, country);
 
   const mutation = useMutation({
     mutationFn: send,
@@ -81,6 +87,12 @@ export function ContactForm({ audience = "women" }: ContactFormProps) {
           This message is not stored or linked to an identity. If you are in immediate danger, please contact emergency
           services or a crisis hotline directly.
         </p>
+        <a
+          href={`tel:${emergency.police}`}
+          className="btn-rose w-full py-2 text-[11px]"
+        >
+          Call {emergency.policeLabel}
+        </a>
       </form>
     </div>
   );
