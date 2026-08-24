@@ -241,18 +241,20 @@ function ToolCard({
   title,
   color,
   summary,
+  iconClassName,
   children,
 }: {
   icon: React.ReactNode;
   title: string;
   color: string;
   summary: string;
+  iconClassName?: string;
   children: React.ReactNode;
 }) {
   return (
     <details className="note-card group overflow-hidden p-0">
       <summary className="flex cursor-pointer list-none items-center gap-4 p-5">
-        <span className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${color}`}>{icon}</span>
+        <span className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${color} ${iconClassName ?? ""}`}>{icon}</span>
         <span className="flex-1">
           <span className="block font-serif text-lg text-ink-900">{title}</span>
           <span className="mt-1 block text-sm text-ink-600">{summary}</span>
