@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import { Phone, X, MapPin, MessageSquare, Settings, ArrowDown } from "lucide-react";
+import { Phone, X, MapPin, MessageSquare, Settings, ArrowDown, Home, Plus, Trash2 } from "lucide-react";
+import {
+  loadAddresses,
+  saveAddresses,
+  loadDefaultAddressId,
+  saveDefaultAddressId,
+  newAddressId,
+  type SavedAddress,
+} from "@/lib/saved-addresses";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES, translateToEnglish, type LangCode } from "@/lib/translations";
 import { getEmergency } from "@/lib/emergency-numbers";
