@@ -36,6 +36,9 @@ function DownloadPage() {
   const [installed, setInstalled] = useState(false);
   const [disguise, setDisguise] = useState(false);
   const [gateOn, setGateOn] = useState(false);
+  const { lang } = useLanguage();
+  const { country } = useRegion();
+  const emergency = getEmergency(lang, country);
 
   useEffect(() => {
     setGateOn(isDisguiseEnabled());
