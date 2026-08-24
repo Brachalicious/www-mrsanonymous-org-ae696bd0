@@ -203,6 +203,11 @@ export function EmergencyWidget() {
       const ageMin = Math.round((Date.now() - loc.at) / 60000);
       if (ageMin >= 1) parts.push(`Location taken ${ageMin} min ago.`);
     }
+    if (selectedAddress) {
+      parts.push(
+        `${loc ? "Saved" : "Saved (no GPS)"} address — ${selectedAddress.label}: ${selectedAddress.address}`,
+      );
+    }
     return parts.join("\n");
   }
 
