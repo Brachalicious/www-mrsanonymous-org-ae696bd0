@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 
-const HASH_KEY = "mrsanon:inbox-codeword";
+import { useAuth } from "@/contexts/AuthContext";
+
+const keyFor = (userId?: string | null) =>
+  userId ? `mrsanon:inbox-codeword:${userId}` : "mrsanon:inbox-codeword:anon";
 
 async function hash(value: string) {
   const data = new TextEncoder().encode(value.trim().toLowerCase());
@@ -11,6 +14,8 @@ async function hash(value: string) {
 }
 
 export function CodeWordGate({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
+  const HASH_KEY = keyFor(user?.id);
   const [ready, setReady] = useState(false);
   const [stored, setStored] = useState<string | null>(null);
   const [unlocked, setUnlocked] = useState(false);
@@ -20,9 +25,12 @@ export function CodeWordGate({ children }: { children: React.ReactNode }) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
+    setUnlocked(false);
+    setValue("");
+    setConfirmValue("");
     setStored(localStorage.getItem(HASH_KEY));
     setReady(true);
-  }, []);
+  }, [HASH_KEY]);
 
   if (!ready) return <div className="mx-auto max-w-3xl px-5 py-16 text-ink-500">Loading…</div>;
   if (unlocked) return <>{children}</>;
