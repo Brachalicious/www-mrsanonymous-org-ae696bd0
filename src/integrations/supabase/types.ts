@@ -88,6 +88,33 @@ export type Database = {
           },
         ]
       }
+      inbox_recovery_locks: {
+        Row: {
+          created_at: string
+          method: string
+          status: string
+          user_id: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          method?: string
+          status?: string
+          user_id: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          method?: string
+          status?: string
+          user_id?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
       journal_entries: {
         Row: {
           attachments: Json
