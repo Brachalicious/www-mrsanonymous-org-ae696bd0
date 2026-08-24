@@ -6,7 +6,7 @@ import { sendContactMessage } from "@/lib/contact.functions";
 import { useAuth } from "@/contexts/AuthContext";
 import { PrivateLetter } from "@/components/PrivateLetter";
 import signalForHelp from "@/assets/signal-for-help.png.asset.json";
-import immediateHelp from "@/assets/mrsanonymous-immediate-help.png.asset.json";
+import immediateHelp from "@/assets/immediate-help-clean.png";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -80,6 +80,31 @@ function Index() {
       {/* The Hand Signal */}
       <HandSignalSection />
 
+      {/* Standalone emergency button — no box, just the image */}
+      <section className="bg-white py-10">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-center px-5 lg:px-10">
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent("mrsanon:open-emergency"))}
+            data-testid="home-emergency-hand"
+            aria-label="Click for emergency options"
+            className="group focus:outline-none"
+          >
+            <img
+              src={immediateHelp}
+              alt="Signal for Help — tap for immediate emergency options"
+              className="max-w-[92vw] transition-transform duration-300 group-hover:scale-105 sm:max-w-[80vw] md:max-w-[65vw] lg:max-w-[55vw]"
+              style={{ imageRendering: "auto" }}
+            />
+          </button>
+          <div className="mt-4 flex items-center gap-2 text-rose-500 animate-bounce">
+            <ArrowDown className="h-6 w-6" />
+            <span className="text-sm font-extrabold uppercase tracking-wider">Click for emergency options</span>
+            <ArrowDown className="h-6 w-6" />
+          </div>
+        </div>
+      </section>
+
       {/* Get the app */}
       <section className="mx-auto max-w-7xl px-5 py-16 lg:px-10">
         <div className="flex flex-col items-center gap-7 rounded-3xl border-2 border-ink-900 bg-white p-8 text-center sm:p-14">
@@ -95,27 +120,6 @@ function Index() {
               📱
             </span>
           </div>
-
-          <div className="flex flex-col items-center">
-            <button
-              type="button"
-              onClick={() => window.dispatchEvent(new CustomEvent("mrsanon:open-emergency"))}
-              data-testid="home-emergency-heart"
-              aria-label="Open emergency help options"
-              className="group flex flex-col items-center"
-            >
-              <img
-                src={immediateHelp.url}
-                alt="Signal for Help — tap for immediate emergency options"
-                width={1260}
-                height={1260}
-                className="max-w-[min(1260px,95vw)] transition group-hover:scale-105"
-                style={{ imageRendering: "auto" }}
-              />
-            </button>
-          </div>
-
-
 
           <div>
             <h2 className="font-serif text-3xl text-ink-900 sm:text-4xl">Download the App Here</h2>
