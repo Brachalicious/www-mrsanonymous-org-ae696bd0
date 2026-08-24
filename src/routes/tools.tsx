@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { performQuickExit } from "@/components/QuickExit";
-import { AlertTriangle, BookOpen, EyeOff, FileText, Hand, HeartPulse, MousePointer2, MoveDown, Pencil, Users } from "lucide-react";
+import { AlertTriangle, ChevronDown, BookOpen, EyeOff, FileText, Hand, HeartPulse, MousePointer2, MoveDown, Pencil, Users } from "lucide-react";
 
 export const Route = createFileRoute("/tools")({
 
@@ -29,7 +29,7 @@ function ToolsPage() {
         </p>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mx-auto flex max-w-3xl flex-col gap-3">
         <ToolCard
           icon={<AlertTriangle className="h-6 w-6 text-white" />}
           title="Quick Exit"
@@ -229,11 +229,16 @@ function ToolCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="note-card flex flex-col p-6">
-      <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full ${color}`}>{icon}</div>
-      <h3 className="font-serif text-xl text-ink-900">{title}</h3>
-      <p className="mt-2 text-sm text-ink-600">{summary}</p>
-      <div className="mt-4 flex-1">{children}</div>
-    </div>
+    <details className="note-card group overflow-hidden p-0">
+      <summary className="flex cursor-pointer list-none items-center gap-4 p-5">
+        <span className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${color}`}>{icon}</span>
+        <span className="flex-1">
+          <span className="block font-serif text-lg text-ink-900">{title}</span>
+          <span className="mt-1 block text-sm text-ink-600">{summary}</span>
+        </span>
+        <ChevronDown className="h-5 w-5 shrink-0 text-ink-500 transition group-open:rotate-180" />
+      </summary>
+      <div className="border-t border-ink-200 p-5 pt-4">{children}</div>
+    </details>
   );
 }
