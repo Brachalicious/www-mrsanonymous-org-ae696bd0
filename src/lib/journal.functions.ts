@@ -76,3 +76,41 @@ export const deleteJournalEntry = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+export const appendJournalAttachment = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) =>
+    z
+      .object({
+        id: z.string().uuid(),
+        attachment: attachmentSchema,
+        fields: z.record(z.string(), z.string().max(8000)).optional(),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    const { data: row, error: readError } = await supabase
+      .from("journal_entries")
+      .select("attachments, fields")
+      .eq("id", data.id)
+      .eq("owner_id", userId)
+      .single();
+    if (readError) throw new Error(readError.message);
+
+    const existing = Array.isArray(row?.attachments) ? (row.attachments as unknown[]) : [];
+    const patch: { attachments: unknown; fields?: unknown } = {
+      attachments: [...existing, data.attachment].slice(0, 500),
+    };
+    if (data.fields) {
+      patch['fields'] = { ...((row?.fields as Record<string, string>) ?? {}), ...data.fields };
+    }
+
+    const { error } = await supabase
+      .from("journal_entries")
+      .update(patch as never)
+      .eq("id", data.id)
+      .eq("owner_id", userId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
