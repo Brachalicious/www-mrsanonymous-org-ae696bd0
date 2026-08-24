@@ -2,16 +2,6 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-/** Returns true when this user's inbox is locked pending admin verification. */
-export async function isInboxLocked(supabaseAdmin: any, userId: string) {
-  const { data } = await supabaseAdmin
-    .from("inbox_recovery_locks")
-    .select("status")
-    .eq("user_id", userId)
-    .maybeSingle();
-  return data?.status === "pending";
-}
-
 export const getMyInboxLock = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {

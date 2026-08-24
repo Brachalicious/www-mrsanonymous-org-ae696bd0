@@ -75,7 +75,7 @@ export const listMyMessages = createServerFn({ method: "GET" })
     const { supabase, userId } = context;
     // Recovery lock: messages stay hidden until an admin verifies the account.
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { isInboxLocked } = await import("@/lib/inbox-lock.functions");
+    const { isInboxLocked } = await import("@/lib/inbox-lock.server");
     if (await isInboxLocked(supabaseAdmin, userId)) return [];
     const { data: messages, error } = await supabase
       .from("contact_messages")
