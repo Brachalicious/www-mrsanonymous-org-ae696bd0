@@ -112,7 +112,7 @@ function SignupPage() {
             </div>
           </label>
           <div>
-            <span className="text-xs font-semibold uppercase tracking-widest text-ink-500">I identify as</span>
+            <span className="text-xs font-semibold uppercase tracking-widest text-ink-500">I am a</span>
             <div className="mt-2 flex gap-3">
               <label
                 data-testid="signup-audience-women"
@@ -130,7 +130,7 @@ function SignupPage() {
                   onChange={() => setAudience("women")}
                   className="sr-only"
                 />
-                A woman
+                woman
               </label>
               <label
                 data-testid="signup-audience-girls"
@@ -148,7 +148,7 @@ function SignupPage() {
                   onChange={() => setAudience("girls")}
                   className="sr-only"
                 />
-                A girl / teen
+                girl / teen
               </label>
             </div>
           </div>
