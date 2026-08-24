@@ -3,15 +3,18 @@ import { useEffect } from "react";
 const QUICK_EXIT_URL = "https://www.google.com";
 
 export function performQuickExit() {
-  try {
-    // Replace the current history entry with the safe URL so this app
-    // does NOT remain in the browser's back/forward history.
-    // Never open a new tab — the exit must stay in the current tab.
-    window.location.replace(QUICK_EXIT_URL);
-  } catch {
-    window.location.href = QUICK_EXIT_URL;
-  }
+  // Replace the current history entry with the safe URL so this app
+  // does NOT remain in the browser's back/forward history. The exit must
+  // always stay in the current tab and never create a new tab or entry.
+  window.location.replace(QUICK_EXIT_URL);
 }
+
+export function performQuickExitFallback() {
+  // If Google is blocked by the network, fall back to a blank page so the
+  // back button still cannot return to MrsANONymous.
+  window.location.replace("about:blank");
+}
+
 
 
 export function QuickExit() {

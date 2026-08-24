@@ -64,7 +64,7 @@ function getTabs(loggedIn: boolean): NavItem[] {
 }
 
 export function Navbar() {
-  const { user, profile, isAdmin } = useAuth();
+  const { user, profile, isAdmin, session } = useAuth();
   const [open, setOpen] = useState(false);
   const [hideHistory, setHideHistory] = useState(false);
   const navigate = useNavigate();
@@ -77,7 +77,7 @@ export function Navbar() {
   const { data: unreadCount } = useQuery({
     queryKey: ["unread-count", user?.id],
     queryFn: () => fetchUnread(),
-    enabled: isClient && !!user,
+    enabled: isClient && !!user && !!session,
     refetchInterval: 30_000,
     retry: false,
   });

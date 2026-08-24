@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import type { User } from "@supabase/supabase-js";
+import type { User, Session } from "@supabase/supabase-js";
 import { registerAnonymousUser } from "@/lib/auth.functions";
 
 export interface Profile {
@@ -16,6 +16,7 @@ export interface Profile {
 
 interface AuthContextValue {
   user: User | null;
+  session: Session | null;
   profile: Profile | null;
   isAdmin: boolean;
   loading: boolean;
@@ -34,6 +35,7 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue>({
   user: null,
+  session: null,
   profile: null,
   isAdmin: false,
   loading: true,
@@ -51,6 +53,7 @@ function nicknameToEmail(nickname: string) {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -60,15 +63,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     async function load() {
       const {
-        data: { user },
-      } = await supabase.auth.getUser();
+        data: { session },
+      } = await supabase.auth.getSession();
+      const nextUser = session?.user ?? null;
       if (!mounted) return;
-      setUser(user ?? null);
+      setSession(session ?? null);
+      setUser(nextUser);
 
-      if (user) {
-        const { data } = await sb.from("profiles").select("*").eq("id", user.id).single();
+      if (nextUser) {
+        const { data } = await sb.from("profiles").select("*").eq("id", nextUser.id).single();
         if (mounted) setProfile((data as Profile | null) ?? null);
-        const { data: roles } = await sb.from("user_roles").select("role").eq("user_id", user.id);
+        const { data: roles } = await sb.from("user_roles").select("role").eq("user_id", nextUser.id);
         if (mounted) setIsAdmin(Array.isArray(roles) && roles.some((r: any) => r.role === "admin"));
       } else {
         setProfile(null);
@@ -85,6 +90,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!mounted) return;
       const nextUser = session?.user ?? null;
+      setSession(session ?? null);
       setUser(nextUser);
 
       if (nextUser) {
@@ -145,7 +151,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, profile, isAdmin, loading, login, register, logout, errMsg }}>
+    <AuthContext.Provider value={{ user, session, profile, isAdmin, loading, login, register, logout, errMsg }}>
       {children}
     </AuthContext.Provider>
   );
