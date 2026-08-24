@@ -60,8 +60,6 @@ function getTabs(loggedIn: boolean): NavItem[] {
     BASE_TABS[5],
     BASE_TABS[6],
     BASE_TABS[7],
-    BASE_TABS[8],
-    BASE_TABS[9],
   ];
 }
 
