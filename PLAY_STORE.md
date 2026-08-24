@@ -31,7 +31,7 @@ the site. Keep the upload-key fingerprint in the list too if you test locally.
   incidents, exportable incident reports, localized emergency numbers and hotlines in 17+
   languages, and an anonymous community board. No email, no phone number, no tracking.
 - **Category:** Health & Fitness (alt: Lifestyle) · **Tags:** safety, support
-- **Contact email:** required by Play (use an ops mailbox, not a survivor-facing one)
+- **Contact email:** mysticminded33@gmail.com
 - **Privacy policy URL:** https://mrsanonymous.org/privacy
 - **Account deletion URL:** https://mrsanonymous.org/delete-account
 - **Graphics needed:** 512×512 icon (have: `public/app-icon-512.png`), 1024×500 feature graphic,
