@@ -72,7 +72,7 @@ function Index() {
           </div>
 
           {/* Private Letter card */}
-          <div className="lg:col-span-5">
+          <div className="lg:col-span-5 lg:-mt-10 lg:self-start">
             <PrivateLetter />
           </div>
         </div>
