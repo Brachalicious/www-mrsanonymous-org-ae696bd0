@@ -24,6 +24,7 @@ export function Footer() {
             <Link to="/women" className="hover:text-rose-500">Women</Link>
             <Link to="/girls" className="hover:text-rose-500">Girls</Link>
             <Link to="/resources" className="hover:text-rose-500">Resources</Link>
+            <Link to="/safety-plan" className="hover:text-rose-500">My Safety Plan</Link>
             <Link to="/contact" className="hover:text-rose-500">Contact</Link>
             <Link to="/privacy" className="hover:text-rose-500">Privacy</Link>
             <Link to="/terms" className="hover:text-rose-500">Terms</Link>
