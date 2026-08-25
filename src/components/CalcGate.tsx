@@ -75,11 +75,13 @@ export function CalcGate() {
       if (mode === "setup" || !stored) {
         window.localStorage.setItem(LS_PASSCODE, sequence);
         window.sessionStorage.setItem(SS_UNLOCKED, "1");
+        window.dispatchEvent(new Event("calc-disguise-changed"));
         setUnlocked(true);
         return;
       }
       if (sequence === stored) {
         window.sessionStorage.setItem(SS_UNLOCKED, "1");
+        window.dispatchEvent(new Event("calc-disguise-changed"));
         setUnlocked(true);
         return;
       }

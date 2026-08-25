@@ -23,6 +23,7 @@ type NavItem = {
 };
 
 const BASE_TABS: NavItem[] = [
+  { to: "/dashboard", label: "Dashboard", testid: "nav-dashboard" },
   { to: "/about", label: "About us", testid: "nav-about" },
   { to: "/women", label: "Women", testid: "nav-women" },
   { to: "/girls", label: "Girls", testid: "nav-girls" },
@@ -60,6 +61,7 @@ function getTabs(loggedIn: boolean): NavItem[] {
     BASE_TABS[5],
     BASE_TABS[6],
     BASE_TABS[7],
+    BASE_TABS[8],
   ];
 }
 

@@ -17,6 +17,7 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { QuickExit } from "@/components/QuickExit";
+import { TermsGate } from "@/components/TermsGate";
 import { EmergencyWidget } from "@/components/EmergencyWidget";
 import { CalcGate } from "@/components/CalcGate";
 import { PrivacyBanner } from "@/components/PrivacyBanner";
@@ -172,6 +173,7 @@ function RootComponent() {
             <QuickExit />
             <BackToSite />
             <CalcGate />
+            <TermsGate />
           </div>
         </LanguageProvider>
       </AuthProvider>
