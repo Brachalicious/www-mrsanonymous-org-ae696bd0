@@ -21,6 +21,14 @@ export function setDisguiseEnabled(on: boolean) {
   window.dispatchEvent(new Event("calc-disguise-changed"));
 }
 
+/** True when the calculator disguise is currently covering the app. */
+export function isDisguiseLocked() {
+  if (typeof window === "undefined") return false;
+  if (!isDisguiseEnabled()) return false;
+  return window.sessionStorage.getItem(SS_UNLOCKED) !== "1";
+}
+
+
 type Mode = "locked" | "setup";
 
 export function CalcGate() {
