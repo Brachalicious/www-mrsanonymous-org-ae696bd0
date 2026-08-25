@@ -16,6 +16,7 @@ import { Route as TellYourStoryRouteImport } from './routes/tell-your-story'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SecurityQuestionsRouteImport } from './routes/security-questions'
+import { Route as SafetyPlanRouteImport } from './routes/safety-plan'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LoginRouteImport } from './routes/login'
@@ -68,6 +69,11 @@ const SettingsRoute = SettingsRouteImport.update({
 const SecurityQuestionsRoute = SecurityQuestionsRouteImport.update({
   id: '/security-questions',
   path: '/security-questions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SafetyPlanRoute = SafetyPlanRouteImport.update({
+  id: '/safety-plan',
+  path: '/safety-plan',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResourcesRoute = ResourcesRouteImport.update({
@@ -177,6 +183,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
+  '/safety-plan': typeof SafetyPlanRoute
   '/security-questions': typeof SecurityQuestionsRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
@@ -204,6 +211,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
+  '/safety-plan': typeof SafetyPlanRoute
   '/security-questions': typeof SecurityQuestionsRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
@@ -232,6 +240,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
+  '/safety-plan': typeof SafetyPlanRoute
   '/security-questions': typeof SecurityQuestionsRoute
   '/settings': typeof SettingsRoute
   '/signup': typeof SignupRoute
@@ -261,6 +270,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy'
     | '/resources'
+    | '/safety-plan'
     | '/security-questions'
     | '/settings'
     | '/signup'
@@ -288,6 +298,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy'
     | '/resources'
+    | '/safety-plan'
     | '/security-questions'
     | '/settings'
     | '/signup'
@@ -315,6 +326,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy'
     | '/resources'
+    | '/safety-plan'
     | '/security-questions'
     | '/settings'
     | '/signup'
@@ -343,6 +355,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PrivacyRoute: typeof PrivacyRoute
   ResourcesRoute: typeof ResourcesRoute
+  SafetyPlanRoute: typeof SafetyPlanRoute
   SecurityQuestionsRoute: typeof SecurityQuestionsRoute
   SettingsRoute: typeof SettingsRoute
   SignupRoute: typeof SignupRoute
@@ -405,6 +418,13 @@ declare module '@tanstack/react-router' {
       path: '/security-questions'
       fullPath: '/security-questions'
       preLoaderRoute: typeof SecurityQuestionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/safety-plan': {
+      id: '/safety-plan'
+      path: '/safety-plan'
+      fullPath: '/safety-plan'
+      preLoaderRoute: typeof SafetyPlanRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resources': {
@@ -551,6 +571,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PrivacyRoute: PrivacyRoute,
   ResourcesRoute: ResourcesRoute,
+  SafetyPlanRoute: SafetyPlanRoute,
   SecurityQuestionsRoute: SecurityQuestionsRoute,
   SettingsRoute: SettingsRoute,
   SignupRoute: SignupRoute,
