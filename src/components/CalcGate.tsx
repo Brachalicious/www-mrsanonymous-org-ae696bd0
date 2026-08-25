@@ -21,6 +21,14 @@ export function setDisguiseEnabled(on: boolean) {
   window.dispatchEvent(new Event("calc-disguise-changed"));
 }
 
+/** True when the calculator disguise is currently covering the app. */
+export function isDisguiseLocked() {
+  if (typeof window === "undefined") return false;
+  if (!isDisguiseEnabled()) return false;
+  return window.sessionStorage.getItem(SS_UNLOCKED) !== "1";
+}
+
+
 type Mode = "locked" | "setup";
 
 export function CalcGate() {
@@ -67,11 +75,13 @@ export function CalcGate() {
       if (mode === "setup" || !stored) {
         window.localStorage.setItem(LS_PASSCODE, sequence);
         window.sessionStorage.setItem(SS_UNLOCKED, "1");
+        window.dispatchEvent(new Event("calc-disguise-changed"));
         setUnlocked(true);
         return;
       }
       if (sequence === stored) {
         window.sessionStorage.setItem(SS_UNLOCKED, "1");
+        window.dispatchEvent(new Event("calc-disguise-changed"));
         setUnlocked(true);
         return;
       }
