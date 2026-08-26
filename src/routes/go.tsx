@@ -189,13 +189,14 @@ function GoPage() {
         title={host}
         onLoad={() => {
           loaded.current = true;
-          // We intentionally do NOT clear the blocked timer here. Many crisis
-          // sites send X-Frame-Options: deny, which triggers onLoad but leaves
-          // the iframe blank. The timer ensures the fallback still appears.
+          if (timer.current) {
+            window.clearTimeout(timer.current);
+            timer.current = null;
+          }
         }}
         className="h-[calc(100%-2.75rem)] w-full border-0"
         referrerPolicy="no-referrer"
-        sandbox="allow-scripts allow-forms"
+        sandbox="allow-scripts allow-forms allow-same-origin"
       />
 
       {backButton}

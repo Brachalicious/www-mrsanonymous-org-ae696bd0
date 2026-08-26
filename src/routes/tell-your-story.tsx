@@ -6,7 +6,7 @@ import { IncidentReportsList } from "@/components/IncidentReportsList";
 
 export const Route = createFileRoute("/tell-your-story")({
   validateSearch: z.object({
-    tab: z.enum(["story", "mine", "entries"]).optional().catch("story"),
+    tab: z.enum(["story", "mine", "entries"]).default("story").catch("story"),
   }),
   head: () => ({
     meta: [
