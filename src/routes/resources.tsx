@@ -996,6 +996,7 @@ function ResourcesPage() {
                   <div>
                     <div className="font-semibold text-ink-900">{it.name}</div>
                     <div className="text-sm text-ink-500">{it.note}</div>
+                    <div className="mt-2"><ShareButton resource={it} /></div>
                   </div>
                   <a
                     data-testid={`resource-link-${slug(it.name)}`}
@@ -1080,6 +1081,7 @@ function LocationFinder() {
                     <div>
                       <div className="font-semibold text-ink-900">{it.name}</div>
                       <div className="text-sm text-ink-500">{it.note}</div>
+                      <div className="mt-2"><ShareButton resource={it} /></div>
                     </div>
                     <a
                       data-testid={`location-link-${slug(it.name)}`}
@@ -1118,6 +1120,7 @@ function LocationFinder() {
                 <div>
                   <div className="font-semibold text-ink-900">{it.name}</div>
                   <div className="text-sm text-ink-500">{it.note}</div>
+                  <div className="mt-2"><ShareButton resource={it} /></div>
                   {(it.sms || it.fax || it.email) && (
                     <div className="mt-2 flex flex-wrap gap-2 text-xs">
                       {it.sms && (
