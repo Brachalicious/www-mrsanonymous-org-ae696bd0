@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { BookOpen, Lock, Globe } from "lucide-react";
-import { getCoverStyle, decodeTheme, isTheme } from "@/lib/notebook-covers";
+import { getCoverStyle, decodeTheme, isTheme, coverImageStyle } from "@/lib/notebook-covers";
 import { CoverImage } from "./CoverImage";
 
 interface NotebookCoverProps {
@@ -37,9 +37,18 @@ export function NotebookCover({
         style={style}
       >
         {themed && theme.image && (
-          <CoverImage path={theme.image} className="absolute inset-0 h-full w-full object-cover" />
+          <CoverImage
+            path={theme.image}
+            className="absolute inset-0 h-full w-full"
+            style={coverImageStyle(theme)}
+          />
         )}
-        {themed && !theme.image && <div className="marble-speckle" aria-hidden="true" />}
+        {themed && !theme.image && (
+          <>
+            <div className="marble-vein" aria-hidden="true" />
+            <div className="marble-speckle" aria-hidden="true" />
+          </>
+        )}
         {themed && (
           <div className="absolute inset-y-0 left-0 z-10 w-3" style={{ backgroundColor: theme.spine }} />
         )}
