@@ -257,15 +257,44 @@ export function EmergencyWidget() {
             <Phone className="h-3.5 w-3.5" /> Call {emergency.policeLabel}
           </a>
           <div className="mt-3 flex flex-col gap-2">
-            {emergency.crisis && (
-              <a
-                href={`tel:${emergency.crisis}`}
-                data-testid="emergency-call-crisis"
-                className="btn-rose w-full py-2 text-xs"
-              >
-                <Phone className="h-3.5 w-3.5" /> {t("safety.callEmergency")} {emergency.crisisLabel ?? emergency.crisis}
-              </a>
+            {is988 ? (
+              <div className="rounded-lg border border-rose-300 bg-rose-50 p-2">
+                <a
+                  href="tel:988"
+                  data-testid="emergency-call-crisis"
+                  className="btn-rose w-full py-2 text-[11px] leading-tight"
+                >
+                  <Phone className="h-3.5 w-3.5" /> 988 Suicide &amp; Crisis Lifeline — Call 24/7
+                </a>
+                <a
+                  href={`sms:988?&body=${encodeURIComponent("I need someone to talk to.")}`}
+                  data-testid="emergency-text-988"
+                  className="btn-ghost mt-1.5 w-full py-2 text-[11px]"
+                >
+                  <MessageSquare className="h-3.5 w-3.5" /> Text 988 — free, 24/7
+                </a>
+                <div className="mt-1.5">
+                  <SafeExternalButton
+                    url="https://988lifeline.org/chat/"
+                    label="988 Lifeline chat"
+                    className="btn-ghost w-full py-2 text-[11px]"
+                  >
+                    Chat with 988 online
+                  </SafeExternalButton>
+                </div>
+              </div>
+            ) : (
+              emergency.crisis && (
+                <a
+                  href={`tel:${emergency.crisis}`}
+                  data-testid="emergency-call-crisis"
+                  className="btn-rose w-full py-2 text-xs"
+                >
+                  <Phone className="h-3.5 w-3.5" /> {t("safety.callEmergency")} {emergency.crisisLabel ?? emergency.crisis}
+                </a>
+              )
             )}
+
             <a
               href={`tel:${emergency.police}`}
               data-testid="emergency-call-police"
