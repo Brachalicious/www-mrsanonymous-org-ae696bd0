@@ -13,6 +13,30 @@ import { LANGUAGES, translateToEnglish, type LangCode } from "@/lib/translations
 import { getEmergency } from "@/lib/emergency-numbers";
 import { useRegion } from "@/hooks/use-region";
 import helpSignalButton from "@/assets/help-signal-button.png.asset.json";
+import { SafeExternalButton } from "@/components/SafeExternalButton";
+import { useAuth } from "@/contexts/AuthContext";
+import { listJournalEntries } from "@/lib/journal.functions";
+import { buildReportText } from "@/lib/incident-report";
+
+const STORY_KEY = "mrsanon:panic-story";
+
+const REPORT_LABELS: Record<string, string> = {
+  realName: "Real name",
+  incidentType: "Type of incident",
+  day: "Day",
+  date: "Date",
+  time: "Time",
+  location: "Location",
+  involved: "Person(s) involved",
+  happened: "What happened",
+  injuries: "Injuries / physical effects",
+  feel: "Emotional impact",
+  witnesses: "Witnesses",
+  evidence: "Evidence saved",
+  reported: "Reported to",
+  chatLog: "Saved conversations",
+};
+
 
 const MSG_KEY = "mrsanon:panic-message";
 const MSG_LANG_KEY = "mrsanon:panic-msg-lang";
@@ -49,6 +73,26 @@ export function EmergencyWidget() {
   const [editAddrs, setEditAddrs] = useState(false);
   const [newLabel, setNewLabel] = useState("");
   const [newAddr, setNewAddr] = useState("");
+  const { user } = useAuth();
+  const [story, setStory] = useState("");
+  const [attachReport, setAttachReport] = useState(false);
+  const [storyStatus, setStoryStatus] = useState("");
+  const is988 = emergency.crisis === "988";
+
+  useEffect(() => {
+    try {
+      const s = localStorage.getItem(STORY_KEY);
+      if (s) setStory(s);
+    } catch {}
+  }, []);
+
+  function saveStory(next: string) {
+    setStory(next);
+    try {
+      localStorage.setItem(STORY_KEY, next);
+    } catch {}
+  }
+
 
   useEffect(() => {
     const list = loadAddresses();
@@ -231,6 +275,68 @@ export function EmergencyWidget() {
     }
   }
 
+  async function latestReportText() {
+    try {
+      const entries = (await listJournalEntries()) as {
+        fields: Record<string, string>;
+        attachments: { name: string; type?: string; size?: number }[] | null;
+        audio_path: string | null;
+        created_at: string;
+      }[];
+      const e = entries?.[0];
+      if (!e) return null;
+      const fieldDefs = Object.keys(e.fields ?? {}).map((k) => ({
+        key: k,
+        label: REPORT_LABELS[k] ?? k,
+      }));
+      return buildReportText({
+        fields: e.fields ?? {},
+        fieldDefs,
+        createdAt: e.created_at,
+        attachments: e.attachments ?? [],
+        hasAudio: Boolean(e.audio_path),
+        includeEmptyFields: false,
+      });
+    } catch {
+      return null;
+    }
+  }
+
+  async function sendStory(number: string) {
+    setStoryStatus("");
+    const written = story.trim();
+    if (!written && !attachReport) {
+      setStoryStatus("Write a few words, or attach your incident report.");
+      return;
+    }
+    setPreparing(true);
+    try {
+      let text = written;
+      if (text && msgLang !== "en") {
+        try {
+          text = await translateToEnglish(text, msgLang);
+        } catch {}
+      }
+      const parts: string[] = [];
+      if (text) parts.push(text);
+      if (attachReport) {
+        if (!user) {
+          setStoryStatus("Sign in to attach your incident report.");
+        } else {
+          const report = await latestReportText();
+          if (report) parts.push("--- INCIDENT REPORT ---", report);
+          else setStoryStatus("No saved incident report was found to attach.");
+        }
+      }
+      const body = buildSmsBody(parts.join("\n\n"), written || undefined);
+      const trimmed = body.length > 1400 ? `${body.slice(0, 1397)}...` : body;
+      window.location.href = `sms:${number}?&body=${encodeURIComponent(trimmed)}`;
+    } finally {
+      setPreparing(false);
+    }
+  }
+
+
   const msgLangDir = LANGUAGES.find((l) => l.code === msgLang)?.dir ?? "ltr";
 
   return (
@@ -257,15 +363,44 @@ export function EmergencyWidget() {
             <Phone className="h-3.5 w-3.5" /> Call {emergency.policeLabel}
           </a>
           <div className="mt-3 flex flex-col gap-2">
-            {emergency.crisis && (
-              <a
-                href={`tel:${emergency.crisis}`}
-                data-testid="emergency-call-crisis"
-                className="btn-rose w-full py-2 text-xs"
-              >
-                <Phone className="h-3.5 w-3.5" /> {t("safety.callEmergency")} {emergency.crisisLabel ?? emergency.crisis}
-              </a>
+            {is988 ? (
+              <div className="rounded-lg border border-rose-300 bg-rose-50 p-2">
+                <a
+                  href="tel:988"
+                  data-testid="emergency-call-crisis"
+                  className="btn-rose w-full py-2 text-[11px] leading-tight"
+                >
+                  <Phone className="h-3.5 w-3.5" /> 988 Suicide &amp; Crisis Lifeline — Call 24/7
+                </a>
+                <a
+                  href={`sms:988?&body=${encodeURIComponent("I need someone to talk to.")}`}
+                  data-testid="emergency-text-988"
+                  className="btn-ghost mt-1.5 w-full py-2 text-[11px]"
+                >
+                  <MessageSquare className="h-3.5 w-3.5" /> Text 988 — free, 24/7
+                </a>
+                <div className="mt-1.5">
+                  <SafeExternalButton
+                    url="https://988lifeline.org/chat/"
+                    label="988 Lifeline chat"
+                    className="btn-ghost w-full py-2 text-[11px]"
+                  >
+                    Chat with 988 online
+                  </SafeExternalButton>
+                </div>
+              </div>
+            ) : (
+              emergency.crisis && (
+                <a
+                  href={`tel:${emergency.crisis}`}
+                  data-testid="emergency-call-crisis"
+                  className="btn-rose w-full py-2 text-xs"
+                >
+                  <Phone className="h-3.5 w-3.5" /> {t("safety.callEmergency")} {emergency.crisisLabel ?? emergency.crisis}
+                </a>
+              )
             )}
+
             <a
               href={`tel:${emergency.police}`}
               data-testid="emergency-call-police"
@@ -303,6 +438,59 @@ export function EmergencyWidget() {
                 {preparing ? t("emg.translating") : `${t("emg.text911").replace("911", emergency.sms ?? emergency.police)}`}
               </a>
             )}
+
+            <div className="rounded-lg border border-ink-300/60 bg-cream-100 p-2">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-ink-700">
+                Share my story by text
+              </p>
+              <p className="mt-0.5 text-[10px] text-ink-500">
+                Sends what happened — and your latest incident report / evidence list if you
+                choose — to a crisis line or the police.
+              </p>
+              <textarea
+                value={story}
+                onChange={(e) => saveStory(e.target.value)}
+                rows={3}
+                data-testid="emergency-story-text"
+                placeholder="Tell them what is happening in your own words…"
+                className="mt-1.5 w-full rounded-md border border-ink-300 bg-white p-2 text-xs text-ink-900 focus:border-rose-500 focus:outline-none"
+              />
+              <label className="mt-1.5 flex items-start gap-1.5 text-[10px] text-ink-700">
+                <input
+                  type="checkbox"
+                  checked={attachReport}
+                  data-testid="emergency-attach-report"
+                  onChange={(e) => setAttachReport(e.target.checked)}
+                  className="mt-0.5 accent-rose-600"
+                />
+                <span>
+                  Attach my most recent incident report (details + list of saved evidence).
+                  {!user && " Sign in to use this."}
+                </span>
+              </label>
+              <div className="mt-1.5 grid grid-cols-2 gap-1.5">
+                {is988 && (
+                  <button
+                    type="button"
+                    onClick={() => void sendStory("988")}
+                    data-testid="emergency-story-988"
+                    className="btn-ghost py-2 text-[10px]"
+                  >
+                    <MessageSquare className="h-3 w-3" /> Text 988
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => void sendStory(smsNumber)}
+                  data-testid="emergency-story-police"
+                  className={`btn-rose py-2 text-[10px] ${is988 ? "" : "col-span-2"}`}
+                >
+                  <MessageSquare className="h-3 w-3" /> Text police ({smsNumber})
+                </button>
+              </div>
+              {storyStatus && <p className="mt-1 text-[10px] text-ink-600">{storyStatus}</p>}
+            </div>
+
 
             {emergency.smsSupported && (
               <div className="rounded-lg border border-red-300 bg-red-50 p-2">
