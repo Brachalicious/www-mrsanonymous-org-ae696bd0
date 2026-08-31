@@ -73,6 +73,26 @@ export function EmergencyWidget() {
   const [editAddrs, setEditAddrs] = useState(false);
   const [newLabel, setNewLabel] = useState("");
   const [newAddr, setNewAddr] = useState("");
+  const { user } = useAuth();
+  const [story, setStory] = useState("");
+  const [attachReport, setAttachReport] = useState(false);
+  const [storyStatus, setStoryStatus] = useState("");
+  const is988 = emergency.crisis === "988";
+
+  useEffect(() => {
+    try {
+      const s = localStorage.getItem(STORY_KEY);
+      if (s) setStory(s);
+    } catch {}
+  }, []);
+
+  function saveStory(next: string) {
+    setStory(next);
+    try {
+      localStorage.setItem(STORY_KEY, next);
+    } catch {}
+  }
+
 
   useEffect(() => {
     const list = loadAddresses();
