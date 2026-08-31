@@ -13,6 +13,30 @@ import { LANGUAGES, translateToEnglish, type LangCode } from "@/lib/translations
 import { getEmergency } from "@/lib/emergency-numbers";
 import { useRegion } from "@/hooks/use-region";
 import helpSignalButton from "@/assets/help-signal-button.png.asset.json";
+import { SafeExternalButton } from "@/components/SafeExternalButton";
+import { useAuth } from "@/contexts/AuthContext";
+import { listJournalEntries } from "@/lib/journal.functions";
+import { buildReportText } from "@/lib/incident-report";
+
+const STORY_KEY = "mrsanon:panic-story";
+
+const REPORT_LABELS: Record<string, string> = {
+  realName: "Real name",
+  incidentType: "Type of incident",
+  day: "Day",
+  date: "Date",
+  time: "Time",
+  location: "Location",
+  involved: "Person(s) involved",
+  happened: "What happened",
+  injuries: "Injuries / physical effects",
+  feel: "Emotional impact",
+  witnesses: "Witnesses",
+  evidence: "Evidence saved",
+  reported: "Reported to",
+  chatLog: "Saved conversations",
+};
+
 
 const MSG_KEY = "mrsanon:panic-message";
 const MSG_LANG_KEY = "mrsanon:panic-msg-lang";
