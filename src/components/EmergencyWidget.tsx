@@ -275,6 +275,68 @@ export function EmergencyWidget() {
     }
   }
 
+  async function latestReportText() {
+    try {
+      const entries = (await listJournalEntries()) as {
+        fields: Record<string, string>;
+        attachments: { name: string; type?: string; size?: number }[] | null;
+        audio_path: string | null;
+        created_at: string;
+      }[];
+      const e = entries?.[0];
+      if (!e) return null;
+      const fieldDefs = Object.keys(e.fields ?? {}).map((k) => ({
+        key: k,
+        label: REPORT_LABELS[k] ?? k,
+      }));
+      return buildReportText({
+        fields: e.fields ?? {},
+        fieldDefs,
+        createdAt: e.created_at,
+        attachments: e.attachments ?? [],
+        hasAudio: Boolean(e.audio_path),
+        includeEmptyFields: false,
+      });
+    } catch {
+      return null;
+    }
+  }
+
+  async function sendStory(number: string) {
+    setStoryStatus("");
+    const written = story.trim();
+    if (!written && !attachReport) {
+      setStoryStatus("Write a few words, or attach your incident report.");
+      return;
+    }
+    setPreparing(true);
+    try {
+      let text = written;
+      if (text && msgLang !== "en") {
+        try {
+          text = await translateToEnglish(text, msgLang);
+        } catch {}
+      }
+      const parts: string[] = [];
+      if (text) parts.push(text);
+      if (attachReport) {
+        if (!user) {
+          setStoryStatus("Sign in to attach your incident report.");
+        } else {
+          const report = await latestReportText();
+          if (report) parts.push("--- INCIDENT REPORT ---", report);
+          else setStoryStatus("No saved incident report was found to attach.");
+        }
+      }
+      const body = buildSmsBody(parts.join("\n\n"), written || undefined);
+      const trimmed = body.length > 1400 ? `${body.slice(0, 1397)}...` : body;
+      window.location.href = `sms:${number}?&body=${encodeURIComponent(trimmed)}`;
+    } finally {
+      setPreparing(false);
+    }
+  }
+
+
   const msgLangDir = LANGUAGES.find((l) => l.code === msgLang)?.dir ?? "ltr";
 
   return (
