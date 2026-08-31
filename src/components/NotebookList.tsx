@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { listMyNotebooks, createNotebook, deleteNotebook } from "@/lib/notebooks.functions";
+import { listMyNotebooks, createNotebook, deleteNotebook, updateNotebook } from "@/lib/notebooks.functions";
 import { NotebookCover } from "./NotebookCover";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "@tanstack/react-router";
@@ -37,6 +37,12 @@ export function NotebookList() {
 
   const deleteMutation = useMutation({
     mutationFn: remove,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["my-notebooks"] }),
+  });
+
+  const update = useServerFn(updateNotebook);
+  const renameMutation = useMutation({
+    mutationFn: update,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["my-notebooks"] }),
   });
 
@@ -136,6 +142,8 @@ export function NotebookList() {
                 shared={n.shared}
                 shareAs={n.share_as}
                 jitter={-1.5 + (i % 3) * 1.5}
+                renaming={renameMutation.isPending}
+                onRename={(id, next) => renameMutation.mutate({ data: { id, title: next } })}
               />
               <button
                 onClick={() => {
