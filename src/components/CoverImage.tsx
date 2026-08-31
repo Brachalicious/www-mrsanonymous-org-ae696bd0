@@ -4,7 +4,15 @@ import { supabase } from "@/integrations/supabase/client";
 const cache = new Map<string, string>();
 
 /** Renders a cover image stored in the private notebook-covers bucket via a signed URL. */
-export function CoverImage({ path, className }: { path: string; className?: string }) {
+export function CoverImage({
+  path,
+  className,
+  style,
+}: {
+  path: string;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   const [url, setUrl] = useState<string | null>(cache.get(path) || null);
 
   useEffect(() => {
@@ -27,5 +35,5 @@ export function CoverImage({ path, className }: { path: string; className?: stri
   }, [path]);
 
   if (!url) return null;
-  return <img src={url} alt="" aria-hidden="true" className={className} />;
+  return <img src={url} alt="" aria-hidden="true" className={className} style={style} />;
 }

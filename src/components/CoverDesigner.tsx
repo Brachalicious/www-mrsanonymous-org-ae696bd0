@@ -8,6 +8,7 @@ import {
   encodeTheme,
   isPreset,
   themeCoverBackground,
+  coverImageStyle,
   type NotebookTheme,
 } from "@/lib/notebook-covers";
 import { CoverImage } from "./CoverImage";
@@ -120,8 +121,19 @@ export function CoverDesigner({
             className="relative h-40 w-32 overflow-hidden rounded-xl shadow-md"
             style={{ background: themeCoverBackground(theme) }}
           >
-            {theme.image && <CoverImage path={theme.image} className="absolute inset-0 h-full w-full object-cover" />}
-            {!theme.image && <div className="marble-speckle" aria-hidden="true" />}
+            {theme.image && (
+              <CoverImage
+                path={theme.image}
+                className="absolute inset-0 h-full w-full"
+                style={coverImageStyle(theme)}
+              />
+            )}
+            {!theme.image && (
+              <>
+                <div className="marble-vein" aria-hidden="true" />
+                <div className="marble-speckle" aria-hidden="true" />
+              </>
+            )}
             <div
               className="absolute inset-y-0 left-0 z-10 w-3"
               style={{ backgroundColor: theme.spine }}
@@ -179,6 +191,36 @@ export function CoverDesigner({
             {saving && <span className="text-xs text-ink-400">Saving…</span>}
           </div>
           {uploadError && <p className="mt-2 text-sm text-emergency">{uploadError}</p>}
+
+          {theme.image && (
+            <div className="mt-3">
+              <span className="text-xs font-semibold uppercase tracking-widest text-ink-500">
+                Image size — {Math.round(theme.imageScale ?? 100)}%
+              </span>
+              <div className="mt-1.5 flex items-center gap-3">
+                <input
+                  type="range"
+                  min={50}
+                  max={300}
+                  step={5}
+                  value={Math.round(theme.imageScale ?? 100)}
+                  onChange={(e) => apply({ imageScale: Number(e.target.value) })}
+                  className="w-full max-w-xs accent-rose-500"
+                  aria-label="Cover image size"
+                />
+                <button
+                  type="button"
+                  onClick={() => apply({ imageScale: 100 })}
+                  className="text-xs text-ink-500 underline"
+                >
+                  Reset
+                </button>
+              </div>
+              <p className="mt-1 text-[11px] text-ink-400">
+                Drag to zoom your photo in or out until it fits the cover.
+              </p>
+            </div>
+          )}
 
           <ColorRow label="Cover" value={theme.coverA} onChange={(v) => apply({ coverA: v })} />
           {mix && (

@@ -111,6 +111,8 @@ export type NotebookTheme = {
   spine: string;
   page: string;
   image?: string | null;
+  /** Zoom for an uploaded cover image, in percent (100 = fill the cover). */
+  imageScale?: number;
 };
 
 export const DEFAULT_THEME: NotebookTheme = {
@@ -119,6 +121,7 @@ export const DEFAULT_THEME: NotebookTheme = {
   spine: "#7F1D1D",
   page: "#FFFDF7",
   image: null,
+  imageScale: 100,
 };
 
 const hex = (v: string) => (v.startsWith("#") ? v : `#${v}`);
@@ -131,16 +134,21 @@ export function isTheme(color: string | null | undefined): boolean {
 export function encodeTheme(t: NotebookTheme): string {
   const cover = t.coverB ? `${bare(t.coverA)}.${bare(t.coverB)}` : bare(t.coverA);
   const tail = `${cover}-${bare(t.spine)}-${bare(t.page)}`;
-  return t.image ? `img:${t.image}|${tail}` : `theme:${tail}`;
+  if (!t.image) return `theme:${tail}`;
+  const scale = Math.round(t.imageScale ?? 100);
+  return `img:${t.image}${scale !== 100 ? `*${scale}` : ""}|${tail}`;
 }
 
 export function decodeTheme(color: string | null | undefined): NotebookTheme {
   if (typeof color !== "string") return { ...DEFAULT_THEME };
   let image: string | null = null;
+  let imageScale = 100;
   let body = color;
   if (color.startsWith("img:")) {
     const [path, rest] = color.slice(4).split("|");
-    image = path || null;
+    const [rawPath, rawScale] = (path || "").split("*");
+    image = rawPath || null;
+    if (rawScale && Number.isFinite(Number(rawScale))) imageScale = Number(rawScale);
     body = rest ? `theme:${rest}` : "";
   }
   if (body.startsWith("theme:")) {
@@ -152,9 +160,10 @@ export function decodeTheme(color: string | null | undefined): NotebookTheme {
       spine: spine ? hex(spine) : DEFAULT_THEME.spine,
       page: page ? hex(page) : DEFAULT_THEME.page,
       image,
+      imageScale,
     };
   }
-  if (image) return { ...DEFAULT_THEME, image };
+  if (image) return { ...DEFAULT_THEME, image, imageScale };
   if (isPreset(color)) return { ...DEFAULT_THEME };
   return { ...DEFAULT_THEME, coverA: color || DEFAULT_THEME.coverA, spine: color || DEFAULT_THEME.spine };
 }
@@ -194,4 +203,9 @@ export function getCoverStyle(color: string | null | undefined): {
     className: "",
     style: { backgroundColor: color || "#B91C1C" },
   };
+}
+/** Inline style that zooms an uploaded cover image without distorting it. */
+export function coverImageStyle(t: NotebookTheme): React.CSSProperties {
+  const s = Math.max(50, Math.min(300, t.imageScale ?? 100));
+  return { objectFit: "cover", transform: `scale(${s / 100})`, transformOrigin: "center" };
 }
