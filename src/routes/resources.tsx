@@ -2,6 +2,50 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, type MouseEvent } from "react";
 import { isHideHistoryEnabled } from "@/components/PrivacyBanner";
 
+function shareText(r: { name: string; phone?: string; href?: string; note: string }) {
+  const parts = [r.name];
+  if (r.phone) parts.push(`Call: ${r.phone}`);
+  if (r.href) parts.push(`Website: ${r.href}`);
+  if (r.note) parts.push(r.note);
+  return parts.join("\n");
+}
+
+function ShareButton({ resource }: { resource: { name: string; phone?: string; href?: string; note: string } }) {
+  const [shared, setShared] = useState<"copied" | null>(null);
+
+  async function share() {
+    const text = shareText(resource);
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: resource.name, text });
+        return;
+      }
+    } catch {
+      // user cancelled share sheet — do nothing
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      setShared("copied");
+      window.setTimeout(() => setShared(null), 2000);
+    } catch {
+      window.prompt("Copy and share this resource:", text);
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      data-testid={`share-${resource.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`}
+      onClick={share}
+      aria-label={`Share ${resource.name}`}
+      className="rounded-full border border-ink-300/60 bg-white px-3 py-1 text-xs font-semibold text-ink-900 hover:border-rose-500"
+    >
+      {shared === "copied" ? "✓ Copied" : "↗ Share"}
+    </button>
+  );
+}
+
 type ResourceItem = {
   name: string;
   phone?: string;
@@ -952,6 +996,7 @@ function ResourcesPage() {
                   <div>
                     <div className="font-semibold text-ink-900">{it.name}</div>
                     <div className="text-sm text-ink-500">{it.note}</div>
+                    <div className="mt-2"><ShareButton resource={it} /></div>
                   </div>
                   <a
                     data-testid={`resource-link-${slug(it.name)}`}
@@ -1036,6 +1081,7 @@ function LocationFinder() {
                     <div>
                       <div className="font-semibold text-ink-900">{it.name}</div>
                       <div className="text-sm text-ink-500">{it.note}</div>
+                      <div className="mt-2"><ShareButton resource={it} /></div>
                     </div>
                     <a
                       data-testid={`location-link-${slug(it.name)}`}
@@ -1074,6 +1120,7 @@ function LocationFinder() {
                 <div>
                   <div className="font-semibold text-ink-900">{it.name}</div>
                   <div className="text-sm text-ink-500">{it.note}</div>
+                  <div className="mt-2"><ShareButton resource={it} /></div>
                   {(it.sms || it.fax || it.email) && (
                     <div className="mt-2 flex flex-wrap gap-2 text-xs">
                       {it.sms && (
