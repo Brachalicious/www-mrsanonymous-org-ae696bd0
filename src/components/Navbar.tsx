@@ -141,6 +141,8 @@ export function Navbar() {
               <span aria-hidden>🌐</span>
               <span className="sr-only">{t("safety.language")}</span>
               <select
+                translate="no"
+                data-no-translate=""
                 data-testid="safety-strip-language"
                 value={lang}
                 onChange={(e) => setLang(e.target.value as LangCode)}
