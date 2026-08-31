@@ -247,6 +247,8 @@ function ensureObserver() {
     childList: true,
     subtree: true,
     characterData: true,
+    attributes: true,
+    attributeFilter: ATTRS,
   });
 }
 
