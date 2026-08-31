@@ -288,31 +288,42 @@
   box-shadow: 0 2px 6px rgba(45, 40, 38, 0.08);
 }
 
-/* Composition-book marbling — crisp mottled splotches over the chosen color.
-   The pattern is a hard-edged noise mask, so it stays sharp at any size. */
+/* Clean marble — soft white clouds plus thin crisp veins over the chosen color,
+   so the base color (e.g. pink) stays true and readable. */
 @utility marble-vein {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-color: rgba(255, 255, 255, 0.92);
-  --mottle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.055' numOctaves='4' seed='11'/%3E%3CfeColorMatrix type='luminanceToAlpha'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='discrete' tableValues='0 0 0 1 1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23m)'/%3E%3C/svg%3E");
-  -webkit-mask-image: var(--mottle);
-  mask-image: var(--mottle);
-  -webkit-mask-size: 200px 200px;
-  mask-size: 200px 200px;
+  /* Thin marble veins — sharp 1px diagonal streaks */
+  background:
+    linear-gradient(63deg, transparent 46.6%, rgba(255, 255, 255, 0.75) 47.3%, rgba(255, 255, 255, 0.75) 47.9%, transparent 48.6%),
+    linear-gradient(121deg, transparent 68.2%, rgba(255, 255, 255, 0.55) 68.9%, rgba(255, 255, 255, 0.55) 69.4%, transparent 70.1%),
+    linear-gradient(28deg, transparent 82.4%, rgba(255, 255, 255, 0.6) 83%, rgba(255, 255, 255, 0.6) 83.5%, transparent 84.2%),
+    linear-gradient(158deg, transparent 24.3%, rgba(255, 255, 255, 0.5) 24.9%, rgba(255, 255, 255, 0.5) 25.4%, transparent 26.1%),
+    linear-gradient(96deg, transparent 55.6%, rgba(255, 255, 255, 0.45) 56.1%, rgba(255, 255, 255, 0.45) 56.6%, transparent 57.3%);
+  /* Soft white clouds, masked so they stay gentle patches */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0.38);
+    --mottle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.028' numOctaves='3' seed='11'/%3E%3CfeColorMatrix type='luminanceToAlpha'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='1.4' intercept='-0.45'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23m)'/%3E%3C/svg%3E");
+    -webkit-mask-image: var(--mottle);
+    mask-image: var(--mottle);
+    -webkit-mask-size: 260px 260px;
+    mask-size: 260px 260px;
+  }
 }
 
-/* Second, darker mottle pass for depth — finer flecks, different seed */
+/* Faint dark shading veins for depth — very light so the color stays clean */
 @utility marble-speckle {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-color: rgba(0, 0, 0, 0.55);
-  --mottle2: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.12' numOctaves='3' seed='29'/%3E%3CfeColorMatrix type='luminanceToAlpha'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='discrete' tableValues='0 0 0 0 1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
-  -webkit-mask-image: var(--mottle2);
-  mask-image: var(--mottle2);
-  -webkit-mask-size: 130px 130px;
-  mask-size: 130px 130px;
+  background:
+    linear-gradient(74deg, transparent 30.5%, rgba(0, 0, 0, 0.12) 31.1%, rgba(0, 0, 0, 0.12) 31.5%, transparent 32.2%),
+    linear-gradient(140deg, transparent 58.8%, rgba(0, 0, 0, 0.1) 59.4%, rgba(0, 0, 0, 0.1) 59.8%, transparent 60.5%),
+    linear-gradient(15deg, transparent 87.2%, rgba(0, 0, 0, 0.1) 87.7%, rgba(0, 0, 0, 0.1) 88.1%, transparent 88.8%);
 }
 
 

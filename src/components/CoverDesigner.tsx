@@ -115,10 +115,10 @@ export function CoverDesigner({
   return (
     <div>
       <div className="flex flex-wrap items-start gap-5">
-        {/* Live preview */}
+        {/* Live preview — mirrors the real NotebookCover */}
         <div className="shrink-0">
           <div
-            className="relative h-40 w-32 overflow-hidden rounded-xl shadow-md"
+            className="marble-base relative h-40 w-32 p-3"
             style={{ background: themeCoverBackground(theme) }}
           >
             {theme.image && (
@@ -138,14 +138,22 @@ export function CoverDesigner({
               className="absolute inset-y-0 left-0 z-10 w-3"
               style={{ backgroundColor: theme.spine }}
             />
+            <div className="relative z-10 flex h-full flex-col">
+              <div className="flex-1" />
+              <div className="rounded-sm border border-ink-300/70 bg-white/95 px-1.5 py-1 shadow-inner">
+                <span className="block truncate font-serif text-[11px] text-ink-900">
+                  Notebook label
+                </span>
+              </div>
+            </div>
             <div
-              className="absolute bottom-2 right-2 z-10 h-8 w-10 rounded-sm shadow-inner"
+              className="absolute bottom-2 right-2 z-0 h-6 w-8 rounded-sm opacity-60 shadow-inner"
               style={{ backgroundColor: theme.page }}
               title="Page color"
             />
           </div>
           <p className="mt-1.5 text-center text-[11px] text-ink-400">
-            Preview — left strip is the binder, small square is the page color
+            Preview — left strip is the binder, bottom box is your label
           </p>
         </div>
 
