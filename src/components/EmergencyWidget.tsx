@@ -667,6 +667,8 @@ export function EmergencyWidget() {
                     {t("emg.msgLang")}
                   </span>
                   <select
+                    translate="no"
+                    data-no-translate=""
                     data-testid="emergency-msg-lang"
                     value={msgLang}
                     onChange={(e) => saveMsgLang(e.target.value as LangCode)}

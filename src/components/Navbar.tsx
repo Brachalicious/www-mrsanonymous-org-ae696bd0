@@ -141,6 +141,8 @@ export function Navbar() {
               <span aria-hidden>🌐</span>
               <span className="sr-only">{t("safety.language")}</span>
               <select
+                translate="no"
+                data-no-translate=""
                 data-testid="safety-strip-language"
                 value={lang}
                 onChange={(e) => setLang(e.target.value as LangCode)}
@@ -173,7 +175,7 @@ export function Navbar() {
       {/* Brand + auth */}
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 pt-4 lg:px-10">
         <Link to="/" data-testid="nav-logo" className="group flex flex-col leading-none">
-          <div className="flex items-baseline gap-1">
+          <div className="flex items-baseline gap-1" translate="no" data-no-translate="">
             <span className="font-serif text-2xl tracking-tight text-ink-900">Mrs</span>
             <span className="font-serif text-2xl italic text-rose-500">ANONymous</span>
             <span className="hidden font-serif text-xl text-ink-300 sm:inline">.org</span>
