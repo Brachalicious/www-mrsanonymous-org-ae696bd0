@@ -333,6 +333,59 @@ export function EmergencyWidget() {
               </a>
             )}
 
+            <div className="rounded-lg border border-ink-300/60 bg-cream-100 p-2">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-ink-700">
+                Share my story by text
+              </p>
+              <p className="mt-0.5 text-[10px] text-ink-500">
+                Sends what happened — and your latest incident report / evidence list if you
+                choose — to a crisis line or the police.
+              </p>
+              <textarea
+                value={story}
+                onChange={(e) => saveStory(e.target.value)}
+                rows={3}
+                data-testid="emergency-story-text"
+                placeholder="Tell them what is happening in your own words…"
+                className="mt-1.5 w-full rounded-md border border-ink-300 bg-white p-2 text-xs text-ink-900 focus:border-rose-500 focus:outline-none"
+              />
+              <label className="mt-1.5 flex items-start gap-1.5 text-[10px] text-ink-700">
+                <input
+                  type="checkbox"
+                  checked={attachReport}
+                  data-testid="emergency-attach-report"
+                  onChange={(e) => setAttachReport(e.target.checked)}
+                  className="mt-0.5 accent-rose-600"
+                />
+                <span>
+                  Attach my most recent incident report (details + list of saved evidence).
+                  {!user && " Sign in to use this."}
+                </span>
+              </label>
+              <div className="mt-1.5 grid grid-cols-2 gap-1.5">
+                {is988 && (
+                  <button
+                    type="button"
+                    onClick={() => void sendStory("988")}
+                    data-testid="emergency-story-988"
+                    className="btn-ghost py-2 text-[10px]"
+                  >
+                    <MessageSquare className="h-3 w-3" /> Text 988
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => void sendStory(smsNumber)}
+                  data-testid="emergency-story-police"
+                  className={`btn-rose py-2 text-[10px] ${is988 ? "" : "col-span-2"}`}
+                >
+                  <MessageSquare className="h-3 w-3" /> Text police ({smsNumber})
+                </button>
+              </div>
+              {storyStatus && <p className="mt-1 text-[10px] text-ink-600">{storyStatus}</p>}
+            </div>
+
+
             {emergency.smsSupported && (
               <div className="rounded-lg border border-red-300 bg-red-50 p-2">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-red-700">
