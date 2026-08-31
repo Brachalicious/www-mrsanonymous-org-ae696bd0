@@ -90,46 +90,112 @@ let running = false;
 let queued = false;
 let currentLang: LangCode = "en";
 
-async function translateNow(lang: LangCode) {
-  if (typeof document === "undefined") return;
-  const nodes = collectTextNodes(document.body);
+// ---- Attribute translation (placeholders, tooltips, alt text, aria labels) ----
+const ATTRS = ["placeholder", "title", "aria-label", "alt", "aria-placeholder"];
+const attrOriginals = new WeakMap<Element, Map<string, string>>();
+const attrApplied = new WeakMap<Element, Map<string, string>>();
 
-  // Ensure originals stored. If the app rewrote a node since we last touched
-  // it, treat the new value as the source text.
-  for (const n of nodes) {
+type Slot = {
+  read: () => string;
+  write: (v: string) => void;
+  connected: () => boolean;
+  original: string;
+  current: string;
+  isApplied: boolean;
+  markApplied: (v: string) => void;
+  clearApplied: () => void;
+};
+
+function collectSlots(): Slot[] {
+  const slots: Slot[] = [];
+
+  for (const n of collectTextNodes(document.body)) {
     const ours = applied.get(n);
     if (!originals.has(n) || (ours !== undefined && ours !== n.nodeValue)) {
       originals.set(n, n.nodeValue ?? "");
       applied.delete(n);
     }
+    slots.push({
+      read: () => n.nodeValue ?? "",
+      write: (v) => {
+        n.nodeValue = v;
+      },
+      connected: () => n.isConnected,
+      original: originals.get(n) ?? n.nodeValue ?? "",
+      current: n.nodeValue ?? "",
+      isApplied: applied.get(n) === n.nodeValue,
+      markApplied: (v) => applied.set(n, v),
+      clearApplied: () => applied.delete(n),
+    });
   }
 
+  const els = document.body.querySelectorAll<HTMLElement>(
+    "[placeholder],[title],[aria-label],[alt],[aria-placeholder]",
+  );
+  els.forEach((el) => {
+    if (shouldSkip(el.firstChild ?? el) || el.getAttribute("translate") === "no") return;
+    if (el.closest("[data-no-translate],[translate='no']")) return;
+    for (const attr of ATTRS) {
+      const val = el.getAttribute(attr);
+      if (!val || !val.trim()) continue;
+      let origs = attrOriginals.get(el);
+      if (!origs) {
+        origs = new Map();
+        attrOriginals.set(el, origs);
+      }
+      let apps = attrApplied.get(el);
+      if (!apps) {
+        apps = new Map();
+        attrApplied.set(el, apps);
+      }
+      const ours = apps.get(attr);
+      if (!origs.has(attr) || (ours !== undefined && ours !== val)) {
+        origs.set(attr, val);
+        apps.delete(attr);
+      }
+      slots.push({
+        read: () => el.getAttribute(attr) ?? "",
+        write: (v) => el.setAttribute(attr, v),
+        connected: () => el.isConnected,
+        original: origs.get(attr) ?? val,
+        current: val,
+        isApplied: apps.get(attr) === val,
+        markApplied: (v) => apps!.set(attr, v),
+        clearApplied: () => apps!.delete(attr),
+      });
+    }
+  });
+
+  return slots;
+}
+
+async function translateNow(lang: LangCode) {
+  if (typeof document === "undefined") return;
+  const slots = collectSlots();
+
   if (lang === "en") {
-    for (const n of nodes) {
-      // Only restore nodes we actually translated.
-      if (applied.get(n) !== n.nodeValue) continue;
-      const orig = originals.get(n);
-      if (orig !== undefined && n.nodeValue !== orig) {
-        n.nodeValue = orig;
-        applied.delete(n);
+    for (const s of slots) {
+      if (!s.isApplied) continue;
+      if (s.current !== s.original) {
+        s.write(s.original);
+        s.clearApplied();
       }
     }
     return;
   }
 
   // Determine which need translation.
-  const need: { node: Text; text: string }[] = [];
-  for (const n of nodes) {
-    const orig = originals.get(n) ?? n.nodeValue ?? "";
-    const key = `${lang}\u0001${orig}`;
-    const cached = cache.get(key);
+  const need: { slot: Slot; text: string }[] = [];
+  for (const s of slots) {
+    const orig = s.original;
+    const cached = cache.get(`${lang}\u0001${orig}`);
     if (cached !== undefined) {
-      if (n.nodeValue !== cached) {
-        n.nodeValue = cached;
-        applied.set(n, cached);
+      if (s.current !== cached) {
+        s.write(cached);
+        s.markApplied(cached);
       }
     } else {
-      need.push({ node: n, text: orig });
+      need.push({ slot: s, text: orig });
     }
   }
 
@@ -141,12 +207,12 @@ async function translateNow(lang: LangCode) {
   const map = new Map<string, string>();
   uniq.forEach((t, i) => map.set(t, translated[i] ?? t));
 
-  for (const { node, text } of need) {
+  for (const { slot, text } of need) {
     const out = map.get(text) ?? text;
     cache.set(`${lang}\u0001${text}`, out);
-    if (currentLang === lang && node.isConnected) {
-      node.nodeValue = out;
-      applied.set(node, out);
+    if (currentLang === lang && slot.connected()) {
+      slot.write(out);
+      slot.markApplied(out);
     }
   }
 }
