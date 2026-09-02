@@ -50,6 +50,29 @@ export function Footer() {
             Call {emergency.policeLabel}
           </a>
         </div>
+
+        <div className="mt-10 flex flex-col items-center gap-2 border-t border-ink-300 pt-6">
+          <div
+            role="img"
+            aria-label="MysticMinded³³ logo"
+            className="h-16 w-16 md:h-20 md:w-20"
+            style={{
+              backgroundImage: "linear-gradient(135deg, var(--color-ink-900), var(--color-rose-500))",
+              WebkitMaskImage: `url(${mysticMindedLogo.url})`,
+              maskImage: `url(${mysticMindedLogo.url})`,
+              WebkitMaskSize: "contain",
+              maskSize: "contain",
+              WebkitMaskRepeat: "no-repeat",
+              maskRepeat: "no-repeat",
+              WebkitMaskPosition: "center",
+              maskPosition: "center",
+            }}
+          />
+          <p className="text-xs tracking-wide text-ink-500">
+            Created by <span className="font-serif italic text-rose-500">MysticMinded</span>
+            <sup className="text-ink-400">33</sup>
+          </p>
+        </div>
       </div>
     </footer>
   );
