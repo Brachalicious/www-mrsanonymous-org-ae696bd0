@@ -68,10 +68,15 @@ function GoPage() {
       .then((res) => {
         if (cancelled) return;
         setFrameBlocked(res.blocked);
+        frameBlockedRef.current = res.blocked;
         if (res.blocked === true) {
           if (timer.current) window.clearTimeout(timer.current);
           timer.current = null;
           setBlocked(true);
+        } else if (res.blocked === false && loaded.current && timer.current) {
+          // Iframe already loaded before the check came back — safe to trust.
+          window.clearTimeout(timer.current);
+          timer.current = null;
         }
       })
       .catch(() => {
@@ -232,8 +237,9 @@ function GoPage() {
             // A load event is NOT proof the page is visible — blocked sites
             // fire it too. Only trust it when the server confirmed the site
             // allows framing; otherwise let the timer fallback protect the
-            // user from a silent blank screen.
-            if (frameBlocked === false && timer.current) {
+            // user from a silent blank screen. (Ref, not state — this handler
+            // can fire before the server check resolves.)
+            if (frameBlockedRef.current === false && timer.current) {
               window.clearTimeout(timer.current);
               timer.current = null;
             }
