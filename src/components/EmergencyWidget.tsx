@@ -474,19 +474,25 @@ export function EmergencyWidget() {
                     type="button"
                     onClick={() => void sendStory("988")}
                     data-testid="emergency-story-988"
-                    className="btn-ghost py-2 text-[10px]"
+                    className={`btn-ghost py-2 text-[10px] ${emergency.smsSupported ? "" : "col-span-2"}`}
                   >
                     <MessageSquare className="h-3 w-3" /> Text 988
                   </button>
                 )}
-                <button
-                  type="button"
-                  onClick={() => void sendStory(smsNumber)}
-                  data-testid="emergency-story-police"
-                  className={`btn-rose py-2 text-[10px] ${is988 ? "" : "col-span-2"}`}
-                >
-                  <MessageSquare className="h-3 w-3" /> Text police ({smsNumber})
-                </button>
+                {emergency.smsSupported ? (
+                  <button
+                    type="button"
+                    onClick={() => void sendStory(smsNumber)}
+                    data-testid="emergency-story-police"
+                    className={`btn-rose py-2 text-[10px] ${is988 ? "" : "col-span-2"}`}
+                  >
+                    <MessageSquare className="h-3 w-3" /> Text police ({smsNumber})
+                  </button>
+                ) : (
+                  <p className={`text-[10px] text-ink-500 ${is988 ? "" : "col-span-2"}`}>
+                    Text-to-police is not supported in your region — please call {emergency.policeLabel} instead.
+                  </p>
+                )}
               </div>
               {storyStatus && <p className="mt-1 text-[10px] text-ink-600">{storyStatus}</p>}
             </div>
