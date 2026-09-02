@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useRegion } from "@/hooks/use-region";
 import { getEmergency } from "@/lib/emergency-numbers";
-import mysticMindedLogo from "@/assets/mysticminded-logo.png.asset.json";
+import mysticMindedLogo from "@/assets/mysticminded-logo-circle.png";
 
 export function Footer() {
   const { lang } = useLanguage();
@@ -53,12 +53,9 @@ export function Footer() {
 
         <div className="mt-10 flex flex-col items-center gap-2 border-t border-ink-300 pt-6">
           <img
-            src={mysticMindedLogo.url}
+            src={mysticMindedLogo}
             alt="MysticMinded³³ logo"
-            className="h-16 w-16 md:h-20 md:w-20 rounded-full border border-ink-300 shadow-sm"
-            style={{
-              filter: "hue-rotate(-58deg) saturate(1.25) brightness(0.96)",
-            }}
+            className="h-20 w-auto md:h-24"
           />
           <p className="text-xs tracking-wide text-ink-500">
             Created by <span className="font-serif italic text-rose-500">MysticMinded</span>
