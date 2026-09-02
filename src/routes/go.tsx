@@ -221,20 +221,26 @@ function GoPage() {
         </div>
       )}
 
-      <iframe
-        src={url}
-        title={host}
-        onLoad={() => {
-          loaded.current = true;
-          if (timer.current) {
-            window.clearTimeout(timer.current);
-            timer.current = null;
-          }
-        }}
-        className="h-[calc(100%-2.75rem)] w-full border-0"
-        referrerPolicy="no-referrer"
-        sandbox="allow-scripts allow-forms allow-same-origin"
-      />
+      {frameBlocked !== true && (
+        <iframe
+          src={url}
+          title={host}
+          onLoad={() => {
+            loaded.current = true;
+            // A load event is NOT proof the page is visible — blocked sites
+            // fire it too. Only trust it when the server confirmed the site
+            // allows framing; otherwise let the timer fallback protect the
+            // user from a silent blank screen.
+            if (frameBlocked === false && timer.current) {
+              window.clearTimeout(timer.current);
+              timer.current = null;
+            }
+          }}
+          className="h-[calc(100%-2.75rem)] w-full border-0"
+          referrerPolicy="no-referrer"
+          sandbox="allow-scripts allow-forms allow-same-origin"
+        />
+      )}
 
       {backButton}
     </div>
