@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useRegion } from "@/hooks/use-region";
 import { getEmergency } from "@/lib/emergency-numbers";
+import mysticMindedLogo from "@/assets/mysticminded-logo.png.asset.json";
 
 export function Footer() {
   const { lang } = useLanguage();
