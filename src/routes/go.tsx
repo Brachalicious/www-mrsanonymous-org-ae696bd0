@@ -35,6 +35,7 @@ function GoPage() {
   // null = not yet checked / unverifiable, true = site refuses framing,
   // false = server confirmed framing is allowed.
   const [frameBlocked, setFrameBlocked] = useState<boolean | null>(null);
+  const frameBlockedRef = useRef<boolean | null>(null);
   const loaded = useRef(false);
   const timer = useRef<number | null>(null);
 
@@ -49,6 +50,7 @@ function GoPage() {
     setBlocked(false);
     setDismissed(false);
     setFrameBlocked(null);
+    frameBlockedRef.current = null;
     if (timer.current) window.clearTimeout(timer.current);
     timer.current = window.setTimeout(() => {
       // Many crisis sites block framing for safety — and browsers still fire
