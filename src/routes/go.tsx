@@ -48,14 +48,36 @@ function GoPage() {
     loaded.current = false;
     setBlocked(false);
     setDismissed(false);
+    setFrameBlocked(null);
     if (timer.current) window.clearTimeout(timer.current);
     timer.current = window.setTimeout(() => {
-      // Many crisis sites block framing for safety. If the iframe hasn't
-      // confirmed it is usable after a short wait, offer the fallback so
-      // the user is never stuck on a blank screen.
+      // Many crisis sites block framing for safety — and browsers still fire
+      // the iframe load event for the blank blocked page, so a client-side
+      // load signal alone can never be trusted. If the server check has not
+      // positively confirmed framing, offer the fallback after a short wait
+      // so the user is never stuck on a blank screen.
       setBlocked(true);
     }, 2500);
+
+    // Ask the server to read the site's framing headers (impossible from the
+    // client due to CORS). A confirmed "blocked" shows the fallback instantly.
+    let cancelled = false;
+    checkFramable({ data: { url } })
+      .then((res) => {
+        if (cancelled) return;
+        setFrameBlocked(res.blocked);
+        if (res.blocked === true) {
+          if (timer.current) window.clearTimeout(timer.current);
+          timer.current = null;
+          setBlocked(true);
+        }
+      })
+      .catch(() => {
+        /* leave as unverifiable — timer fallback stays in charge */
+      });
+
     return () => {
+      cancelled = true;
       if (timer.current) window.clearTimeout(timer.current);
     };
   }, [url]);
@@ -108,8 +130,19 @@ function GoPage() {
     if (!url) return;
     // Open the resource in a new tab and replace this tab with a neutral
     // search page so the crisis site never appears in this tab's history.
-    window.open(url, "_blank", "noopener,noreferrer");
-    window.location.replace("https://www.google.com/search?q=weather");
+    // If the pop-up is blocked, take this tab to the resource instead so the
+    // user always reaches help.
+    let win: Window | null = null;
+    try {
+      win = window.open(url, "_blank", "noopener,noreferrer");
+    } catch {
+      win = null;
+    }
+    if (win) {
+      window.location.replace("https://www.google.com/search?q=weather");
+    } else {
+      window.location.assign(url);
+    }
   }
 
   return (
