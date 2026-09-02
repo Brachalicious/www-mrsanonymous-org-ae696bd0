@@ -52,20 +52,12 @@ export function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col items-center gap-2 border-t border-ink-300 pt-6">
-          <div
-            role="img"
-            aria-label="MysticMinded³³ logo"
-            className="h-16 w-16 md:h-20 md:w-20"
+          <img
+            src={mysticMindedLogo.url}
+            alt="MysticMinded³³ logo"
+            className="h-16 w-16 md:h-20 md:w-20 rounded-full border border-ink-300 shadow-sm"
             style={{
-              backgroundImage: "linear-gradient(135deg, var(--color-ink-900), var(--color-rose-500))",
-              WebkitMaskImage: `url(${mysticMindedLogo.url})`,
-              maskImage: `url(${mysticMindedLogo.url})`,
-              WebkitMaskSize: "contain",
-              maskSize: "contain",
-              WebkitMaskRepeat: "no-repeat",
-              maskRepeat: "no-repeat",
-              WebkitMaskPosition: "center",
-              maskPosition: "center",
+              filter: "hue-rotate(-58deg) saturate(1.25) brightness(0.96)",
             }}
           />
           <p className="text-xs tracking-wide text-ink-500">
