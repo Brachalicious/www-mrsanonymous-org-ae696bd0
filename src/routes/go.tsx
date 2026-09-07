@@ -73,8 +73,11 @@ function GoPage() {
           if (timer.current) window.clearTimeout(timer.current);
           timer.current = null;
           setBlocked(true);
-        } else if (res.blocked === false && loaded.current && timer.current) {
-          // Iframe already loaded before the check came back — safe to trust.
+        } else if (loaded.current && timer.current) {
+          // Iframe already loaded before the check came back. When the check
+          // is unverifiable (null) we cannot prove the site allows framing,
+          // but it also never confirmed blocking — trust the real render over
+          // showing a false "can't be shown" warning on a working page.
           window.clearTimeout(timer.current);
           timer.current = null;
         }
@@ -234,12 +237,15 @@ function GoPage() {
           title={host}
           onLoad={() => {
             loaded.current = true;
-            // A load event is NOT proof the page is visible — blocked sites
-            // fire it too. Only trust it when the server confirmed the site
-            // allows framing; otherwise let the timer fallback protect the
-            // user from a silent blank screen. (Ref, not state — this handler
-            // can fire before the server check resolves.)
-            if (frameBlockedRef.current === false && timer.current) {
+            // A load event alone is not proof of a visible page — blocked
+            // sites fire it too — but the server check already catches
+            // confirmed blockers instantly (frameBlocked === true hides the
+            // iframe outright). When the check is unverifiable (null), the
+            // server could not prove blocking either, so prefer trusting the
+            // rendered page: a false "can't be shown" warning over a working
+            // crisis chat is the worse failure. (Ref, not state — this
+            // handler can fire before the server check resolves.)
+            if (frameBlockedRef.current !== true && timer.current) {
               window.clearTimeout(timer.current);
               timer.current = null;
             }
