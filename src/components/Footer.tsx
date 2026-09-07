@@ -55,7 +55,7 @@ export function Footer() {
           <img
             src={mysticMindedLogo}
             alt="MysticMinded³³ logo"
-            className="h-20 w-auto md:h-24"
+            className="h-28 w-auto md:h-36"
           />
           <p className="text-xs tracking-wide text-ink-500">
             Created by <span className="font-serif italic text-rose-500">MysticMinded</span>
