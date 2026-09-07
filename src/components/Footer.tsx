@@ -55,10 +55,10 @@ export function Footer() {
           <img
             src={mysticMindedLogo}
             alt="MysticMinded³³ logo"
-            className="h-28 w-auto md:h-36"
+            className="h-56 w-auto md:h-72"
           />
           <p className="text-xs tracking-wide text-ink-500">
-            Created by <span className="font-serif italic text-rose-500">MysticMinded</span>
+            Brought to you by <span className="font-serif italic text-rose-500">MysticMinded</span>
             <sup className="text-ink-400">33</sup>
           </p>
         </div>
