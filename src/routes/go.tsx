@@ -73,7 +73,7 @@ function GoPage() {
           if (timer.current) window.clearTimeout(timer.current);
           timer.current = null;
           setBlocked(true);
-        } else if (res.blocked !== true && loaded.current && timer.current) {
+        } else if (loaded.current && timer.current) {
           // Iframe already loaded before the check came back. When the check
           // is unverifiable (null) we cannot prove the site allows framing,
           // but it also never confirmed blocking — trust the real render over
