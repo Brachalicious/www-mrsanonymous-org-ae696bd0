@@ -255,13 +255,13 @@ function DownloadPage() {
         </div>
 
         <div className="mt-8 rounded-xl border border-ink-300 bg-white p-6">
-          <h2 className="font-serif text-2xl font-semibold text-ink-900">App store information</h2>
+          <h2 className="font-serif text-2xl font-semibold text-ink-900">App information</h2>
           <p className="mt-2 text-sm text-ink-700">
-            Required disclosures for Apple App Store and Google Play distribution:
+            MrsANONymous is a private web app (PWA). No app store download is required.
           </p>
           <ul className="mt-3 space-y-2 text-sm text-ink-700">
             <li>
-              <strong>Not an emergency service.</strong> In danger, call your local emergency number.
+              <strong>Not an emergency service.</strong> If you are in immediate danger, call your local emergency number.
             </li>
             <li>
               <a
@@ -272,9 +272,9 @@ function DownloadPage() {
               </a>
             </li>
             <li><strong>Age rating:</strong> 12+ / Teen — includes sensitive discussion of abuse.</li>
-            <li><strong>Accounts:</strong> nickname only, no email or phone number required.</li>
+            <li><strong>Accounts:</strong> nickname only. No email, phone number, or real name is required.</li>
             <li><strong>Delete your account and all data</strong> at any time from <a href="/settings" className="text-rose-600 underline">Settings</a> — see <a href="/delete-account" className="text-rose-600 underline">how to delete your data</a>.</li>
-            <li><strong>User-generated content:</strong> every shared story can be reported or its author blocked; reports are reviewed within 24 hours.</li>
+            <li><strong>User-generated content:</strong> every shared story can be reported or its author blocked; reports are reviewed as soon as possible.</li>
             <li>
               <a href="/privacy" className="text-rose-600 underline">Privacy Policy</a> ·{" "}
               <a href="/terms" className="text-rose-600 underline">Terms of Use</a> ·{" "}
