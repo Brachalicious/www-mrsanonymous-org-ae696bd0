@@ -7,7 +7,7 @@ The Android app is a Trusted Web Activity (TWA) wrapper around https://mrsanonym
 ```bash
 npm i -g @bubblewrap/cli
 bubblewrap init --manifest https://mrsanonymous.org/manifest.webmanifest
-# package id: org.mrsanonymous.app
+# package id: www.MrsAnonymous.org
 bubblewrap build          # produces app-release-bundle.aab + app-release-signed.apk
 ```
 
