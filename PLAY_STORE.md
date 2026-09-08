@@ -18,9 +18,27 @@ Upload `app-release-bundle.aab` to Play Console → Production (or Internal test
 `public/.well-known/assetlinks.json` is already served at
 https://mrsanonymous.org/.well-known/assetlinks.json.
 
-Replace `REPLACE_WITH_PLAY_APP_SIGNING_SHA256_FINGERPRINT` with the SHA-256 from
-Play Console → Release → Setup → **App signing** (App signing key certificate), then republish
-the site. Keep the upload-key fingerprint in the list too if you test locally.
+The Play App Signing SHA-256 fingerprint
+(`27:D7:FE:5E:...:40:31:1E`) is filled in. If you also test a locally built APK,
+add the upload-key SHA-256 as a second entry in the same list.
+
+## 2b. "Signing not valid" on upload
+
+Play rejects an .aab that is not signed by the **upload key** registered for the app.
+
+```bash
+# rebuild and sign with the keystore Bubblewrap created (android.keystore)
+bubblewrap build
+# verify before uploading
+jarsigner -verify -verbose -certs app-release-bundle.aab | head -20
+keytool -list -v -keystore android.keystore -alias android | grep SHA256
+```
+
+The SHA-256 printed by `keytool` must match Play Console → App signing →
+**Upload key certificate**. If it does not, you are signing with the wrong keystore:
+use the original one, or request an upload-key reset in Play Console
+(App signing → Request upload key reset) and upload the new certificate.
+Never re-sign with the App signing key — Google holds that one.
 
 ## 3. Store listing copy
 
