@@ -72,6 +72,8 @@ function DeleteAccountPage() {
 
       <DeletionRequestForm />
 
+      <DataDeletionRequestForm />
+
       <h2 className="mt-8 font-serif text-2xl text-ink-900">Can&apos;t sign in?</h2>
       <p className="mt-3 text-ink-700">
         Use{" "}
