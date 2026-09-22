@@ -37,6 +37,7 @@ function PrivacyPage() {
       <Section title="What we never collect">
         <ul className="ml-5 list-disc space-y-1">
           <li>Your location is never sent to us. If you use the emergency location feature, your device shares it directly with the emergency service you contact.</li>
+          <li>Saved addresses and your safety plan are stored only on your own device — they are never sent to us. When you text an emergency service, your phone's own messaging app sends it directly.</li>
           <li>No advertising identifiers, no third-party ad networks, no analytics profiles, no data brokers.</li>
           <li>We never sell or rent any information about you.</li>
         </ul>
