@@ -90,7 +90,7 @@ function DeleteAccountPage() {
 
 function DeletionRequestForm() {
   const send = useServerFn(sendContactMessage);
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [nickname, setNickname] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const [status, setStatus] = useState("");
@@ -111,7 +111,7 @@ function DeletionRequestForm() {
       setStatus("Please confirm you want the account permanently deleted.");
       return;
     }
-    const nick = user?.nickname ?? nickname.trim();
+    const nick = profile?.nickname ?? nickname.trim();
     if (!nick) {
       setStatus("Please enter the nickname of the account to delete.");
       return;
@@ -156,7 +156,7 @@ function DeletionRequestForm() {
         {user && (
           <p className="text-sm text-ink-600">
             Requesting deletion for the signed-in account{" "}
-            <strong>{user.nickname}</strong>.
+            <strong>{profile?.nickname ?? "your account"}</strong>.
           </p>
         )}
 
