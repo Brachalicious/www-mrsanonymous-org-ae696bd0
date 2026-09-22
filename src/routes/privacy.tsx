@@ -29,7 +29,7 @@ function PrivacyPage() {
         <ul className="ml-5 list-disc space-y-1">
           <li><strong>A nickname and password.</strong> We never ask for your email, phone number, or real name.</li>
           <li><strong>Security question answers</strong>, stored only as one-way hashes so we cannot read them.</li>
-          <li><strong>Anything you write</strong> in your notebooks or send to support.</li>
+          <li><strong>Anything you write or record</strong> in your notebooks, including voice recordings and files you attach.</li>
           <li><strong>An anonymous session identifier</strong> in a cookie, used to remember your reactions and blocks.</li>
         </ul>
       </Section>
