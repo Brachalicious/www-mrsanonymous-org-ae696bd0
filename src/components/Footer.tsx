@@ -29,6 +29,7 @@ export function Footer() {
             <Link to="/contact" className="hover:text-rose-500">Contact</Link>
             <Link to="/privacy" className="hover:text-rose-500">Privacy</Link>
             <Link to="/terms" className="hover:text-rose-500">Terms</Link>
+            <Link to="/delete-account" className="hover:text-rose-500">Delete account</Link>
             <Link to="/settings" className="hover:text-rose-500">Settings</Link>
           </nav>
 
