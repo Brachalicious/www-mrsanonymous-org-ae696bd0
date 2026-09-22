@@ -29,7 +29,7 @@ function PrivacyPage() {
         <ul className="ml-5 list-disc space-y-1">
           <li><strong>A nickname and password.</strong> We never ask for your email, phone number, or real name.</li>
           <li><strong>Security question answers</strong>, stored only as one-way hashes so we cannot read them.</li>
-          <li><strong>Anything you write</strong> in your notebooks or send to support.</li>
+          <li><strong>Anything you write or record</strong> in your notebooks, including voice recordings and files you attach.</li>
           <li><strong>An anonymous session identifier</strong> in a cookie, used to remember your reactions and blocks.</li>
         </ul>
       </Section>
@@ -37,6 +37,7 @@ function PrivacyPage() {
       <Section title="What we never collect">
         <ul className="ml-5 list-disc space-y-1">
           <li>Your location is never sent to us. If you use the emergency location feature, your device shares it directly with the emergency service you contact.</li>
+          <li>Saved addresses and your safety plan are stored only on your own device — they are never sent to us. When you text an emergency service, your phone's own messaging app sends it directly.</li>
           <li>No advertising identifiers, no third-party ad networks, no analytics profiles, no data brokers.</li>
           <li>We never sell or rent any information about you.</li>
         </ul>
