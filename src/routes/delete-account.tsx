@@ -12,12 +12,13 @@ export const Route = createFileRoute("/delete-account")({
       {
         name: "description",
         content:
-          "How to permanently delete your MrsANONymous account and every note, story, and message linked to it. No email required.",
+          "How to delete your MrsANONymous data without deleting your account, or permanently delete your account and every note, story, and message linked to it. No email required.",
       },
       { property: "og:title", content: "Delete Your Account & Data — MrsANONymous" },
       {
         property: "og:description",
-        content: "Permanently delete your anonymous account and all of your data in one step.",
+        content:
+          "Delete your data and keep your account, or permanently delete your anonymous account and all of your data in one step.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://www-mrsanonymous-org.lovable.app/delete-account" },
@@ -34,7 +35,11 @@ function DeleteAccountPage() {
       <h1 className="font-serif text-4xl text-ink-900">Delete your account and data</h1>
       <p className="mt-3 text-ink-700">
         MrsANONymous (app: <strong>MrsANONymous — Safety &amp; Support</strong>) lets you delete your
-        account and everything stored with it, at any time, without contacting us.
+        account and everything stored with it, at any time, without contacting us. You can also{" "}
+        <a href="#delete-data" className="text-rose-600 underline">
+          delete your data and keep your account
+        </a>
+        .
       </p>
 
       <h2 className="mt-8 font-serif text-2xl text-ink-900">How to delete yourself</h2>
@@ -66,6 +71,8 @@ function DeleteAccountPage() {
       </p>
 
       <DeletionRequestForm />
+
+      <DataDeletionRequestForm />
 
       <h2 className="mt-8 font-serif text-2xl text-ink-900">Can&apos;t sign in?</h2>
       <p className="mt-3 text-ink-700">
@@ -188,6 +195,160 @@ function DeletionRequestForm() {
         <p className="text-[11px] leading-relaxed text-ink-500">
           No email address is needed. Requests are sent straight to our support team, who delete the
           account and everything stored with it.
+        </p>
+      </form>
+    </div>
+  );
+}
+
+function DataDeletionRequestForm() {
+  const send = useServerFn(sendContactMessage);
+  const { user, profile } = useAuth();
+  const [nickname, setNickname] = useState("");
+  const [eraseJournal, setEraseJournal] = useState(true);
+  const [eraseStories, setEraseStories] = useState(true);
+  const [eraseMessages, setEraseMessages] = useState(true);
+  const [confirmed, setConfirmed] = useState(false);
+  const [status, setStatus] = useState("");
+
+  const mutation = useMutation({
+    mutationFn: send,
+    onSuccess: () => {
+      setStatus("✓ Data deletion request received. We will erase your data and your account will stay open.");
+    },
+    onError: (err) => {
+      setStatus((err as Error).message || "Could not send the request. Please try again.");
+    },
+  });
+
+  function submit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!eraseJournal && !eraseStories && !eraseMessages) {
+      setStatus("Select at least one kind of data to erase.");
+      return;
+    }
+    if (!confirmed) {
+      setStatus("Please confirm you want your data permanently erased.");
+      return;
+    }
+    const nick = profile?.nickname ?? nickname.trim();
+    if (!nick) {
+      setStatus("Please enter the nickname of the account.");
+      return;
+    }
+    const parts = [
+      eraseJournal && "Journals, notes, recordings, and uploaded files",
+      eraseStories && "Stories you shared",
+      eraseMessages && "Support messages with the team",
+    ].filter(Boolean);
+    setStatus("");
+    const message = [
+      "DATA DELETION REQUEST — KEEP ACCOUNT",
+      `Nickname: ${nick}`,
+      user?.id ? `Account ID: ${user.id}` : null,
+      "Erase the following while keeping the account active:",
+      ...parts.map((p) => `- ${p}`),
+      "Requested via the delete-account page. Do NOT delete the account itself.",
+    ]
+      .filter(Boolean)
+      .join("\n");
+    mutation.mutate({ data: { message, audience: "women", userId: user?.id ?? null } });
+  }
+
+  return (
+    <div id="delete-data" className="note-card mt-10 scroll-mt-24 p-7">
+      <div className="text-xs font-bold uppercase tracking-[0.3em] text-rose-500">
+        Delete data — keep your account
+      </div>
+      <p className="mt-2 text-ink-700">
+        Want everything you&apos;ve stored erased but need to keep using the app? Send a data-only
+        deletion request. Your nickname, login, and account stay active — only the data you pick
+        below is permanently erased.
+      </p>
+
+      <form onSubmit={submit} className="mt-5 space-y-4">
+        {!user && (
+          <label className="block">
+            <span className="text-xs font-semibold uppercase tracking-widest text-ink-500">
+              Account nickname
+            </span>
+            <input
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              maxLength={60}
+              className="input-soft mt-1.5"
+              placeholder="the nickname you signed up with"
+            />
+          </label>
+        )}
+        {user && (
+          <p className="text-sm text-ink-600">
+            Requesting for the signed-in account{" "}
+            <strong>{profile?.nickname ?? "your account"}</strong>.
+          </p>
+        )}
+
+        <fieldset className="space-y-2">
+          <legend className="text-xs font-semibold uppercase tracking-widest text-ink-500">
+            What should we erase?
+          </legend>
+          <label className="flex items-center gap-3 text-sm text-ink-700">
+            <input
+              type="checkbox"
+              checked={eraseJournal}
+              onChange={(e) => setEraseJournal(e.target.checked)}
+              className="accent-rose-500"
+            />
+            <span>Journals, notes, recordings, and uploaded files</span>
+          </label>
+          <label className="flex items-center gap-3 text-sm text-ink-700">
+            <input
+              type="checkbox"
+              checked={eraseStories}
+              onChange={(e) => setEraseStories(e.target.checked)}
+              className="accent-rose-500"
+            />
+            <span>Stories you shared on the board</span>
+          </label>
+          <label className="flex items-center gap-3 text-sm text-ink-700">
+            <input
+              type="checkbox"
+              checked={eraseMessages}
+              onChange={(e) => setEraseMessages(e.target.checked)}
+              className="accent-rose-500"
+            />
+            <span>Support messages between you and the team</span>
+          </label>
+        </fieldset>
+
+        <label className="flex items-start gap-3 text-sm text-ink-700">
+          <input
+            type="checkbox"
+            checked={confirmed}
+            onChange={(e) => setConfirmed(e.target.checked)}
+            className="mt-1 accent-rose-500"
+          />
+          <span>
+            I understand the selected data will be permanently erased and cannot be recovered. My
+            account itself will remain open and usable.
+          </span>
+        </label>
+
+        {status && (
+          <div
+            className={`rounded-md px-3 py-2 text-sm ${status.startsWith("✓") ? "bg-green-50 text-green-700" : "bg-emergency/10 text-emergency"}`}
+          >
+            {status}
+          </div>
+        )}
+
+        <button type="submit" disabled={mutation.isPending} className="btn-rose w-full">
+          {mutation.isPending ? "Sending request…" : "Request data deletion (keep my account)"}
+        </button>
+
+        <p className="text-[11px] leading-relaxed text-ink-500">
+          No email address is needed. Requests are sent straight to our support team, who erase the
+          selected data and leave your account active.
         </p>
       </form>
     </div>
