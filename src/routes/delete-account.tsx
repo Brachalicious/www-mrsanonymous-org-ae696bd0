@@ -12,12 +12,13 @@ export const Route = createFileRoute("/delete-account")({
       {
         name: "description",
         content:
-          "How to permanently delete your MrsANONymous account and every note, story, and message linked to it. No email required.",
+          "How to delete your MrsANONymous data without deleting your account, or permanently delete your account and every note, story, and message linked to it. No email required.",
       },
       { property: "og:title", content: "Delete Your Account & Data — MrsANONymous" },
       {
         property: "og:description",
-        content: "Permanently delete your anonymous account and all of your data in one step.",
+        content:
+          "Delete your data and keep your account, or permanently delete your anonymous account and all of your data in one step.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://www-mrsanonymous-org.lovable.app/delete-account" },
@@ -34,7 +35,11 @@ function DeleteAccountPage() {
       <h1 className="font-serif text-4xl text-ink-900">Delete your account and data</h1>
       <p className="mt-3 text-ink-700">
         MrsANONymous (app: <strong>MrsANONymous — Safety &amp; Support</strong>) lets you delete your
-        account and everything stored with it, at any time, without contacting us.
+        account and everything stored with it, at any time, without contacting us. You can also{" "}
+        <a href="#delete-data" className="text-rose-600 underline">
+          delete your data and keep your account
+        </a>
+        .
       </p>
 
       <h2 className="mt-8 font-serif text-2xl text-ink-900">How to delete yourself</h2>
